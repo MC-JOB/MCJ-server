@@ -3,7 +3,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/minecraft-job
     username: root
-    password: wnswns65
+    password: ${password}
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 mybatis:
   type-aliases-package: spring.notice.springnotice
   mapper-locations: static/mapper/*.xml
