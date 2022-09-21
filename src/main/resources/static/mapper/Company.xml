@@ -5,13 +5,14 @@
 <mapper namespace="com.minecraft.job.minecraftjob.domain.company.CompanyMapper">
 
     <insert id="create" parameterType="com.minecraft.job.minecraftjob.domain.company.CompanyVo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO Company(email, password, name, description, logo, createAt)
+        INSERT INTO Company(email, password, name, description, logo, score, createAt)
         VALUES (
                 #{email},
                 #{password},
                 #{name},
                 #{description},
                 #{logo},
+                #{score},
                 #{createAt}
                 )
     </insert>
@@ -22,7 +23,8 @@
             #{password},
             #{name},
             #{description},
-            #{logo}
+            #{logo},
+            #{score}
         WHERE id=#{id}
     </update>
 

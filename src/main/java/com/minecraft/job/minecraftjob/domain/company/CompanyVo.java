@@ -22,6 +22,8 @@ public class CompanyVo {
 
     private String logo;
 
+    private int score;
+
     private final OffsetDateTime createAt = OffsetDateTime.now();
 
     public void update(String email, String password, String name, String description, String logo) {
@@ -43,6 +45,7 @@ public class CompanyVo {
         this.name = name;
         this.description = description;
         this.logo = logo;
+        this.score = 0;
     }
 
     public static CompanyVo create(String email, String password, String name, String description, String logo) {
