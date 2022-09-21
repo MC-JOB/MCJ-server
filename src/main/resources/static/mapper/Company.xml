@@ -19,12 +19,12 @@
 
     <update id="update" parameterType="com.minecraft.job.minecraftjob.domain.company.CompanyVo">
         UPDATE Company
-        SET #{email},
-            #{password},
-            #{name},
-            #{description},
-            #{logo},
-            #{score}
+        SET email = #{email},
+            password = #{password},
+            name = #{name},
+            description = #{description},
+            logo = #{logo},
+            score = #{score}
         WHERE id=#{id}
     </update>
 
