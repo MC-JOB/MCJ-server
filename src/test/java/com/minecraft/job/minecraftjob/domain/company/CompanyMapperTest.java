@@ -36,6 +36,29 @@ class CompanyMapperTest {
         assertThat(findCompany.getCreateAt()).isNotNull();
     }
 
+    @Test
+    void 회사_수정_성공() {
+        CompanyVo company = CompanyVo.create("email", "password", "name", "description", "logo");
+
+        companyMapper.create(company);
+
+        CompanyVo findCompany = companyMapper.getCompanys().get(0);
+
+        findCompany.update("updateEmail", "updatePassword", "upName", "updateDescription", "updateLogo");
+
+        int updateResult = companyMapper.update(findCompany);
+
+        findCompany = companyMapper.getCompanys().get(0);
+
+
+        assertThat(updateResult).isEqualTo(1);
+        assertThat(findCompany.getId()).isNotNull();
+        assertThat(findCompany.getEmail()).isEqualTo("updateEmail");
+        assertThat(findCompany.getPassword()).isEqualTo("updatePassword");
+        assertThat(findCompany.getName()).isEqualTo("upName");
+        assertThat(findCompany.getDescription()).isEqualTo("updateDescription");
+        assertThat(findCompany.getLogo()).isEqualTo("updateLogo");
+    }
 
     @Test
     void 회사_전체_조회_성공() {
