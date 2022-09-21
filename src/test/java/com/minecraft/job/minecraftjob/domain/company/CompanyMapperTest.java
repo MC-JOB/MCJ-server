@@ -32,6 +32,7 @@ class CompanyMapperTest {
         assertThat(findCompany.getName()).isEqualTo("name");
         assertThat(findCompany.getDescription()).isEqualTo("description");
         assertThat(findCompany.getLogo()).isEqualTo("logo");
+        assertThat(findCompany.getScore()).isEqualTo(0);
         assertThat(findCompany.getCreateAt()).isNotNull();
     }
 
