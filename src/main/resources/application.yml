@@ -1,11 +1,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/minecraft-job
+    url: jdbc:mysql://localhost:3307/minecraftjob
     username: root
-    password: ${password}
+    password: 1234
   flyway:
-    enabled: true
+    enabled: false
     baseline-on-migrate: true
 mybatis:
   type-aliases-package: spring.notice.springnotice
