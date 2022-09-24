@@ -1,11 +1,20 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/minecraftjobtest
-    username: root
-    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${db.url:jdbc:mysql://localhost:3306/minecraftjobtest}
+    username: ${db.username:root}
+    password: ${db.password:1234}
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+      javax:
+        persistence:
+          validation:
+            mode: none
   flyway:
     enabled: false
-mybatis:
-  type-aliases-package: spring.notice.springnotice
-  mapper-locations: static/mapper/*.xml
