@@ -1,5 +1,7 @@
-package com.minecraft.job.common.domain.company;
+package com.minecraft.job.common.company.service;
 
+import com.minecraft.job.common.company.domain.Company;
+import com.minecraft.job.common.company.domain.CompanyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,13 +17,13 @@ class DomainCompanyServiceTest {
     private CompanyService companyService;
 
     @Autowired
-    private CompanyMapper companyMapper;
+    private CompanyRepository companyRepository;
 
     @Test
     void 회사_생성_성공() {
-        companyService.create("email", "password", "name", "description", "logo");
+        Company company = companyService.create("email", "password", "name", "description", "logo");
 
-        CompanyVo findCompany = companyMapper.getCompanys().get(0);
+        Company findCompany = companyRepository.getById(company.getId());
 
         assertThat(findCompany.getId()).isNotNull();
     }

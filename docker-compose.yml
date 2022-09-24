@@ -1,11 +1,11 @@
 services:
-  minecraft-job:
+  minecraftjob-mysql:
     platform: linux/x86_64
     image: mysql
-    container_name: minecraft-job-mysql
+    container_name: minecraftjob-mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1234
     volumes:
       - ./config/:/docker-entrypoint-initdb.d/
     ports:
-      - 3307:3307
+      - 3306:3306

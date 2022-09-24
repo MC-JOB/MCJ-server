@@ -1,16 +1,26 @@
-package com.minecraft.job.common.domain.company;
+package com.minecraft.job.common.company.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.OffsetDateTime;
 
 import static com.minecraft.job.common.util.Preconditions.require;
+import static lombok.AccessLevel.PROTECTED;
 
+@Entity
 @Getter
-public class CompanyVo {
+@NoArgsConstructor(access = PROTECTED)
+public class Company {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String email;
 
@@ -39,7 +49,7 @@ public class CompanyVo {
         this.logo = logo;
     }
 
-    private CompanyVo(String email, String password, String name, String description, String logo) {
+    private Company(String email, String password, String name, String description, String logo) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -48,12 +58,12 @@ public class CompanyVo {
         this.score = 0;
     }
 
-    public static CompanyVo create(String email, String password, String name, String description, String logo) {
+    public static Company create(String email, String password, String name, String description, String logo) {
         require(Strings.isNotBlank(email));
         require(Strings.isNotBlank(password));
         require(Strings.isNotBlank(name));
         require(Strings.isNotBlank(description));
 
-        return new CompanyVo(email, password, name, description, logo);
+        return new Company(email, password, name, description, logo);
     }
 }
