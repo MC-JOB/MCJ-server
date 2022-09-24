@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS minecraftjob;
+CREATE SCHEMA IF NOT EXISTS minecraftjobtest;
