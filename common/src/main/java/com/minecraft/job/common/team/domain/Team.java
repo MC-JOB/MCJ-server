@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.team.domain.TeamStatus.CREATED;
@@ -36,13 +34,17 @@ public class Team {
 
     private Long memberNum;
 
+    @Enumerated(value = EnumType.STRING)
     private TeamStatus teamStatus = CREATED;
 
     private Long averagePoint = 0L;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Team(String name, String email, String password, String description, String logo, Long memberNum) {
+    public Team(
+            String name, String email, String password,
+            String description, String logo, Long memberNum
+    ) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -51,7 +53,10 @@ public class Team {
         this.memberNum = memberNum;
     }
 
-    public static Team create(String name, String email, String password, String description, String logo, Long memberNum) {
+    public static Team create(
+            String name, String email, String password,
+            String description, String logo, Long memberNum
+    ) {
         require(Strings.isNotBlank(name));
         require(Strings.isNotBlank(email));
         require(Strings.isNotBlank(password));
