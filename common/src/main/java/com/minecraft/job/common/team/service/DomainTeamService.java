@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.util.Preconditions.check;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,6 +20,8 @@ public class DomainTeamService implements TeamService {
             String name, String email, String password,
             String description, String logo, Long memberNum
     ) {
+        check(teamRepository.findByEmail(email).isEmpty());
+
         Team team = Team.create(name, email, password, description, logo, memberNum);
 
         return teamRepository.save(team);
