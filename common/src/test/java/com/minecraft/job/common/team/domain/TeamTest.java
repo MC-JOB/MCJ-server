@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import static com.minecraft.job.common.team.domain.TeamStatus.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -19,6 +20,9 @@ class TeamTest {
         assertThat(team.getDescription()).isEqualTo("description");
         assertThat(team.getLogo()).isEqualTo("logo");
         assertThat(team.getMemberNum()).isEqualTo(5L);
+        assertThat(team.getTeamStatus()).isEqualTo(CREATED);
+        assertThat(team.getAveragePoint()).isEqualTo(0L);
+        assertThat(team.getCreatedAt()).isNotNull();
     }
 
     @ParameterizedTest

@@ -8,12 +8,12 @@ import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.team.domain.TeamStatus.CREATED;
 import static com.minecraft.job.common.util.Preconditions.require;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -21,7 +21,7 @@ import static com.minecraft.job.common.util.Preconditions.require;
 public class Team {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long Id;
 
     private String name;
