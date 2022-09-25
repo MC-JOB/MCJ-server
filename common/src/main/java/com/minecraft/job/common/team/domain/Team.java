@@ -41,7 +41,7 @@ public class Team {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Team(
+    private Team(
             String name, String email, String password,
             String description, String logo, Long memberNum
     ) {
