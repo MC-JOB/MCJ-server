@@ -16,6 +16,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_email", columnNames = "email")
+        }
+)
 public class Team {
 
     @Id

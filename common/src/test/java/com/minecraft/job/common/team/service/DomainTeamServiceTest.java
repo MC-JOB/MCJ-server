@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @SpringBootTest
 @Transactional
@@ -26,5 +27,12 @@ class DomainTeamServiceTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findTeam.getId()).isNotNull();
+    }
+
+    @Test
+    void 팀_생성_실패__이미_존재하는_이메일() {
+        teamService.create("name", "email", "password", "description", "logo", 5L);
+
+        assertThatIllegalStateException().isThrownBy(() -> teamService.create("name", "email", "password", "description", "logo", 5L));
     }
 }
