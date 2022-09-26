@@ -2,6 +2,7 @@ package com.minecraft.job.common.recruitment.domain;
 
 import com.minecraft.job.common.team.domain.Team;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
@@ -17,6 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recruitment {
 
@@ -32,7 +34,7 @@ public class Recruitment {
     private Team team;
 
     @Enumerated(value = EnumType.STRING)
-    private RecruitmentStatus recruitmentStatus = CREATED;
+    private RecruitmentStatus status = CREATED;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 

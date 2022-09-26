@@ -31,7 +31,7 @@ class TeamRepositoryTest {
         assertThat(findTeam.getDescription()).isEqualTo("description");
         assertThat(findTeam.getLogo()).isEqualTo("logo");
         assertThat(findTeam.getMemberNum()).isEqualTo(5L);
-        assertThat(findTeam.getTeamStatus()).isEqualTo(ACTIVATED);
+        assertThat(findTeam.getStatus()).isEqualTo(ACTIVATED);
         assertThat(findTeam.getAveragePoint()).isEqualTo(0L);
         assertThat(findTeam.getCreatedAt()).isNotNull();
     }

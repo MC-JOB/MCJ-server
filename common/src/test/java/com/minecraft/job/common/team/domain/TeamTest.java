@@ -21,7 +21,7 @@ class TeamTest {
         assertThat(team.getDescription()).isEqualTo("description");
         assertThat(team.getLogo()).isEqualTo("logo");
         assertThat(team.getMemberNum()).isEqualTo(5L);
-        assertThat(team.getTeamStatus()).isEqualTo(ACTIVATED);
+        assertThat(team.getStatus()).isEqualTo(ACTIVATED);
         assertThat(team.getAveragePoint()).isEqualTo(0L);
         assertThat(team.getCreatedAt()).isNotNull();
     }
@@ -63,7 +63,7 @@ class TeamTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    void 팀_업데이트_싫패__name이_널이거나_공백(String name) {
+    void 팀_업데이트_실패__name이_널이거나_공백(String name) {
         Team team = TeamFixture.create();
 
         assertThatIllegalArgumentException().isThrownBy(() -> team.update(name, "updateDescription", "updateLogo", 1L));
@@ -91,7 +91,7 @@ class TeamTest {
 
         team.inactivate();
 
-        assertThat(team.getTeamStatus()).isEqualTo(INACTIVATED);
+        assertThat(team.getStatus()).isEqualTo(INACTIVATED);
     }
 
     @Test
