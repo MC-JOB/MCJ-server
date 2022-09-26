@@ -2,6 +2,7 @@ package com.minecraft.job.common.team.domain;
 
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
@@ -17,6 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
         uniqueConstraints = {
@@ -42,7 +44,7 @@ public class Team {
     private Long memberNum;
 
     @Enumerated(value = EnumType.STRING)
-    private TeamStatus teamStatus = ACTIVATED;
+    private TeamStatus status = ACTIVATED;
 
     private Long averagePoint = 0L;
 
@@ -76,7 +78,7 @@ public class Team {
         require(Strings.isNotBlank(name));
         require(memberNum >= 0);
 
-        check(this.teamStatus == ACTIVATED);
+        check(this.status == ACTIVATED);
 
         this.name = name;
         this.description = description;
@@ -85,8 +87,8 @@ public class Team {
     }
 
     public void inactivate() {
-        check(this.teamStatus == ACTIVATED);
+        check(this.status == ACTIVATED);
 
-        this.teamStatus = INACTIVATED;
+        this.status = INACTIVATED;
     }
 }

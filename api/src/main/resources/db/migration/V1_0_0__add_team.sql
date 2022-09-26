@@ -9,6 +9,6 @@ create table team
     member_num    bigint,
     name          varchar(255),
     password      varchar(255),
-    team_status   varchar(255),
+    status   varchar(255),
     primary key (id)
 );
