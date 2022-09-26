@@ -86,6 +86,14 @@ public class Team {
         this.memberNum = memberNum;
     }
 
+    public void changePassword(String password) {
+        require(Strings.isNotBlank(password));
+
+        check(this.status == ACTIVATED);
+
+        this.password = password;
+    }
+
     public void inactivate() {
         check(this.status == ACTIVATED);
 
