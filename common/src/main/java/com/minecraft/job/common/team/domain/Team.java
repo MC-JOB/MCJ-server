@@ -9,7 +9,9 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.team.domain.TeamStatus.CREATED;
+import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
+import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
+import static com.minecraft.job.common.util.Preconditions.check;
 import static com.minecraft.job.common.util.Preconditions.require;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -40,7 +42,7 @@ public class Team {
     private Long memberNum;
 
     @Enumerated(value = EnumType.STRING)
-    private TeamStatus teamStatus = CREATED;
+    private TeamStatus teamStatus = ACTIVATED;
 
     private Long averagePoint = 0L;
 
@@ -68,5 +70,11 @@ public class Team {
         require(memberNum >= 0);
 
         return new Team(name, email, password, description, logo, memberNum);
+    }
+
+    public void inactivate() {
+        check(this.teamStatus == ACTIVATED);
+
+        this.teamStatus = INACTIVATED;
     }
 }
