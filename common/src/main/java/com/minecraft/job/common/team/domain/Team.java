@@ -27,7 +27,7 @@ public class Team {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String name;
 
@@ -70,6 +70,18 @@ public class Team {
         require(memberNum >= 0);
 
         return new Team(name, email, password, description, logo, memberNum);
+    }
+
+    public void update(String name, String description, String logo, Long memberNum) {
+        require(Strings.isNotBlank(name));
+        require(memberNum >= 0);
+
+        check(this.teamStatus == ACTIVATED);
+
+        this.name = name;
+        this.description = description;
+        this.logo = logo;
+        this.memberNum = memberNum;
     }
 
     public void inactivate() {
