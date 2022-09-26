@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static com.minecraft.job.common.team.domain.TeamStatus.CREATED;
+import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -31,7 +31,7 @@ class TeamRepositoryTest {
         assertThat(findTeam.getDescription()).isEqualTo("description");
         assertThat(findTeam.getLogo()).isEqualTo("logo");
         assertThat(findTeam.getMemberNum()).isEqualTo(5L);
-        assertThat(findTeam.getTeamStatus()).isEqualTo(CREATED);
+        assertThat(findTeam.getTeamStatus()).isEqualTo(ACTIVATED);
         assertThat(findTeam.getAveragePoint()).isEqualTo(0L);
         assertThat(findTeam.getCreatedAt()).isNotNull();
     }
