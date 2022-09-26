@@ -86,6 +86,32 @@ class TeamTest {
     }
 
     @Test
+    void 팀_패스워드_변경_성공() {
+        Team team = TeamFixture.create();
+
+        team.changePassword("changePassword");
+
+        assertThat(team.getPassword()).isEqualTo("changePassword");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 팀_패스워드_변경_실패__password가_널이거나_공백(String password) {
+        Team team = TeamFixture.create();
+
+        assertThatIllegalArgumentException().isThrownBy(() -> team.changePassword(password));
+    }
+
+    @Test
+    void 팀_패스워드_변경_실패__활성화_상태가_아님() {
+        Team team = TeamFixture.create();
+
+        team.inactivate();
+
+        assertThatIllegalStateException().isThrownBy(() -> team.changePassword("changePassword"));
+    }
+
+    @Test
     void 팀_비활성화_성공() {
         Team team = TeamFixture.create();
 
