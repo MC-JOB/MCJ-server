@@ -1,8 +1,14 @@
-package com.minecraft.job.common.util;
+package com.minecraft.job.common.support;
 
 import java.util.Objects;
 
 public class Preconditions {
+
+    public static void validate(boolean expression, ErrorCode errorCode) {
+        if (!expression) {
+            throw new MinecraftJobException(errorCode);
+        }
+    }
 
     public static <T> T notNull(T obj) {
         return Objects.requireNonNull(obj);

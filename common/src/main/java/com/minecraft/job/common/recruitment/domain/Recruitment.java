@@ -10,8 +10,8 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.util.Preconditions.notNull;
-import static com.minecraft.job.common.util.Preconditions.require;
+import static com.minecraft.job.common.support.Preconditions.notNull;
+import static com.minecraft.job.common.support.Preconditions.require;
 
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
 import static javax.persistence.GenerationType.IDENTITY;

@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
-import static com.minecraft.job.common.util.Preconditions.check;
-import static com.minecraft.job.common.util.Preconditions.require;
+import static com.minecraft.job.common.support.Preconditions.check;
+import static com.minecraft.job.common.support.Preconditions.require;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity

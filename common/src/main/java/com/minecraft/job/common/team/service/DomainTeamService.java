@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.minecraft.job.common.util.Preconditions.check;
+import static com.minecraft.job.common.support.ErrorCode.ALREADY_USED_PASSWORD;
+import static com.minecraft.job.common.support.Preconditions.validate;
 
 @Service
 @Transactional
@@ -20,7 +21,7 @@ public class DomainTeamService implements TeamService {
             String name, String email, String password,
             String description, String logo, Long memberNum
     ) {
-        check(teamRepository.findByEmail(email).isEmpty());
+        validate(teamRepository.findByEmail(email).isEmpty(), ALREADY_USED_PASSWORD);
 
         Team team = Team.create(name, email, password, description, logo, memberNum);
 
