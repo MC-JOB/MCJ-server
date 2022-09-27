@@ -1,22 +1,18 @@
 package com.minecraft.job.common.recruitment.domain;
 
 import com.minecraft.job.common.team.domain.Team;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
-import static com.minecraft.job.common.support.Preconditions.notNull;
-import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
+import static com.minecraft.job.common.support.Preconditions.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Getter
+@Getter @Setter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recruitment {
@@ -33,7 +29,7 @@ public class Recruitment {
     private Team team;
 
     @Enumerated(value = EnumType.STRING)
-    private final RecruitmentStatus status = CREATED;
+    private RecruitmentStatus status = CREATED;
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
@@ -52,5 +48,14 @@ public class Recruitment {
         notNull(team);
 
         return new Recruitment(title, content, team);
+    }
+
+    public void activate(LocalDateTime closedAt){
+        require(closedAt.isAfter(LocalDateTime.now()));
+
+        check(CAN_MOVE_ACTIVATED.contains(status));
+
+        this.status = ACTIVATED;
+        this.closedAt = closedAt;
     }
 }
