@@ -10,10 +10,9 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
 import static com.minecraft.job.common.support.Preconditions.notNull;
 import static com.minecraft.job.common.support.Preconditions.require;
-
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -30,13 +29,13 @@ public class Recruitment {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
     @Enumerated(value = EnumType.STRING)
-    private RecruitmentStatus status = CREATED;
+    private final RecruitmentStatus status = CREATED;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime closedAt;
 

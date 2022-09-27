@@ -10,10 +10,10 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
-import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static com.minecraft.job.common.support.Preconditions.check;
 import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
+import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -46,9 +46,9 @@ public class Team {
     @Enumerated(value = EnumType.STRING)
     private TeamStatus status = ACTIVATED;
 
-    private Long averagePoint = 0L;
+    private final Long averagePoint = 0L;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     private Team(
             String name, String email, String password,
