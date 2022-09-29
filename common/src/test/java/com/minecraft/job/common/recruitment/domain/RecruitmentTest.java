@@ -80,6 +80,27 @@ class RecruitmentTest {
     }
 
     @Test
+    void 채용공고_비활성화_성공() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.activate(LocalDateTime.now().plusMinutes(1));
+        recruitment.inactivate();
+
+        assertThat(recruitment.getStatus()).isEqualTo(INACTIVATED);
+        assertThat(recruitment.getClosedAt()).isNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = RecruitmentStatus.class, names = {"INACTIVATED", "DELETED"}, mode = INCLUDE)
+    void 채용공고_비활성화_실패__비활성화_가능한_상태아님(RecruitmentStatus status) {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.setStatus(status);
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitment.inactivate());
+    }
+
+    @Test
     void 채용공고_수정_성공() {
         Recruitment recruitment = RecruitmentFixture.create();
 
