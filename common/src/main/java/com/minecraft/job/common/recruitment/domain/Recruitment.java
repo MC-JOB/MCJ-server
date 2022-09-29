@@ -58,4 +58,14 @@ public class Recruitment {
         this.status = ACTIVATED;
         this.closedAt = closedAt;
     }
+
+    public void update(String title, String content){
+        require(Strings.isNotBlank(title));
+        require(Strings.isNotBlank(content));
+
+        check(this.status != DELETED);
+
+        this.title = title;
+        this.content = content;
+    }
 }
