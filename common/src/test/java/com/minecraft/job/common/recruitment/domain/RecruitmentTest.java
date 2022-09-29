@@ -11,8 +11,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
@@ -78,5 +77,40 @@ class RecruitmentTest {
         recruitment.setStatus(status);
 
         assertThatIllegalStateException().isThrownBy(() -> recruitment.activate(LocalDateTime.now().plusMinutes(1)));
+    }
+
+    @Test
+    void 채용공고_수정_성공() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.update("updateTitle", "updateContent");
+
+        assertThat(recruitment.getTitle()).isEqualTo("updateTitle");
+        assertThat(recruitment.getContent()).isEqualTo("updateContent");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 채용공고_수정_실패__title이_널이거나_공백(String title) {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.update(title, "updateContent"));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 채용공고_수정_실패__content가_널이거나_공백(String content) {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.update("updateTitle", content));
+    }
+
+    @Test
+    void 채용공고_수정_실패__삭제됨_상태() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.setStatus(DELETED);
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitment.update("updateTitle", "updateContent"));
     }
 }
