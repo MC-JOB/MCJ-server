@@ -130,8 +130,26 @@ class RecruitmentTest {
     void 채용공고_수정_실패__삭제됨_상태() {
         Recruitment recruitment = RecruitmentFixture.create();
 
-        recruitment.setStatus(DELETED);
+        recruitment.delete();
 
         assertThatIllegalStateException().isThrownBy(() -> recruitment.update("updateTitle", "updateContent"));
+    }
+
+    @Test
+    void 채용공고_삭제_성공() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.delete();
+
+        assertThat(recruitment.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 채용공고_삭제_실패__삭제됨_상태() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.delete();
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitment.delete());
     }
 }
