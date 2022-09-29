@@ -101,6 +101,51 @@ class RecruitmentTest {
     }
 
     @Test
+    void 채용공고_활성화_기간연장_성공() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        LocalDateTime activateClosedAt = LocalDateTime.now().plusDays(5);
+
+        recruitment.activate(activateClosedAt);
+
+        recruitment.createdAtExtend(activateClosedAt.plusMinutes(1));
+
+        assertThat(recruitment.getClosedAt()).isAfter(activateClosedAt);
+    }
+
+    @Test
+    void 채용공고_활성화_기간연장_실패__현재보다_이전() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        recruitment.setStatus(ACTIVATED);
+        recruitment.setClosedAt(LocalDateTime.now().minusSeconds(10));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.createdAtExtend(LocalDateTime.now().minusSeconds(1)));
+    }
+
+    @Test
+    void 채용공고_활성화_기간연장_실패__기존_마감일보다_이전() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        LocalDateTime activateClosedAt = LocalDateTime.now().plusDays(5);
+
+        recruitment.activate(activateClosedAt);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.createdAtExtend(activateClosedAt.minusSeconds(1)));
+    }
+
+    @Test
+    void 채용공고_활성화_기간연장_실패__활성화_상태가_아님() {
+        Recruitment recruitment = RecruitmentFixture.create();
+
+        LocalDateTime closeAt = LocalDateTime.now().plusDays(5);
+
+        recruitment.setClosedAt(closeAt);
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitment.createdAtExtend(closeAt.plusSeconds(1)));
+    }
+
+    @Test
     void 채용공고_수정_성공() {
         Recruitment recruitment = RecruitmentFixture.create();
 
