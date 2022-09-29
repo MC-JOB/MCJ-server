@@ -59,6 +59,13 @@ public class Recruitment {
         this.closedAt = closedAt;
     }
 
+    public void inactivate(){
+        check(CAN_MOVE_INACTIVATED.contains(status));
+
+        this.status = INACTIVATED;
+        this.closedAt = null;
+    }
+
     public void update(String title, String content){
         require(Strings.isNotBlank(title));
         require(Strings.isNotBlank(content));
