@@ -75,4 +75,10 @@ public class Recruitment {
         this.title = title;
         this.content = content;
     }
+
+    public void delete(){
+        check(this.status != DELETED);
+
+        this.status = DELETED;
+    }
 }
