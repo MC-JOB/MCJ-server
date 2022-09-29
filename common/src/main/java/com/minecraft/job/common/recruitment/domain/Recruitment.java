@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static com.minecraft.job.common.support.Preconditions.*;
+import static com.minecraft.job.common.support.Preconditions.require;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -64,6 +65,15 @@ public class Recruitment {
 
         this.status = INACTIVATED;
         this.closedAt = null;
+    }
+
+    public void createdAtExtend(LocalDateTime closedAt){
+        require(closedAt.isAfter(LocalDateTime.now()));
+        require(closedAt.isAfter(this.closedAt));
+
+        check(this.status == ACTIVATED);
+
+        this.closedAt = closedAt;
     }
 
     public void update(String title, String content){
