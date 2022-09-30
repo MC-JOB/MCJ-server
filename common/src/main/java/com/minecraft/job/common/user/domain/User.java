@@ -54,4 +54,3 @@ public class User {
         return new User(nickname,email,password,age);
     }
 }
-
