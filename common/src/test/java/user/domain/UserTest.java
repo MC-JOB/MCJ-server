@@ -12,9 +12,8 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 public class UserTest {
 
     @Test
-    void 유저_생성__성공(){
+    void 유저_생성_성공(){
         User user = User.create("nickname","email","password",10L);
-
         assertThat(user.getNickname()).isEqualTo("nickname");
         assertThat(user.getEmail()).isEqualTo("email");
         assertThat(user.getPassword()).isEqualTo("password");
@@ -23,19 +22,19 @@ public class UserTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    void 닉네임_생성_실패__널이거나_공백(String nickname){
+    void 유저_생성_실패__닉네임이_널이거나_공백(String nickname){
         assertThatIllegalArgumentException().isThrownBy(() -> User.create(nickname,"email","password",10L));
     }
 
     @ParameterizedTest
     @NullAndEmptySource
-    void 이메일_생성_실패__널이거나_공백(String email){
+    void 유저_생성_실패__이메일이_널이거나_공백(String email){
         assertThatIllegalArgumentException().isThrownBy(() -> User.create("nickname",email,"password",10L));
     }
 
     @ParameterizedTest
     @NullAndEmptySource
-    void 패스워드_생성_실패__널이거나__공백(String password){
+    void 유저_생성_실패__패스워드_널이거나__공백(String password){
         assertThatIllegalArgumentException().isThrownBy(() -> User.create("nickname","email",password,10L));
     }
 

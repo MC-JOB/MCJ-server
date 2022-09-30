@@ -8,6 +8,8 @@ import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static com.minecraft.job.common.support.Preconditions.require;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -20,6 +22,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    private String id;
+
     private String  nickname;
 
     private String email;
@@ -32,6 +36,8 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     private UserStatus status = UserStatus.ACTIVATED;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     private User(String nickname, String email, String password, Long age ){
         this.nickname = nickname;
@@ -47,6 +53,5 @@ public class User {
         require(age >= 0);
         return new User(nickname,email,password,age);
     }
-
-
 }
+
