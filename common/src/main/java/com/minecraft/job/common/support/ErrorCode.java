@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    ALREADY_USED_PASSWORD("error.already.used.password");
+    ALREADY_USED_EMAIL("error.already.used.email");
 
     private final String message;
 }

@@ -10,3 +10,5 @@ create table user
     status     varchar(255),
     primary key (id)
 );
+
+alter table user add constraint uq_email unique (email);
