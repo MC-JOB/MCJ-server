@@ -5,7 +5,7 @@ import com.minecraft.job.common.user.domain.User;
 
 public class TeamFixture {
 
-    public static Team create(User user){
+    public static Team create(User user) {
         return Team.create("name", "description", "logo", 5L, user);
     }
 }

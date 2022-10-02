@@ -1,7 +1,6 @@
 package com.minecraft.job.common.team.domain;
 
 
-import com.minecraft.job.common.support.Preconditions;
 import com.minecraft.job.common.user.domain.User;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

@@ -43,7 +43,7 @@ public class UserTest {
 
     @Test
     void 유저_생성_실패__나이가_음수() {
-        assertThatIllegalArgumentException().isThrownBy(() ->  User.create("email", "password", "nickname", "interest", -1L));
+        assertThatIllegalArgumentException().isThrownBy(() -> User.create("email", "password", "nickname", "interest", -1L));
     }
 
 
