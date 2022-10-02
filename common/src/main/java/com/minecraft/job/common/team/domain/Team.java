@@ -45,6 +45,10 @@ public class Team {
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
+    public boolean ofUser(User user){
+        return this.user == user;
+    }
+
     private Team(String name, String description, String logo, Long memberNum, User user) {
         this.name = name;
         this.description = description;
