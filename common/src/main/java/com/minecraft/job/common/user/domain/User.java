@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.support.Preconditions.require;
@@ -24,33 +23,35 @@ public class User {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private String  nickname;
-
     private String email;
 
     private String password;
 
-    private Long age;
+    private String nickname;
 
-    private String interests;
+    private String interest;
+
+    private Long age;
 
     @Enumerated(value = EnumType.STRING)
     private UserStatus status = UserStatus.ACTIVATED;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    private User(String nickname, String email, String password, Long age ){
-        this.nickname = nickname;
+    private User(String email, String password, String nickname, String interest, Long age) {
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
+        this.interest = interest;
         this.age = age;
     }
 
-    public static User create(String nickname, String email, String password, Long age ){
-        require(Strings.isNotBlank(nickname));
+    public static User create(String email, String password, String nickname, String interest, Long age) {
         require(Strings.isNotBlank(email));
         require(Strings.isNotBlank(password));
+        require(Strings.isNotBlank(nickname));
         require(age >= 0);
-        return new User(nickname,email,password,age);
+
+        return new User(email, password, nickname, interest, age);
     }
 }
