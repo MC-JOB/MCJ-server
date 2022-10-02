@@ -36,6 +36,10 @@ public class Recruitment {
 
     private LocalDateTime closedAt;
 
+    public boolean ofTeam(Team team) {
+        return this.team == team;
+    }
+
     private Recruitment(String title, String content, Team team) {
         this.title = title;
         this.content = content;

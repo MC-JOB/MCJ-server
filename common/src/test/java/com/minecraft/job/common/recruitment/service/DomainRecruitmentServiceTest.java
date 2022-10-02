@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 @SpringBootTest
 @Transactional
@@ -49,5 +53,55 @@ class DomainRecruitmentServiceTest {
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
         assertThat(findRecruitment.getId()).isNotNull();
+    }
+
+    @Test
+    void 채용공고_생성_실패__유저의_팀이_아님() {
+        User user = User.create("fakeEmail", "fakePassword", "fakeNickname", "fakeInterest", 15L);
+
+        User fakeUser = userRepository.save(user);
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.create(fakeUser.getId(), team.getId(), "title", "content")
+        );
+    }
+
+    @Test
+    void 채용공고_활성화_성공() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(ACTIVATED);
+        assertThat(findRecruitment.getClosedAt()).isNotNull();
+    }
+
+    @Test
+    void 채용공고_활성화_실패__유저의_팀이_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        User user = User.create("fakeEmail", "fakePassword", "fakeNickname", "fakeInterest", 15L);
+
+        User fakeUser = userRepository.save(user);
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.activate(recruitment.getId(), fakeUser.getId(), team.getId(), LocalDateTime.now().plusMinutes(1))
+        );
+    }
+
+    @Test
+    void 채용공고_활성화_실패__팀의_채용공고가_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        Team team = Team.create("fakeTeam", "fakeDescription", "fakeLogo", 5L, user);
+
+        Team fakeTeam = teamRepository.save(team);
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.activate(recruitment.getId(), user.getId(), fakeTeam.getId(), LocalDateTime.now().plusMinutes(1))
+        );
+
     }
 }

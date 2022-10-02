@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 import static com.minecraft.job.common.support.Preconditions.require;
 
 @Service
@@ -33,5 +35,17 @@ public class DomainRecruitmentService implements RecruitmentService {
         Recruitment recruitment = Recruitment.create(title, content, team);
 
         return recruitmentRepository.save(recruitment);
+    }
+
+    @Override
+    public void activate(Long recruitmentId, Long userId, Long teamId, LocalDateTime closedAt) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        require(team.ofUser(user));
+        require(recruitment.ofTeam(team));
+
+        recruitment.activate(closedAt);
     }
 }
