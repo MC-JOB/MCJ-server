@@ -17,6 +17,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_email", columnNames = "email")
+        }
+)
 public class User {
 
     @Id

@@ -1,5 +1,6 @@
 package com.minecraft.job.common.user.service;
 
+import com.minecraft.job.common.support.MinecraftJobException;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @SpringBootTest
 @Transactional
@@ -26,5 +28,14 @@ class DomainUserServiceTest {
         User findUser = userRepository.findById(user.getId()).orElseThrow();
 
         assertThat(findUser.getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 유저_생성_실패__이미_존재하는_이메일() {
+        userService.create("email", "password", "nickname", "interest", 10L);
+
+        assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(
+                () -> userService.create("email", "password", "nickname", "interest", 10L)
+        );
     }
 }
