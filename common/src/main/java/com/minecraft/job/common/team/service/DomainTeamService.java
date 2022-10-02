@@ -2,12 +2,11 @@ package com.minecraft.job.common.team.service;
 
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
+import com.minecraft.job.common.user.domain.User;
+import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.minecraft.job.common.support.ErrorCode.ALREADY_USED_PASSWORD;
-import static com.minecraft.job.common.support.Preconditions.validate;
 
 @Service
 @Transactional
@@ -16,14 +15,13 @@ public class DomainTeamService implements TeamService {
 
     private final TeamRepository teamRepository;
 
-    @Override
-    public Team create(
-            String name, String email, String password,
-            String description, String logo, Long memberNum
-    ) {
-        validate(teamRepository.findByEmail(email).isEmpty(), ALREADY_USED_PASSWORD);
+    private final UserRepository userRepository;
 
-        Team team = Team.create(name, email, password, description, logo, memberNum);
+    @Override
+    public Team create(Long userId, String name, String description, String logo, Long memberNum) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Team team = Team.create(name, description, logo, memberNum, user);
 
         return teamRepository.save(team);
     }

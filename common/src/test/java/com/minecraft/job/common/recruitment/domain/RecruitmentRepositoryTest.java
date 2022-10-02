@@ -1,8 +1,11 @@
 package com.minecraft.job.common.recruitment.domain;
 
 import com.minecraft.job.common.fixture.TeamFixture;
+import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
+import com.minecraft.job.common.user.domain.User;
+import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +26,17 @@ class RecruitmentRepositoryTest {
     @Autowired
     private TeamRepository teamRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private Team team;
+
+    private User user;
 
     @BeforeEach
     void setUp() {
-        team = teamRepository.save(TeamFixture.create());
+        user = userRepository.save(UserFixture.create());
+        team = teamRepository.save(TeamFixture.create(user));
     }
 
     @Test

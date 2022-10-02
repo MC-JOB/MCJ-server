@@ -1,6 +1,9 @@
 package com.minecraft.job.common.team.domain;
 
 import com.minecraft.job.common.fixture.TeamFixture;
+import com.minecraft.job.common.fixture.UserFixture;
+import com.minecraft.job.common.user.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -11,16 +14,22 @@ import static org.assertj.core.api.Assertions.*;
 
 class TeamTest {
 
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        user = UserFixture.create();
+    }
+
     @Test
     void 팀_생성_성공() {
-        Team team = Team.create("name", "email", "password", "description", "logo", 5L);
+        Team team = Team.create("name", "description", "logo", 5L, user);
 
         assertThat(team.getName()).isEqualTo("name");
-        assertThat(team.getEmail()).isEqualTo("email");
-        assertThat(team.getPassword()).isEqualTo("password");
         assertThat(team.getDescription()).isEqualTo("description");
         assertThat(team.getLogo()).isEqualTo("logo");
         assertThat(team.getMemberNum()).isEqualTo(5L);
+        assertThat(team.getUser()).isEqualTo(user);
         assertThat(team.getStatus()).isEqualTo(ACTIVATED);
         assertThat(team.getAveragePoint()).isEqualTo(0L);
         assertThat(team.getCreatedAt()).isNotNull();
@@ -29,29 +38,17 @@ class TeamTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 팀_생성_실패__name이_널이거나_공백(String name) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Team.create(name, "email", "password", "description", "logo", 5L));
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    void 팀_생성_실패__email이_널이거나_공백(String email) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", email, "password", "description", "logo", 5L));
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    void 팀_생성_실패__password가_널이거나_공백(String password) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", "email", password, "description", "logo", 5L));
+        assertThatIllegalArgumentException().isThrownBy(() -> Team.create(name, "description", "logo", 5L, user));
     }
 
     @Test
     void 팀_생성_실패__memberNum이_음수() {
-        assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", "email", "password", "description", "logo", -1L));
+        assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", "description", "logo", -1L, user));
     }
 
     @Test
     void 팀_업데이트_성공() {
-        Team team = TeamFixture.create();
+        Team team = TeamFixture.create(user);
 
         team.update("updateName", "updateDescription", "updateLogo", 1L);
 
@@ -64,21 +61,21 @@ class TeamTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 팀_업데이트_실패__name이_널이거나_공백(String name) {
-        Team team = TeamFixture.create();
+        Team team = TeamFixture.create(user);
 
         assertThatIllegalArgumentException().isThrownBy(() -> team.update(name, "updateDescription", "updateLogo", 1L));
     }
 
     @Test
     void 팀_업데이트_실패__memberNum이_음수() {
-        Team team = TeamFixture.create();
+        Team team = TeamFixture.create(user);
 
         assertThatIllegalArgumentException().isThrownBy(() -> team.update("updateName", "updateDescription", "updateLogo", -1L));
     }
 
     @Test
     void 팀_업데이트_실패__활성화_상태가_아님() {
-        Team team = TeamFixture.create();
+        Team team = TeamFixture.create(user);
 
         team.inactivate();
 
@@ -86,34 +83,8 @@ class TeamTest {
     }
 
     @Test
-    void 팀_패스워드_변경_성공() {
-        Team team = TeamFixture.create();
-
-        team.changePassword("changePassword");
-
-        assertThat(team.getPassword()).isEqualTo("changePassword");
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    void 팀_패스워드_변경_실패__password가_널이거나_공백(String password) {
-        Team team = TeamFixture.create();
-
-        assertThatIllegalArgumentException().isThrownBy(() -> team.changePassword(password));
-    }
-
-    @Test
-    void 팀_패스워드_변경_실패__활성화_상태가_아님() {
-        Team team = TeamFixture.create();
-
-        team.inactivate();
-
-        assertThatIllegalStateException().isThrownBy(() -> team.changePassword("changePassword"));
-    }
-
-    @Test
     void 팀_비활성화_성공() {
-        Team team = TeamFixture.create();
+        Team team = TeamFixture.create(user);
 
         team.inactivate();
 
@@ -122,7 +93,7 @@ class TeamTest {
 
     @Test
     void 팀_비활성화_실패__이미_비활성화_상태() {
-        Team team = TeamFixture.create();
+        Team team = TeamFixture.create(user);
 
         team.inactivate();
 
