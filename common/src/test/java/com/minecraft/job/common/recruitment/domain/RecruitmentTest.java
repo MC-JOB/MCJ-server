@@ -2,6 +2,7 @@ package com.minecraft.job.common.recruitment.domain;
 
 import com.minecraft.job.common.fixture.RecruitmentFixture;
 import com.minecraft.job.common.fixture.TeamFixture;
+import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.team.domain.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class RecruitmentTest {
 
     @BeforeEach
     void setUp() {
-        team = TeamFixture.create();
+        team = TeamFixture.create(UserFixture.create());
     }
 
     @Test
@@ -54,7 +55,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_활성화_성공() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.activate(LocalDateTime.now().plusMinutes(1));
 
@@ -64,7 +65,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_활성화_실패__마감일이_현재보다_과거() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         assertThatIllegalArgumentException().isThrownBy(() -> recruitment.activate(LocalDateTime.now().minusSeconds(1)));
     }
@@ -72,7 +73,7 @@ class RecruitmentTest {
     @ParameterizedTest
     @EnumSource(value = RecruitmentStatus.class, names = {"ACTIVATED", "DELETED"}, mode = INCLUDE)
     void 채용공고_활성화_실패__활성화_가능한_상태아님(RecruitmentStatus status) {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.setStatus(status);
 
@@ -81,7 +82,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_비활성화_성공() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.activate(LocalDateTime.now().plusMinutes(1));
         recruitment.inactivate();
@@ -93,7 +94,7 @@ class RecruitmentTest {
     @ParameterizedTest
     @EnumSource(value = RecruitmentStatus.class, names = {"INACTIVATED", "DELETED"}, mode = INCLUDE)
     void 채용공고_비활성화_실패__비활성화_가능한_상태아님(RecruitmentStatus status) {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.setStatus(status);
 
@@ -102,7 +103,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_활성화_기간연장_성공() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         LocalDateTime activateClosedAt = LocalDateTime.now().plusDays(5);
 
@@ -115,7 +116,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_활성화_기간연장_실패__현재보다_이전() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.setStatus(ACTIVATED);
         recruitment.setClosedAt(LocalDateTime.now().minusSeconds(10));
@@ -125,7 +126,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_활성화_기간연장_실패__기존_마감일보다_이전() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         LocalDateTime activateClosedAt = LocalDateTime.now().plusDays(5);
 
@@ -136,7 +137,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_활성화_기간연장_실패__활성화_상태가_아님() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         LocalDateTime closeAt = LocalDateTime.now().plusDays(5);
 
@@ -147,7 +148,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_수정_성공() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.update("updateTitle", "updateContent");
 
@@ -158,7 +159,7 @@ class RecruitmentTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 채용공고_수정_실패__title이_널이거나_공백(String title) {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         assertThatIllegalArgumentException().isThrownBy(() -> recruitment.update(title, "updateContent"));
     }
@@ -166,14 +167,14 @@ class RecruitmentTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 채용공고_수정_실패__content가_널이거나_공백(String content) {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         assertThatIllegalArgumentException().isThrownBy(() -> recruitment.update("updateTitle", content));
     }
 
     @Test
     void 채용공고_수정_실패__삭제됨_상태() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.delete();
 
@@ -182,7 +183,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_삭제_성공() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.delete();
 
@@ -191,7 +192,7 @@ class RecruitmentTest {
 
     @Test
     void 채용공고_삭제_실패__삭제됨_상태() {
-        Recruitment recruitment = RecruitmentFixture.create();
+        Recruitment recruitment = RecruitmentFixture.create(team);
 
         recruitment.delete();
 

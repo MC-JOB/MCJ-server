@@ -1,6 +1,7 @@
 package com.minecraft.job.common.team.domain;
 
 
+import com.minecraft.job.common.user.domain.User;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,21 +11,16 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.support.Preconditions.check;
-import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.support.Preconditions.*;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uq_email", columnNames = "email")
-        }
-)
 public class Team {
 
     @Id
@@ -33,15 +29,14 @@ public class Team {
 
     private String name;
 
-    private String email;
-
-    private String password;
-
     private String description;
 
     private String logo;
 
     private Long memberNum;
+
+    @ManyToOne(fetch = LAZY)
+    private User user;
 
     @Enumerated(value = EnumType.STRING)
     private TeamStatus status = ACTIVATED;
@@ -50,28 +45,22 @@ public class Team {
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    private Team(
-            String name, String email, String password,
-            String description, String logo, Long memberNum
-    ) {
+    private Team(String name, String description, String logo, Long memberNum, User user) {
         this.name = name;
-        this.email = email;
-        this.password = password;
         this.description = description;
         this.logo = logo;
         this.memberNum = memberNum;
+        this.user = user;
     }
 
-    public static Team create(
-            String name, String email, String password,
-            String description, String logo, Long memberNum
-    ) {
+    public static Team create(String name, String description, String logo, Long memberNum, User user) {
+        notNull(user);
+
         require(Strings.isNotBlank(name));
-        require(Strings.isNotBlank(email));
-        require(Strings.isNotBlank(password));
         require(memberNum >= 0);
 
-        return new Team(name, email, password, description, logo, memberNum);
+
+        return new Team(name, description, logo, memberNum, user);
     }
 
     public void update(String name, String description, String logo, Long memberNum) {
@@ -84,14 +73,6 @@ public class Team {
         this.description = description;
         this.logo = logo;
         this.memberNum = memberNum;
-    }
-
-    public void changePassword(String password) {
-        require(Strings.isNotBlank(password));
-
-        check(this.status == ACTIVATED);
-
-        this.password = password;
     }
 
     public void inactivate() {

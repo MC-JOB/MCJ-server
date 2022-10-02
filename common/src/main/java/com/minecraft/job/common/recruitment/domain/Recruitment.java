@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static com.minecraft.job.common.support.Preconditions.*;
-import static com.minecraft.job.common.support.Preconditions.require;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Recruitment {
@@ -51,7 +51,7 @@ public class Recruitment {
         return new Recruitment(title, content, team);
     }
 
-    public void activate(LocalDateTime closedAt){
+    public void activate(LocalDateTime closedAt) {
         require(closedAt.isAfter(LocalDateTime.now()));
 
         check(CAN_MOVE_ACTIVATED.contains(status));
@@ -60,14 +60,14 @@ public class Recruitment {
         this.closedAt = closedAt;
     }
 
-    public void inactivate(){
+    public void inactivate() {
         check(CAN_MOVE_INACTIVATED.contains(status));
 
         this.status = INACTIVATED;
         this.closedAt = null;
     }
 
-    public void createdAtExtend(LocalDateTime closedAt){
+    public void createdAtExtend(LocalDateTime closedAt) {
         require(closedAt.isAfter(LocalDateTime.now()));
         require(closedAt.isAfter(this.closedAt));
 
@@ -76,7 +76,7 @@ public class Recruitment {
         this.closedAt = closedAt;
     }
 
-    public void update(String title, String content){
+    public void update(String title, String content) {
         require(Strings.isNotBlank(title));
         require(Strings.isNotBlank(content));
 
@@ -86,7 +86,7 @@ public class Recruitment {
         this.content = content;
     }
 
-    public void delete(){
+    public void delete() {
         check(this.status != DELETED);
 
         this.status = DELETED;
