@@ -124,4 +124,22 @@ class TeamTest {
 
         assertThatIllegalStateException().isThrownBy(team::inactivate);
     }
+
+    @Test
+    void 팀_활성화_성공() {
+        Team team = TeamFixture.create(user);
+
+        team.inactivate();
+
+        team.activate();
+
+        assertThat(team.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 팀_활성화_실패__이미_활성화_상태() {
+        Team team = TeamFixture.create(user);
+
+        assertThatIllegalStateException().isThrownBy(team::activate);
+    }
 }
