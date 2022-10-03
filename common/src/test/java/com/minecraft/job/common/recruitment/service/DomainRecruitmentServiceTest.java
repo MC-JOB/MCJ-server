@@ -58,9 +58,7 @@ class DomainRecruitmentServiceTest {
 
     @Test
     void 채용공고_생성_실패__유저의_팀이_아님() {
-        User user = User.create("fakeEmail", "fakePassword", "fakeNickname", "fakeInterest", 15L);
-
-        User fakeUser = userRepository.save(user);
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.create(fakeUser.getId(), team.getId(), "title", "content")
@@ -83,9 +81,7 @@ class DomainRecruitmentServiceTest {
     void 채용공고_활성화_실패__유저의_팀이_아님() {
         Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
 
-        User user = User.create("fakeEmail", "fakePassword", "fakeNickname", "fakeInterest", 15L);
-
-        User fakeUser = userRepository.save(user);
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.activate(recruitment.getId(), fakeUser.getId(), team.getId(), LocalDateTime.now().plusMinutes(1))
@@ -96,9 +92,7 @@ class DomainRecruitmentServiceTest {
     void 채용공고_활성화_실패__팀의_채용공고가_아님() {
         Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
 
-        Team team = Team.create("fakeTeam", "fakeDescription", "fakeLogo", 5L, user);
-
-        Team fakeTeam = teamRepository.save(team);
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.activate(recruitment.getId(), user.getId(), fakeTeam.getId(), LocalDateTime.now().plusMinutes(1))
