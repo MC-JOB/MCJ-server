@@ -48,4 +48,16 @@ public class DomainRecruitmentService implements RecruitmentService {
 
         recruitment.activate(closedAt);
     }
+
+    @Override
+    public void inactivate(Long recruitmentId, Long userId, long teamId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        require(team.ofUser(user));
+        require(recruitment.ofTeam(team));
+
+        recruitment.inactivate();
+    }
 }

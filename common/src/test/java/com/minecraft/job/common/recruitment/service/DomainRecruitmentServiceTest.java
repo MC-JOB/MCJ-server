@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -102,6 +103,19 @@ class DomainRecruitmentServiceTest {
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.activate(recruitment.getId(), user.getId(), fakeTeam.getId(), LocalDateTime.now().plusMinutes(1))
         );
+    }
 
+    @Test
+    void 채용공고_비활성화_성공() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
+
+        recruitmentService.inactivate(recruitment.getId(), user.getId(), team.getId());
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(INACTIVATED);
+        assertThat(findRecruitment.getClosedAt()).isNull();
     }
 }
