@@ -9,4 +9,6 @@ public interface RecruitmentService {
     Recruitment create(Long userId, Long teamId, String title, String content);
 
     void activate(Long recruitmentId, Long userId, Long teamId, LocalDateTime closedAt);
+
+    void inactivate(Long recruitmentId, Long userId, long teamId);
 }
