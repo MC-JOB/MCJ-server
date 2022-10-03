@@ -94,4 +94,10 @@ public class Team {
 
         this.status = INACTIVATED;
     }
+
+    public void activate() {
+        check(this.status == INACTIVATED);
+
+        this.status = ACTIVATED;
+    }
 }
