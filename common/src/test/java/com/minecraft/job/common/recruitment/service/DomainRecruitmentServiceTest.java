@@ -142,8 +142,6 @@ class DomainRecruitmentServiceTest {
     void 채용공고_삭제_성공() {
         Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
 
-        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
-
         recruitmentService.delete(recruitment.getId(), user.getId(), team.getId());
 
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
@@ -170,6 +168,40 @@ class DomainRecruitmentServiceTest {
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.delete(recruitment.getId(), user.getId(), fakeTeam.getId())
+        );
+    }
+
+    @Test
+    void 채용공고_수정_성공() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        recruitmentService.update(recruitment.getId(), user.getId(), team.getId(), "updateTitle", "updateContent");
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getTitle().equals("updateTitle"));
+        assertThat(findRecruitment.getContent().equals("updateContent"));
+    }
+
+    @Test
+    void 채용공고_수정_실패__유저의_팀이_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.update(recruitment.getId(), fakeUser.getId(), team.getId(), "updateTitle", "updateContent")
+        );
+    }
+
+    @Test
+    void 채용공고_수정_실패__팀의_채용공고가_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.update(recruitment.getId(), user.getId(), fakeTeam.getId(), "updateTitle", "updateContent")
         );
     }
 }

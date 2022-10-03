@@ -72,4 +72,16 @@ public class DomainRecruitmentService implements RecruitmentService {
 
         recruitment.delete();
     }
+
+    @Override
+    public void update(Long recruitmentId, Long userId, long teamId, String title, String content) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        require(team.ofUser(user));
+        require(recruitment.ofTeam(team));
+
+        recruitment.update(title, content);
+    }
 }

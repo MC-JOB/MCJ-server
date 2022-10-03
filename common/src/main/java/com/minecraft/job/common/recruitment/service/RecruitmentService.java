@@ -13,4 +13,6 @@ public interface RecruitmentService {
     void inactivate(Long recruitmentId, Long userId, long teamId);
 
     void delete(Long recruitmentId, Long userId, long teamId);
+
+    void update(Long recruitmentId, Long userId, long teamId, String title, String content);
 }
