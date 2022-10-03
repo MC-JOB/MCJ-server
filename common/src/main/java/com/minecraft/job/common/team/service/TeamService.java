@@ -9,4 +9,6 @@ public interface TeamService {
     void update(Long teamId, Long userId, String name, String description, String logo, Long memberNum);
 
     void inactivate(Long teamId, Long userId);
+
+    void activate(Long teamId, Long userId);
 }
