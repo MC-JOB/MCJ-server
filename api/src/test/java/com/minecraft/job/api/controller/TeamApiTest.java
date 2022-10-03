@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
@@ -8,6 +9,7 @@ import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
+import com.minecraft.job.common.team.service.TeamService;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,6 +31,9 @@ class TeamApiTest extends ApiTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TeamService teamService;
 
     private Team team;
     private User user;
@@ -85,5 +91,23 @@ class TeamApiTest extends ApiTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findTeam.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @Test
+    void 팀_활성화_성공() throws Exception {
+        TeamActivateRequest teamActivateRequest = new TeamActivateRequest(team.getId(), user.getId());
+
+        teamService.inactivate(team.getId(), user.getId());
+
+        mockMvc.perform(post("/team/activate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(teamActivateRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findTeam.getStatus()).isEqualTo(ACTIVATED);
     }
 }
