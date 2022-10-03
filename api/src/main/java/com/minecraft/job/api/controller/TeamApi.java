@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
@@ -38,5 +39,11 @@ public class TeamApi {
     public void inactivate(@RequestBody TeamInactivateRequest req) {
 
         teamService.inactivate(req.teamId(), req.userId());
+    }
+
+    @PostMapping("/activate")
+    public void activate(@RequestBody TeamActivateRequest req) {
+
+        teamService.activate(req.teamId(), req.userId());
     }
 }
