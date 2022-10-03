@@ -112,4 +112,30 @@ class DomainRecruitmentServiceTest {
         assertThat(findRecruitment.getStatus()).isEqualTo(INACTIVATED);
         assertThat(findRecruitment.getClosedAt()).isNull();
     }
+
+    @Test
+    void 채용공고_비활성화_실패__유저의_팀이_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
+
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.inactivate(recruitment.getId(), fakeUser.getId(), team.getId())
+        );
+    }
+
+    @Test
+    void 채용공고_비활성화_실패__팀의_채용공고가_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.inactivate(recruitment.getId(), user.getId(), fakeTeam.getId())
+        );
+    }
 }
