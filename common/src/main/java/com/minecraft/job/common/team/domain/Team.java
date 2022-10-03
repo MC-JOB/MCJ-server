@@ -41,11 +41,14 @@ public class Team {
     @Enumerated(value = EnumType.STRING)
     private TeamStatus status = ACTIVATED;
 
-    private final Long averagePoint = 0L;
+    private Long averagePoint = 0L;
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    public boolean ofUser(User user){
+    public static final Long MAX_AVERAGE_POINT = 5L;
+    public static final Long MIN_AVERAGE_POINT = 0L;
+
+    public boolean ofUser(User user) {
         return this.user == user;
     }
 
@@ -67,6 +70,13 @@ public class Team {
         return new Team(name, description, logo, memberNum, user);
     }
 
+    public void applyAveragePoint(Long averagePoint) {
+        require(averagePoint >= MIN_AVERAGE_POINT);
+        require(averagePoint <= MAX_AVERAGE_POINT);
+
+        this.averagePoint = averagePoint;
+    }
+
     public void update(String name, String description, String logo, Long memberNum) {
         require(Strings.isNotBlank(name));
         require(memberNum >= 0);
@@ -83,5 +93,11 @@ public class Team {
         check(this.status == ACTIVATED);
 
         this.status = INACTIVATED;
+    }
+
+    public void activate() {
+        check(this.status == INACTIVATED);
+
+        this.status = ACTIVATED;
     }
 }
