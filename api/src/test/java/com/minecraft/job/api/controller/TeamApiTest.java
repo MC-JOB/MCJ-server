@@ -1,6 +1,7 @@
 package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
+import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,5 +69,21 @@ class TeamApiTest extends ApiTest {
         assertThat(findTeam.getDescription()).isEqualTo("updateDescription");
         assertThat(findTeam.getLogo()).isEqualTo("updateLogo");
         assertThat(findTeam.getMemberNum()).isEqualTo(1L);
+    }
+
+    @Test
+    void 팀_비활성화_성공() throws Exception {
+        TeamInactivateRequest teamInactivateRequest = new TeamInactivateRequest(team.getId(), user.getId());
+
+        mockMvc.perform(post("/team/inactivate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(teamInactivateRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findTeam.getStatus()).isEqualTo(INACTIVATED);
     }
 }
