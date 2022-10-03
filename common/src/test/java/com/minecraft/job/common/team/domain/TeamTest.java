@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import static com.minecraft.job.common.team.domain.Team.MAX_AVERAGE_POINT;
+import static com.minecraft.job.common.team.domain.Team.MIN_AVERAGE_POINT;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.*;
@@ -44,6 +46,29 @@ class TeamTest {
     @Test
     void 팀_생성_실패__memberNum이_음수() {
         assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", "description", "logo", -1L, user));
+    }
+
+    @Test
+    void 팀_평점_적용_성공() {
+        Team team = TeamFixture.create(user);
+
+        team.applyAveragePoint(5L);
+
+        assertThat(team.getAveragePoint()).isEqualTo(5L);
+    }
+
+    @Test
+    void 팀_평점_적용_실패__평점_최소값보다_낮음() {
+        Team team = TeamFixture.create(user);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> team.applyAveragePoint(MIN_AVERAGE_POINT - 1L));
+    }
+
+    @Test
+    void 팀_평점_적용_실패__평점_최대값보다_높음() {
+        Team team = TeamFixture.create(user);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> team.applyAveragePoint(MAX_AVERAGE_POINT + 1L));
     }
 
     @Test
