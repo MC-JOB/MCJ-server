@@ -103,7 +103,6 @@ class DomainRecruitmentServiceTest {
         Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
 
         recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
-
         recruitmentService.inactivate(recruitment.getId(), user.getId(), team.getId());
 
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
@@ -202,6 +201,48 @@ class DomainRecruitmentServiceTest {
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.update(recruitment.getId(), user.getId(), fakeTeam.getId(), "updateTitle", "updateContent")
+        );
+    }
+
+    @Test
+    void 채용공고_기간연장_성공() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(1);
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), localDateTime);
+        recruitmentService.createdAtExtend(recruitment.getId(), user.getId(), team.getId(), recruitment.getClosedAt().plusMinutes(1));
+
+        assertThat(localDateTime.isAfter(recruitment.getClosedAt()));
+    }
+
+    @Test
+    void 채용공고_기간연장_실패__유저의_팀이_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(1);
+
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), localDateTime);
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.createdAtExtend(recruitment.getId(), fakeUser.getId(), team.getId(), recruitment.getClosedAt().plusMinutes(1))
+        );
+    }
+
+    @Test
+    void 채용공고_기간연장_실패__팀의_채용공고가_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(1);
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), localDateTime);
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.createdAtExtend(recruitment.getId(), user.getId(), fakeTeam.getId(), recruitment.getClosedAt().plusMinutes(1))
         );
     }
 }
