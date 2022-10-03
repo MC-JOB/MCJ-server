@@ -11,4 +11,6 @@ public interface RecruitmentService {
     void activate(Long recruitmentId, Long userId, Long teamId, LocalDateTime closedAt);
 
     void inactivate(Long recruitmentId, Long userId, long teamId);
+
+    void delete(Long recruitmentId, Long userId, long teamId);
 }

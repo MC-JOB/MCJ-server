@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.INACTIVATED;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -136,6 +135,41 @@ class DomainRecruitmentServiceTest {
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.inactivate(recruitment.getId(), user.getId(), fakeTeam.getId())
+        );
+    }
+
+    @Test
+    void 채용공고_삭제_성공() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
+
+        recruitmentService.delete(recruitment.getId(), user.getId(), team.getId());
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 채용공고_삭제_실패__유저의_팀이_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.delete(recruitment.getId(), fakeUser.getId(), team.getId())
+        );
+    }
+
+    @Test
+    void 채용공고_삭제_실패__팀의_채용공고가_아님() {
+        Recruitment recruitment = recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentService.delete(recruitment.getId(), user.getId(), fakeTeam.getId())
         );
     }
 }
