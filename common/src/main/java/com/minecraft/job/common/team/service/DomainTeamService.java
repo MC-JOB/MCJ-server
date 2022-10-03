@@ -47,4 +47,14 @@ public class DomainTeamService implements TeamService {
 
         team.inactivate();
     }
+
+    @Override
+    public void activate(Long teamId, Long userId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        require(team.ofUser(user));
+
+        team.activate();
+    }
 }
