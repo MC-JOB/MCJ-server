@@ -3,6 +3,7 @@ package com.minecraft.job.api.controller;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
+import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,11 @@ public class TeamApi {
     public void update(@RequestBody TeamUpdateRequest req) {
 
         teamService.update(req.teamId(), req.userId(), req.name(), req.description(), req.logo(), req.memberNum());
+    }
+
+    @PostMapping("/inactivate")
+    public void inactivate(@RequestBody TeamInactivateRequest req) {
+
+        teamService.inactivate(req.teamId(), req.userId());
     }
 }
