@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.support.Preconditions.require;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,5 +26,15 @@ public class DomainTeamService implements TeamService {
         Team team = Team.create(name, description, logo, memberNum, user);
 
         return teamRepository.save(team);
+    }
+
+    @Override
+    public void update(Long teamId, Long userId, String name, String description, String logo, Long memberNum) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        require(team.ofUser(user));
+
+        team.update(name, description, logo, memberNum);
     }
 }
