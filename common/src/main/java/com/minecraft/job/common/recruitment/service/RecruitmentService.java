@@ -15,4 +15,6 @@ public interface RecruitmentService {
     void delete(Long recruitmentId, Long userId, long teamId);
 
     void update(Long recruitmentId, Long userId, long teamId, String title, String content);
+
+    void createdAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt);
 }

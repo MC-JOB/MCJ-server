@@ -84,4 +84,16 @@ public class DomainRecruitmentService implements RecruitmentService {
 
         recruitment.update(title, content);
     }
+
+    @Override
+    public void createdAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        require(team.ofUser(user));
+        require(recruitment.ofTeam(team));
+
+        recruitment.createdAtExtend(closedAt);
+    }
 }
