@@ -7,4 +7,8 @@ public interface TeamService {
     Team create(Long userId, String name, String description, String logo, Long memberNum);
 
     void update(Long teamId, Long userId, String name, String description, String logo, Long memberNum);
+
+    void inactivate(Long teamId, Long userId);
+
+    void activate(Long teamId, Long userId);
 }
