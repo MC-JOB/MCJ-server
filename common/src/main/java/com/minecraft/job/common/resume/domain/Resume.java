@@ -69,6 +69,12 @@ public class Resume {
         this.trainingHistory = trainingHistory;
     }
 
+    public void activate() {
+        check(CAN_MOVE_ACTIVATED.contains(status));
+
+        this.status = ACTIVATED;
+    }
+
     public void inactivate() {
         check(CAN_MOVE_INACTIVATED.contains(status));
 

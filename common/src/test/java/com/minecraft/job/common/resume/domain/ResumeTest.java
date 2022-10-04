@@ -119,4 +119,23 @@ class ResumeTest {
 
         assertThatIllegalStateException().isThrownBy(resume::inactivate);
     }
+
+    @Test
+    void 이력서_활성화_성공() {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.activate();
+
+        assertThat(resume.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ResumeStatue.class, names = {"ACTIVATED", "DELETED"}, mode = INCLUDE)
+    void 이력서_활성화_실패__활성화_가능한_상태가_아님(ResumeStatue statue) {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.setStatus(statue);
+
+        assertThatIllegalStateException().isThrownBy(resume::activate);
+    }
 }
