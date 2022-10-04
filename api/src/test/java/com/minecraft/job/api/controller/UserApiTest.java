@@ -1,9 +1,7 @@
 package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.support.ApiTest;
-import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;

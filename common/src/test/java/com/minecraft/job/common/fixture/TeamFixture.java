@@ -9,7 +9,7 @@ public class TeamFixture {
         return Team.create("name", "description", "logo", 5L, user);
     }
 
-    public static Team getFakeTeam(User user)  {
+    public static Team getFakeTeam(User user) {
         return Team.create("fakeName", "fakeDescription", "fakeLogo", 5L, user);
     }
 }

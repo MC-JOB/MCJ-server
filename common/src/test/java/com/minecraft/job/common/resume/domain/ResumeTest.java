@@ -1,5 +1,6 @@
 package com.minecraft.job.common.resume.domain;
 
+import com.minecraft.job.common.fixture.ResumeFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import static com.minecraft.job.common.resume.domain.ResumeStatue.CREATED;
+import static com.minecraft.job.common.resume.domain.ResumeStatue.DELETED;
 import static org.assertj.core.api.Assertions.*;
 
 class ResumeTest {
@@ -52,5 +54,49 @@ class ResumeTest {
     @NullAndEmptySource
     void 이력서_생성_실패__trainingHistory가_널이나_공백(String trainingHistory) {
         assertThatIllegalArgumentException().isThrownBy(() -> Resume.create("title", "content", trainingHistory, user));
+    }
+
+    @Test
+    void 이력서_수정_성공() {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.update("updateTitle", "updateContent", "updateTrainingHistory");
+
+        assertThat(resume.getTitle()).isEqualTo("updateTitle");
+        assertThat(resume.getContent()).isEqualTo("updateContent");
+        assertThat(resume.getTrainingHistory()).isEqualTo("updateTrainingHistory");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 이력서_수정_실패__title이_널이나_공백(String title) {
+        Resume resume = ResumeFixture.create(user);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> resume.update(title, "content", "trainingHistory"));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 이력서_수정_실패__content가_널이나_공백(String content) {
+        Resume resume = ResumeFixture.create(user);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> resume.update("title", content, "trainingHistory"));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 이력서_수정_실패__trainingHistory가_널이나_공백(String trainingHistory) {
+        Resume resume = ResumeFixture.create(user);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> resume.update("title", "content", trainingHistory));
+    }
+
+    @Test
+    void 이력서_수정_실패__삭제됨_상태임() {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.setStatus(DELETED);
+
+        assertThatIllegalStateException().isThrownBy(() -> resume.update("title", "content", "trainingHistory"));
     }
 }
