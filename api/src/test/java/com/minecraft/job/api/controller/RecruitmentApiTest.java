@@ -1,6 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentCreateDto;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

@@ -9,11 +9,15 @@ public class RecruitmentCreateDto {
 
     public record RecruitmentCreateResponse(RecruitmentCreateData recruitment) {
 
-        public static RecruitmentCreateResponse create(RecruitmentCreateData recruitment) { return new RecruitmentCreateResponse(recruitment); }
+        public static RecruitmentCreateResponse create(RecruitmentCreateData recruitment) {
+            return new RecruitmentCreateResponse(recruitment);
+        }
     }
 
     public record RecruitmentCreateData(Long id, String title) {
 
-        public static RecruitmentCreateData create(Recruitment recruitment) { return new RecruitmentCreateData(recruitment.getId(), recruitment.getTitle()); }
+        public static RecruitmentCreateData create(Recruitment recruitment) {
+            return new RecruitmentCreateData(recruitment.getId(), recruitment.getTitle());
+        }
     }
 }
