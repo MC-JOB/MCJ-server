@@ -40,6 +40,10 @@ public class Resume {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    public boolean ofUser(User user) {
+        return this.user == user;
+    }
+
     private Resume(String title, String content, String trainingHistory, User user) {
         this.title = title;
         this.content = content;
