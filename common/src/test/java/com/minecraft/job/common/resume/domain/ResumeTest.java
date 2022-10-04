@@ -138,4 +138,22 @@ class ResumeTest {
 
         assertThatIllegalStateException().isThrownBy(resume::activate);
     }
+
+    @Test
+    void 이력서_삭제_성공() {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.delete();
+
+        assertThat(resume.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 이력서_삭제_실패__이미_삭제됨_상태임() {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.delete();
+
+        assertThatIllegalStateException().isThrownBy(resume::delete);
+    }
 }
