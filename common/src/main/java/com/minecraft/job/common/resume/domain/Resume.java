@@ -34,6 +34,7 @@ public class Resume {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @Enumerated(EnumType.STRING)
     private ResumeStatue status = CREATED;
 
     private LocalDateTime createdAt = LocalDateTime.now();
