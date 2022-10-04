@@ -80,4 +80,10 @@ public class Resume {
 
         this.status = INACTIVATED;
     }
+
+    public void delete() {
+        check(CAN_MOVE_DELETED.contains(status));
+
+        this.status = DELETED;
+    }
 }
