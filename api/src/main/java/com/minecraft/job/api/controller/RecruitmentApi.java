@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 
 @RestController
 @RequestMapping("/recruitment")
@@ -22,5 +23,11 @@ public class RecruitmentApi {
         Recruitment recruitment = recruitmentService.create(req.userId(), req.teamId(), req.title(), req.content());
 
         return RecruitmentCreateResponse.create(RecruitmentCreateData.create(recruitment));
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestBody RecruitmentUpdateRequest req) {
+
+        recruitmentService.update(req.recruitmentId(), req.userId(), req.teamId(), req.title(), req.content());
     }
 }
