@@ -10,8 +10,7 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.resume.domain.ResumeStatue.CREATED;
-import static com.minecraft.job.common.resume.domain.ResumeStatue.DELETED;
+import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
 import static com.minecraft.job.common.support.Preconditions.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -68,5 +67,11 @@ public class Resume {
         this.title = title;
         this.content = content;
         this.trainingHistory = trainingHistory;
+    }
+
+    public void inactivate() {
+        check(CAN_MOVE_INACTIVATED.contains(status));
+
+        this.status = INACTIVATED;
     }
 }

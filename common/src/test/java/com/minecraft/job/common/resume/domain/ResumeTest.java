@@ -6,11 +6,12 @@ import com.minecraft.job.common.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import static com.minecraft.job.common.resume.domain.ResumeStatue.CREATED;
-import static com.minecraft.job.common.resume.domain.ResumeStatue.DELETED;
+import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
 class ResumeTest {
 
@@ -98,5 +99,24 @@ class ResumeTest {
         resume.setStatus(DELETED);
 
         assertThatIllegalStateException().isThrownBy(() -> resume.update("title", "content", "trainingHistory"));
+    }
+
+    @Test
+    void 이력서_비활성화_성공() {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.inactivate();
+
+        assertThat(resume.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ResumeStatue.class, names = {"INACTIVATED", "DELETED"}, mode = INCLUDE)
+    void 이력서_비활성화_실패__비활성화_가능한_상태가_아님(ResumeStatue statue) {
+        Resume resume = ResumeFixture.create(user);
+
+        resume.setStatus(statue);
+
+        assertThatIllegalStateException().isThrownBy(resume::inactivate);
     }
 }
