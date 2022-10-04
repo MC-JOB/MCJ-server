@@ -11,4 +11,5 @@ create table user
     primary key (id)
 );
 
-alter table user add constraint uq_email unique (email);
+alter table user
+    add constraint uq_email unique (email);
