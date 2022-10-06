@@ -19,8 +19,10 @@ import java.time.LocalDateTime;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -77,6 +79,21 @@ public class RecruitmentApiTest extends ApiTest {
 
         assertThat(findRecruitment.getTitle()).isEqualTo("updateTitle");
         assertThat(findRecruitment.getContent()).isEqualTo("updateContent");
+    }
+
+    @Test
+    void 채용공고_비활성화_성공() throws Exception {
+        RecruitmentInactivateRequest recruitmentInactivateRequest = new RecruitmentInactivateRequest(recruitment.getId(), user.getId(), team.getId());
+
+        mockMvc.perform(post("/recruitment/inactivate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentInactivateRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(INACTIVATED);
     }
 
     @Test
