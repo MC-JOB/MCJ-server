@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.RecruitmentInactivateDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
@@ -16,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -73,5 +76,20 @@ public class RecruitmentApiTest extends ApiTest {
 
         assertThat(findRecruitment.getTitle()).isEqualTo("updateTitle");
         assertThat(findRecruitment.getContent()).isEqualTo("updateContent");
+    }
+
+    @Test
+    void 채용공고_비활성화_성공() throws Exception {
+        RecruitmentInactivateRequest recruitmentInactivateRequest = new RecruitmentInactivateRequest(recruitment.getId(), user.getId(), team.getId());
+
+        mockMvc.perform(post("/recruitment/inactivate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentInactivateRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(INACTIVATED);
     }
 }
