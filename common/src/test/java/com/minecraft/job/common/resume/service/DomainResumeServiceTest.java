@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.minecraft.job.common.resume.domain.ResumeStatue.ACTIVATED;
-import static com.minecraft.job.common.resume.domain.ResumeStatue.INACTIVATED;
+import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -96,5 +95,21 @@ class DomainResumeServiceTest {
         User fakeUser = userRepository.save(UserFixture.getFakerUser());
 
         assertThatIllegalArgumentException().isThrownBy(() -> resumeService.inactivate(resume.getId(), fakeUser.getId()));
+    }
+
+    @Test
+    void 이력서_삭제_성공() {
+        resumeService.delete(resume.getId(), user.getId());
+
+        Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
+
+        assertThat(findResume.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 이력서_삭제_실패__유저의_이력서가_아님() {
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(() -> resumeService.delete(resume.getId(), fakeUser.getId()));
     }
 }

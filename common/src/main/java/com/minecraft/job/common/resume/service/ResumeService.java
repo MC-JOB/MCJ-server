@@ -11,4 +11,6 @@ public interface ResumeService {
     void activate(Long resumeId, Long userId);
 
     void inactivate(Long resumeId, Long userId);
+
+    void delete(Long resumeId, Long userId);
 }
