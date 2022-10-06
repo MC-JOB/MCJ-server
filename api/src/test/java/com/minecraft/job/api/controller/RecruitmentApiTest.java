@@ -15,8 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
+
+import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -73,5 +77,21 @@ public class RecruitmentApiTest extends ApiTest {
 
         assertThat(findRecruitment.getTitle()).isEqualTo("updateTitle");
         assertThat(findRecruitment.getContent()).isEqualTo("updateContent");
+    }
+
+    @Test
+    void 채용공고_활성화_성공() throws Exception {
+        RecruitmentActivateRequest recruitmentActivateRequest = new RecruitmentActivateRequest(recruitment.getId(), user.getId(), team.getId(), LocalDateTime.now().plusMinutes(1));
+
+        mockMvc.perform(post("/recruitment/activate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentActivateRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(ACTIVATED);
     }
 }
