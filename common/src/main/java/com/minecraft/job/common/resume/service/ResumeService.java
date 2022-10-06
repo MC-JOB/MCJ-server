@@ -9,4 +9,6 @@ public interface ResumeService {
     void update(Long resumeId, Long userId, String title, String content, String trainingHistory);
 
     void activate(Long resumeId, Long userId);
+
+    void inactivate(Long resumeId, Long userId);
 }

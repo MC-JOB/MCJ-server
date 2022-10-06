@@ -47,4 +47,14 @@ public class DomainResumeService implements ResumeService {
 
         resume.activate();
     }
+
+    @Override
+    public void inactivate(Long resumeId, Long userId) {
+        Resume resume = resumeRepository.findById(resumeId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        require(resume.ofUser(user));
+
+        resume.inactivate();
+    }
 }
