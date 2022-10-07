@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto;
 import com.minecraft.job.api.controller.dto.RecruitmentDeleteDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
@@ -127,5 +129,25 @@ public class RecruitmentApiTest extends ApiTest {
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
         assertThat(findRecruitment.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 채용공고_기간연장_성공() throws Exception {
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(1);
+
+        recruitment.activate(localDateTime);
+
+        RecruitmentClosedAtExtendRequest recruitmentClosedAtExtendRequest = new RecruitmentClosedAtExtendRequest(recruitment.getId(), user.getId(), team.getId(), localDateTime.plusMinutes(1));
+
+        mockMvc.perform(post("/recruitment/closedAtExtend")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentClosedAtExtendRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getClosedAt()).isEqualTo(localDateTime.plusMinutes(1));
     }
 }

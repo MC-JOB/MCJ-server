@@ -71,7 +71,7 @@ public class Recruitment {
         this.closedAt = null;
     }
 
-    public void createdAtExtend(LocalDateTime closedAt) {
+    public void closedAtExtend(LocalDateTime closedAt) {
         require(closedAt.isAfter(LocalDateTime.now()));
         require(closedAt.isAfter(this.closedAt));
 

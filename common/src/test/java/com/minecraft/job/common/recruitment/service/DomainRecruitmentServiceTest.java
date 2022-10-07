@@ -211,7 +211,7 @@ class DomainRecruitmentServiceTest {
         LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(1);
 
         recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), localDateTime);
-        recruitmentService.createdAtExtend(recruitment.getId(), user.getId(), team.getId(), recruitment.getClosedAt().plusMinutes(1));
+        recruitmentService.closedAtExtend(recruitment.getId(), user.getId(), team.getId(), recruitment.getClosedAt().plusMinutes(1));
 
         assertThat(localDateTime.isAfter(recruitment.getClosedAt()));
     }
@@ -227,7 +227,7 @@ class DomainRecruitmentServiceTest {
         recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), localDateTime);
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentService.createdAtExtend(recruitment.getId(), fakeUser.getId(), team.getId(), recruitment.getClosedAt().plusMinutes(1))
+                () -> recruitmentService.closedAtExtend(recruitment.getId(), fakeUser.getId(), team.getId(), recruitment.getClosedAt().plusMinutes(1))
         );
     }
 
@@ -242,7 +242,7 @@ class DomainRecruitmentServiceTest {
         recruitmentService.activate(recruitment.getId(), user.getId(), team.getId(), localDateTime);
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentService.createdAtExtend(recruitment.getId(), user.getId(), fakeTeam.getId(), recruitment.getClosedAt().plusMinutes(1))
+                () -> recruitmentService.closedAtExtend(recruitment.getId(), user.getId(), fakeTeam.getId(), recruitment.getClosedAt().plusMinutes(1))
         );
     }
 }
