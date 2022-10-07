@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.RecruitmentDeleteDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
@@ -19,10 +20,10 @@ import java.time.LocalDateTime;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.ACTIVATED;
-import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.INACTIVATED;
+import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,5 +111,21 @@ public class RecruitmentApiTest extends ApiTest {
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
         assertThat(findRecruitment.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 채용공고_삭제_성공() throws Exception {
+        RecruitmentDeleteRequest recruitmentDeleteRequest = new RecruitmentDeleteRequest(recruitment.getId(), user.getId(), team.getId());
+
+        mockMvc.perform(post("/recruitment/delete")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentDeleteRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getStatus()).isEqualTo(DELETED);
     }
 }
