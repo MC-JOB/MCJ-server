@@ -31,4 +31,10 @@ public class ResumeApi {
 
         resumeService.update(req.resumeId(), req.userId(), req.title(), req.content(), req.trainingHistory());
     }
+
+    @PostMapping("/activate")
+    public void activate(@RequestBody ResumeUpdateRequest req) {
+
+        resumeService.activate(req.resumeId(), req.userId());
+    }
 }

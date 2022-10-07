@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.ResumeActivateDto.ResumeActivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.UserFixture;
@@ -11,11 +12,12 @@ import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
+import static com.minecraft.job.common.resume.domain.ResumeStatue.ACTIVATED;
 import static com.minecraft.job.common.resume.domain.ResumeStatue.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +44,7 @@ class ResumeApiTest extends ApiTest {
         ResumeCreateRequest req = new ResumeCreateRequest(user.getId(), "title", "content", "trainingHistory");
 
         mockMvc.perform(post("/resume")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpectAll(
                         status().isOk(),
@@ -66,7 +68,7 @@ class ResumeApiTest extends ApiTest {
         ResumeUpdateRequest req = new ResumeUpdateRequest(resume.getId(), user.getId(), "updateTitle", "updateContent", "updateTrainingHistory");
 
         mockMvc.perform(post("/resume/update")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req))
         ).andExpectAll(
                 status().isOk()
@@ -77,5 +79,19 @@ class ResumeApiTest extends ApiTest {
         assertThat(findResume.getTitle()).isEqualTo("updateTitle");
         assertThat(findResume.getContent()).isEqualTo("updateContent");
         assertThat(findResume.getTrainingHistory()).isEqualTo("updateTrainingHistory");
+    }
+
+    @Test
+    void 이력서_활성화_성공() throws Exception {
+        ResumeActivateRequest req = new ResumeActivateRequest(resume.getId(), user.getId());
+
+        mockMvc.perform(post("/resume/activate")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk());
+
+        Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
+
+        assertThat(findResume.getStatus()).isEqualTo(ACTIVATED);
     }
 }
