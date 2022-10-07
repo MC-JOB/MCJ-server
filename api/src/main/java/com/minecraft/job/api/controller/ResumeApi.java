@@ -4,6 +4,7 @@ import com.minecraft.job.api.controller.dto.ResumeActivateDto.ResumeActivateRequ
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateData;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateResponse;
+import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
 import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.common.resume.domain.Resume;
@@ -44,5 +45,11 @@ public class ResumeApi {
     public void inactivate(@RequestBody ResumeInactivateRequest req) {
 
         resumeService.inactivate(req.resumeId(), req.userId());
+    }
+
+    @PostMapping("/delete")
+    public void delete(@RequestBody ResumeDeleteRequest req) {
+
+        resumeService.delete(req.resumeId(), req.userId());
     }
 }

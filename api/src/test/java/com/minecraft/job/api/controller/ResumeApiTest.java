@@ -1,6 +1,7 @@
 package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.ResumeActivateDto.ResumeActivateRequest;
+import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
 import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.api.fixture.ResumeFixture;
@@ -107,5 +108,19 @@ class ResumeApiTest extends ApiTest {
         Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
 
         assertThat(findResume.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @Test
+    void 이력서_삭제_성공() throws Exception {
+        ResumeDeleteRequest req = new ResumeDeleteRequest(resume.getId(), user.getId());
+
+        mockMvc.perform(post("/resume/delete")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk());
+
+        Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
+
+        assertThat(findResume.getStatus()).isEqualTo(DELETED);
     }
 }
