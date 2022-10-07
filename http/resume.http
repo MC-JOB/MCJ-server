@@ -1,0 +1,49 @@
+###Create
+POST http://localhost:8080/resume
+Content-Type: application/json
+
+{
+  "userId": "",
+  "title": "",
+  "content": "",
+  "trainingHistory": ""
+}
+
+###Update
+POST http://localhost:8080/resume/update
+Content-Type: application/json
+
+{
+  "resumeId": "",
+  "userId": "",
+  "title": "",
+  "content": "",
+  "trainingHistory": ""
+}
+
+###Activate
+POST http://localhost:8080/resume/activate
+Content-Type: application/json
+
+{
+  "resumeId": "",
+  "userId": ""
+}
+
+###Inactivate
+POST http://localhost:8080/resume/inactivate
+Content-Type: application/json
+
+{
+  "resumeId": "",
+  "userId": ""
+}
+
+###Delete
+POST http://localhost:8080/resume/delete
+Content-Type: application/json
+
+{
+  "resumeId": "",
+  "userId": ""
+}

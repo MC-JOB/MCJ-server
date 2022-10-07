@@ -1,0 +1,42 @@
+###Create
+POST http://localhost:8080/team
+Content-Type: application/json
+
+{
+  "userId": "",
+  "name": "",
+  "description": "",
+  "logo": "",
+  "memberNum": ""
+}
+
+###Update
+POST http://localhost:8080/team/update
+Content-Type: application/json
+
+{
+  "teamId": "",
+  "userId": "",
+  "name": "",
+  "description": "",
+  "logo": "",
+  "memberNum": ""
+}
+
+###Activate
+POST http://localhost:8080/team/activate
+Content-Type: application/json
+
+{
+  "teamId": "",
+  "userId": ""
+}
+
+###Inactivate
+POST http://localhost:8080/team/inactivate
+Content-Type: application/json
+
+{
+  "teamId": "",
+  "userId": ""
+}

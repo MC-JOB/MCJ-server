@@ -1,0 +1,64 @@
+###Create
+POST http://localhost:8080/recruitment
+Content-Type: application/json
+
+{
+  "userId": "",
+  "teamId": "",
+  "title": "",
+  "content": ""
+}
+
+###Update
+POST http://localhost:8080/recruitment/update
+Content-Type: application/json
+
+{
+  "recruitmentId": "",
+  "userId": "",
+  "teamId": "",
+  "title": "",
+  "content": ""
+}
+
+###Inactivate
+POST http://localhost:8080/recruitment/inactivate
+Content-Type: application/json
+
+{
+  "recruitmentId": "",
+  "userId": "",
+  "teamId": ""
+}
+
+###Activate
+POST http://localhost:8080/recruitment/activate
+Content-Type: application/json
+
+{
+  "recruitmentId": "",
+  "userId": "",
+  "teamId": "",
+  "closedAt": "2022-10-07T23:00:00.0000"
+}
+
+###Delete
+POST http://localhost:8080/recruitment/delete
+Content-Type: application/json
+
+{
+  "recruitmentId": "",
+  "userId": "",
+  "teamId": ""
+}
+
+###ClosedAtExtend
+POST http://localhost:8080/recruitment/closedAtExtend
+Content-Type: application/json
+
+{
+  "recruitmentId": "",
+  "userId": "",
+  "teamId": "",
+  "closedAt": "2022-10-07T23:10:00.0000"
+}

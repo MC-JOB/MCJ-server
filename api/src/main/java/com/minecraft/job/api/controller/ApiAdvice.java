@@ -5,9 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Locale;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -23,7 +24,9 @@ public class ApiAdvice {
     @ExceptionHandler(MinecraftJobException.class)
     public ErrorResponse exception(MinecraftJobException ex) {
 
-        final String message = messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
+        System.out.println("debug");
+
+        final String message = messageSource.getMessage(ex.getMessage(), null, Locale.getDefault());
 
         return new ErrorResponse(new ErrorData(message));
     }
