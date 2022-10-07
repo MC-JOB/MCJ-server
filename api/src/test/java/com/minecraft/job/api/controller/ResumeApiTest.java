@@ -1,5 +1,7 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
+import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.resume.domain.Resume;
@@ -27,10 +29,12 @@ class ResumeApiTest extends ApiTest {
     private UserRepository userRepository;
 
     private User user;
+    private Resume resume;
 
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
+        resume = resumeRepository.save(ResumeFixture.create(user));
     }
 
     @Test
@@ -55,5 +59,23 @@ class ResumeApiTest extends ApiTest {
         assertThat(findResume.getUser()).isEqualTo(user);
         assertThat(findResume.getStatus()).isEqualTo(CREATED);
         assertThat(findResume.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void 이력서_수정_성공() throws Exception {
+        ResumeUpdateRequest req = new ResumeUpdateRequest(resume.getId(), user.getId(), "updateTitle", "updateContent", "updateTrainingHistory");
+
+        mockMvc.perform(post("/resume/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req))
+        ).andExpectAll(
+                status().isOk()
+        );
+
+        Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
+
+        assertThat(findResume.getTitle()).isEqualTo("updateTitle");
+        assertThat(findResume.getContent()).isEqualTo("updateContent");
+        assertThat(findResume.getTrainingHistory()).isEqualTo("updateTrainingHistory");
     }
 }

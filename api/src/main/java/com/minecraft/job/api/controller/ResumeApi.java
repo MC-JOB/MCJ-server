@@ -3,6 +3,7 @@ package com.minecraft.job.api.controller;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateData;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateResponse;
+import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,11 @@ public class ResumeApi {
         Resume resume = resumeService.create(req.userId(), req.title(), req.content(), req.trainingHistory());
 
         return ResumeCreateResponse.create(ResumeCreateData.create(resume));
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestBody ResumeUpdateRequest req) {
+
+        resumeService.update(req.resumeId(), req.userId(), req.title(), req.content(), req.trainingHistory());
     }
 }
