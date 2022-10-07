@@ -86,7 +86,7 @@ public class DomainRecruitmentService implements RecruitmentService {
     }
 
     @Override
-    public void createdAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt) {
+    public void closedAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
         Team team = teamRepository.findById(teamId).orElseThrow();
@@ -94,6 +94,6 @@ public class DomainRecruitmentService implements RecruitmentService {
         require(team.ofUser(user));
         require(recruitment.ofTeam(team));
 
-        recruitment.createdAtExtend(closedAt);
+        recruitment.closedAtExtend(closedAt);
     }
 }

@@ -109,7 +109,7 @@ class RecruitmentTest {
 
         recruitment.activate(activateClosedAt);
 
-        recruitment.createdAtExtend(activateClosedAt.plusMinutes(1));
+        recruitment.closedAtExtend(activateClosedAt.plusMinutes(1));
 
         assertThat(recruitment.getClosedAt()).isAfter(activateClosedAt);
     }
@@ -121,7 +121,7 @@ class RecruitmentTest {
         recruitment.setStatus(ACTIVATED);
         recruitment.setClosedAt(LocalDateTime.now().minusSeconds(10));
 
-        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.createdAtExtend(LocalDateTime.now().minusSeconds(1)));
+        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.closedAtExtend(LocalDateTime.now().minusSeconds(1)));
     }
 
     @Test
@@ -132,7 +132,7 @@ class RecruitmentTest {
 
         recruitment.activate(activateClosedAt);
 
-        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.createdAtExtend(activateClosedAt.minusSeconds(1)));
+        assertThatIllegalArgumentException().isThrownBy(() -> recruitment.closedAtExtend(activateClosedAt.minusSeconds(1)));
     }
 
     @Test
@@ -143,7 +143,7 @@ class RecruitmentTest {
 
         recruitment.setClosedAt(closeAt);
 
-        assertThatIllegalStateException().isThrownBy(() -> recruitment.createdAtExtend(closeAt.plusSeconds(1)));
+        assertThatIllegalStateException().isThrownBy(() -> recruitment.closedAtExtend(closeAt.plusSeconds(1)));
     }
 
     @Test

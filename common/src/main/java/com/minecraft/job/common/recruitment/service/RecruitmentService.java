@@ -16,5 +16,5 @@ public interface RecruitmentService {
 
     void update(Long recruitmentId, Long userId, long teamId, String title, String content);
 
-    void createdAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt);
+    void closedAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt);
 }
