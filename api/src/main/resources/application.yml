@@ -8,11 +8,9 @@ spring:
     password: ${db.password:1234}
   flyway:
     enabled: true
-    baseline-on-migrate: true
   jpa:
     hibernate:
       ddl-auto: validate
-
     properties:
       hibernate:
         format_sql: false
