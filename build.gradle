@@ -56,9 +56,32 @@ project(":common") {
     }
 }
 
+project(":integration") {
+    dependencies {
+        implementation(project(':common'))
+
+        implementation 'org.springframework.boot:spring-boot-starter-mail'
+        implementation 'org.thymeleaf:thymeleaf'
+        implementation 'org.thymeleaf:thymeleaf-spring5'
+    }
+
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
 project(":api") {
     dependencies {
         implementation(project(':common'))
+        implementation(project(':integration'))
         implementation 'org.flywaydb:flyway-core'
         implementation 'org.flywaydb:flyway-mysql'
     }
