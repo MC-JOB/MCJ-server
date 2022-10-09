@@ -1,6 +1,7 @@
 package com.minecraft.job.common.team.domain;
 
 
+import com.minecraft.job.common.review.domain.Review;
 import com.minecraft.job.common.user.domain.User;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -45,8 +46,8 @@ public class Team {
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    public static final Long MAX_AVERAGE_POINT = 5L;
-    public static final Long MIN_AVERAGE_POINT = 0L;
+    public static final Long MAX_AVERAGE_POINT = Review.MAX_SCORE;
+    public static final Long MIN_AVERAGE_POINT = Review.MAX_SCORE;
 
     public boolean ofUser(User user) {
         return this.user == user;
