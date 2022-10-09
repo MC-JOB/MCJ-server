@@ -1,0 +1,57 @@
+package com.minecraft.job.common.review.domain;
+
+import com.minecraft.job.common.fixture.TeamFixture;
+import com.minecraft.job.common.fixture.UserFixture;
+import com.minecraft.job.common.team.domain.Team;
+import com.minecraft.job.common.team.domain.TeamRepository;
+import com.minecraft.job.common.user.domain.User;
+import com.minecraft.job.common.user.domain.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = NONE)
+class ReviewRepositoryTest {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
+    private User user;
+    private Team team;
+
+    @BeforeEach
+    void setUp() {
+        user = userRepository.save(UserFixture.create());
+        User teamUser = userRepository.save(UserFixture.getAntherUser("teamUser"));
+        team = teamRepository.save(TeamFixture.create(teamUser));
+    }
+
+    @Test
+    void 리뷰_생성_성공() {
+        Review review = Review.create("content", 3L, user, team);
+
+        review = reviewRepository.save(review);
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+
+        assertThat(findReview.getId()).isNotNull();
+        assertThat(findReview.getContent()).isEqualTo("content");
+        assertThat(findReview.getScore()).isEqualTo(3L);
+        assertThat(findReview.getUser()).isEqualTo(user);
+        assertThat(findReview.getTeam()).isEqualTo(team);
+        assertThat(findReview.getStatus()).isEqualTo(ACTIVATED);
+    }
+}
