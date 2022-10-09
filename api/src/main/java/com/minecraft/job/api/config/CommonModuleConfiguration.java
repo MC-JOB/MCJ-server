@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.minecraft.job.common")
 @EnableJpaRepositories(basePackages = {"com.minecraft.job.common"})
 @ComponentScans({
-        @ComponentScan(value = "com.minecraft.job.common")
+        @ComponentScan(value = "com.minecraft.job.common"),
+        @ComponentScan(value = "com.minecraft.job.integration")
 })
 @Configuration
 public class CommonModuleConfiguration {

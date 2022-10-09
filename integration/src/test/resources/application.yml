@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${db.url:jdbc:mysql://localhost:3306/minecraftjobtest}
+    username: ${db.username:root}
+    password: ${db.password:1234}
+  mail:
+    host: ${mail.host:smtp.gmail.com}
+    port: 587
+    default-encoding: utf-8
+    username: ${mail.username:no.reply.mcj.server@gmail.com}
+    password: ${mail.password:sabuvtjkselzygyh}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
