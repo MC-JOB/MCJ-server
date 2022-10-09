@@ -1,7 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto;
-import com.minecraft.job.api.controller.dto.RecruitmentDeleteDto;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.*;
-import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.RecruitmentDeleteRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 

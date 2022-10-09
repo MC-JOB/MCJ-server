@@ -1,7 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto;
-import com.minecraft.job.api.controller.dto.RecruitmentDeleteDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
@@ -20,9 +18,9 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.RecruitmentDeleteRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
