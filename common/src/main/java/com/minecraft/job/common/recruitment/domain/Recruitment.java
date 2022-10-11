@@ -1,6 +1,7 @@
 package com.minecraft.job.common.recruitment.domain;
 
 import com.minecraft.job.common.team.domain.Team;
+import com.minecraft.job.common.user.domain.User;
 import lombok.*;
 import org.apache.logging.log4j.util.Strings;
 
@@ -38,6 +39,10 @@ public class Recruitment {
 
     public boolean ofTeam(Team team) {
         return this.team == team;
+    }
+
+    public boolean ofUser(User user) {
+        return this.team.ofUser(user);
     }
 
     private Recruitment(String title, String content, Team team) {
