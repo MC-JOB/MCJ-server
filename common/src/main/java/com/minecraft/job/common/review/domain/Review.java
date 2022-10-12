@@ -2,17 +2,20 @@ package com.minecraft.job.common.review.domain;
 
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.user.domain.User;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
+import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
 import static com.minecraft.job.common.support.Preconditions.*;
 
 @Getter
-@Setter
 @Entity
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -66,5 +69,11 @@ public class Review {
         check(this.status != ACTIVATED);
 
         this.status = ACTIVATED;
+    }
+
+    public void inactivate() {
+        check(this.status != INACTIVATED);
+
+        this.status = INACTIVATED;
     }
 }

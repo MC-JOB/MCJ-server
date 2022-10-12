@@ -81,7 +81,7 @@ class ReviewTest {
 
     @Test
     void 리뷰_활성화_성공() {
-        review.setStatus(INACTIVATED);
+        review.inactivate();
 
         review.activate();
 
@@ -90,8 +90,24 @@ class ReviewTest {
 
     @Test
     void 리뷰_활성화_실패__이미_활성화_상태() {
-        review.setStatus(ACTIVATED);
+        review.inactivate();
+
+        review.activate();
 
         assertThatIllegalStateException().isThrownBy(() -> review.activate());
+    }
+
+    @Test
+    void 리뷰_비활성화_성공() {
+        review.inactivate();
+
+        assertThat(review.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @Test
+    void 리뷰_비활성화_실패__이미_비활성화_상태() {
+        review.inactivate();
+
+        assertThatIllegalStateException().isThrownBy(() -> review.inactivate());
     }
 }
