@@ -19,6 +19,9 @@ import static com.minecraft.job.common.support.Preconditions.require;
 @Entity
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uq_user_team", columnNames = {"user_id", "team_id"})
+})
 public class Review {
 
     @Id
