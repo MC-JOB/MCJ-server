@@ -12,8 +12,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import static com.minecraft.job.common.review.domain.Review.MAX_SCORE;
 import static com.minecraft.job.common.review.domain.Review.MIN_SCORE;
-import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
-import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
+import static com.minecraft.job.common.review.domain.ReviewStatus.*;
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -109,5 +108,19 @@ class ReviewTest {
         review.inactivate();
 
         assertThatIllegalStateException().isThrownBy(() -> review.inactivate());
+    }
+
+    @Test
+    void 리뷰_삭제_성공() {
+        review.delete();
+
+        assertThat(review.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 리뷰_삭제_실패__이미_삭제_상태() {
+        review.delete();
+
+        assertThatIllegalStateException().isThrownBy(() -> review.delete());
     }
 }

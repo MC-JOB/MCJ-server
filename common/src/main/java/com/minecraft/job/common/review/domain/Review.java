@@ -11,8 +11,7 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
-import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
+import static com.minecraft.job.common.review.domain.ReviewStatus.*;
 import static com.minecraft.job.common.support.Preconditions.*;
 
 @Getter
@@ -75,5 +74,11 @@ public class Review {
         check(this.status != INACTIVATED);
 
         this.status = INACTIVATED;
+    }
+
+    public void delete() {
+        check(this.status != DELETED);
+
+        this.status = DELETED;
     }
 }
