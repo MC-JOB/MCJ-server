@@ -47,7 +47,7 @@ public class Team {
     private final LocalDateTime createdAt = LocalDateTime.now();
 
     public static final Long MAX_AVERAGE_POINT = Review.MAX_SCORE;
-    public static final Long MIN_AVERAGE_POINT = Review.MAX_SCORE;
+    public static final Long MIN_AVERAGE_POINT = Review.MIN_SCORE;
 
     public boolean ofUser(User user) {
         return this.user == user;
