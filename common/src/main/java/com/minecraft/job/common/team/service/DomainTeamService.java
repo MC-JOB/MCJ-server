@@ -29,6 +29,13 @@ public class DomainTeamService implements TeamService {
     }
 
     @Override
+    public void applyAveragePoint(Long teamId, Long averagePoint) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        team.applyAveragePoint(averagePoint);
+    }
+
+    @Override
     public void update(Long teamId, Long userId, String name, String description, String logo, Long memberNum) {
         Team team = teamRepository.findById(teamId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();

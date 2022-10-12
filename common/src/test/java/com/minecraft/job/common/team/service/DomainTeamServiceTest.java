@@ -47,6 +47,17 @@ class DomainTeamServiceTest {
     }
 
     @Test
+    void 팀_평점_적용_성공() {
+        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+
+        teamService.applyAveragePoint(team.getId(), 3L);
+
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findTeam.getAveragePoint()).isEqualTo(3L);
+    }
+
+    @Test
     void 팀_수정_성공() {
         Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
 
