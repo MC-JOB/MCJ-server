@@ -1,3 +1,5 @@
+package com.minecraft.job.common.review.service;
+
 import com.minecraft.job.common.review.domain.Review;
 
 public interface ReviewService {

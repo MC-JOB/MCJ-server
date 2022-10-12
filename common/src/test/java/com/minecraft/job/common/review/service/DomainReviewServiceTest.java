@@ -3,7 +3,6 @@ package com.minecraft.job.common.review.service;
 import com.minecraft.job.common.fixture.TeamFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.review.domain.Review;
-import com.minecraft.job.common.review.domain.ReviewCreateEvent;
 import com.minecraft.job.common.review.domain.ReviewRepository;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import javax.transaction.Transactional;
@@ -37,9 +35,6 @@ class DomainReviewServiceTest {
     @Autowired
     private TeamRepository teamRepository;
 
-    @Autowired
-    private ApplicationEvents applicationEvents;
-
     private User user;
     private Team team;
 
@@ -58,7 +53,5 @@ class DomainReviewServiceTest {
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
 
         assertThat(findReview.getId()).isNotNull();
-        assertThat(applicationEvents.stream(ReviewCreateEvent.class)
-                .findFirst().orElseThrow().getReviewId()).isEqualTo(review.getId());
     }
 }
