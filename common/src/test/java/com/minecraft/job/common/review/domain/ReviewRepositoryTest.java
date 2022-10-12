@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -53,5 +55,18 @@ class ReviewRepositoryTest {
         assertThat(findReview.getUser()).isEqualTo(user);
         assertThat(findReview.getTeam()).isEqualTo(team);
         assertThat(findReview.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 리뷰_팀으로_조회() {
+        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+
+        Review review1 = reviewRepository.save(Review.create("content", 4L, user1, team));
+        Review review2 = reviewRepository.save(Review.create("content", 3L, user2, team));
+
+        List<Review> reviewScoreByTeam = reviewRepository.findReviewByTeam(team);
+
+        assertThat(reviewScoreByTeam).containsExactly(review1, review2);
     }
 }
