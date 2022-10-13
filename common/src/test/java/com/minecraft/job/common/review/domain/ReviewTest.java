@@ -79,6 +79,37 @@ class ReviewTest {
     }
 
     @Test
+    void 리뷰_수정_성공() {
+        review.update("updateContent", 4L);
+
+        assertThat(review.getContent()).isEqualTo("updateContent");
+        assertThat(review.getScore()).isEqualTo(4L);
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 리뷰_수정_실패__본문이_널이거나_공백(String content) {
+        assertThatIllegalArgumentException().isThrownBy(() -> review.update(content, 10L));
+    }
+
+    @Test
+    void 리뷰_수정_실패__최소값보다_낮음() {
+        assertThatIllegalArgumentException().isThrownBy(() -> review.update("updateContent", MIN_SCORE - 1));
+    }
+
+    @Test
+    void 리뷰_수정_실패__최대값보다_높음() {
+        assertThatIllegalArgumentException().isThrownBy(() -> review.update("updateContent", MAX_SCORE + 1));
+    }
+
+    @Test
+    void 리뷰_수정_실패__활성화_상태가_아님() {
+        review.inactivate();
+
+        assertThatIllegalStateException().isThrownBy(() -> review.update("updateContent", 3L));
+    }
+
+    @Test
     void 리뷰_활성화_성공() {
         review.inactivate();
 
