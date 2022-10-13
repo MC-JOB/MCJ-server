@@ -64,6 +64,17 @@ public class Review {
         return new Review(content, score, user, team);
     }
 
+    public void update(String content, Long score) {
+        require(Strings.isNotBlank(content));
+        require(score >= MIN_SCORE);
+        require(score <= MAX_SCORE);
+
+        check(this.status == ACTIVATED);
+
+        this.content = content;
+        this.score = score;
+    }
+
     public void activate() {
         check(this.status != ACTIVATED);
 
