@@ -1,6 +1,7 @@
 package com.minecraft.job.api.service;
 
 import com.minecraft.job.api.service.dto.ReviewCreateDto;
+import com.minecraft.job.api.service.dto.ReviewUpdateDto;
 import com.minecraft.job.common.review.domain.Review;
 import com.minecraft.job.common.review.domain.ReviewRepository;
 import com.minecraft.job.common.review.service.ReviewService;
@@ -27,21 +28,35 @@ public class DefaultReviewAppService implements ReviewAppService {
 
     @Override
     public Pair<Review, Long> create(ReviewCreateDto dto) {
-        Team team = teamRepository.findById(dto.teamId()).orElseThrow();
-
         Review review = reviewService.create(dto.userId(), dto.teamId(), dto.content(), dto.score());
+
+        Long averagePoint = getAveragePoint(dto.teamId());
+
+        teamService.applyAveragePoint(dto.teamId(), averagePoint);
+
+        return Pair.of(review, averagePoint);
+    }
+
+    @Override
+    public void update(ReviewUpdateDto dto) {
+        reviewService.update(dto.reviewId(), dto.userId(), dto.teamId(), dto.content(), dto.score());
+
+        Long averagePoint = getAveragePoint(dto.teamId());
+
+        teamService.applyAveragePoint(dto.teamId(), averagePoint);
+    }
+
+
+    private long getAveragePoint(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
 
         List<Review> reviews = reviewRepository.findReviewByTeam(team);
 
-        Long averagePoint = Double.valueOf(
+        return Double.valueOf(
                         reviews.stream()
                                 .flatMapToLong(it -> LongStream.of(it.getScore()))
                                 .average()
                                 .orElseThrow())
                 .longValue();
-
-        teamService.applyAveragePoint(dto.teamId(), averagePoint);
-
-        return Pair.of(review, averagePoint);
     }
 }
