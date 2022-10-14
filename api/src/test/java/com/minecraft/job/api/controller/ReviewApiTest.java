@@ -1,9 +1,13 @@
 package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
+import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
+import com.minecraft.job.api.fixture.ReviewFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
+import com.minecraft.job.common.review.domain.Review;
+import com.minecraft.job.common.review.domain.ReviewRepository;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -19,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReviewApiTest extends ApiTest {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -54,5 +61,24 @@ class ReviewApiTest extends ApiTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findTeam.getAveragePoint()).isEqualTo(3L);
+    }
+
+    @Test
+    void 리뷰_수정_성공() throws Exception {
+        Review review = reviewRepository.save(ReviewFixture.create(user, team));
+
+        ReviewUpdateRequest req = new ReviewUpdateRequest(review.getId(), user.getId(), team.getId(), "updateContent", 1L);
+
+        mockMvc.perform(post("/review/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk());
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findReview.getContent()).isEqualTo("updateContent");
+        assertThat(findReview.getScore()).isEqualTo(1L);
+        assertThat(findTeam.getAveragePoint()).isEqualTo(1L);
     }
 }

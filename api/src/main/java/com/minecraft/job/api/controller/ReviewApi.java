@@ -2,6 +2,7 @@ package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateResponse;
+import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
 import com.minecraft.job.api.service.ReviewAppService;
 import com.minecraft.job.common.review.domain.Review;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,10 @@ public class ReviewApi {
         Pair<Review, Long> pair = reviewAppService.create(req.toDto());
 
         return ReviewCreateResponse.create(pair);
+    }
+
+    @PostMapping("update")
+    public void update(@RequestBody ReviewUpdateRequest req) {
+        reviewAppService.update(req.toDto());
     }
 }
