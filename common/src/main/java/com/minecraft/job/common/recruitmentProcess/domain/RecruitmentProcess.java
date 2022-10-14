@@ -7,9 +7,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.IN_PROGRESS;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.WAITING;
-import static com.minecraft.job.common.support.Preconditions.notNull;
-import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.support.Preconditions.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
@@ -76,5 +76,11 @@ public class RecruitmentProcess {
         require(!recruitment.ofUser(user));
 
         return new RecruitmentProcess(recruitment, user);
+    }
+
+    public void inProgress() {
+        check(this.status == WAITING);
+
+        this.status = IN_PROGRESS;
     }
 }
