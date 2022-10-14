@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.minecraft.job.common.support.Preconditions.require;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,5 +30,17 @@ public class DomainReviewService implements ReviewService {
         Review review = Review.create(content, score, user, team);
 
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public void update(Long reviewId, Long userId, Long teamId, String content, Long score) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        require(review.ofUser(user));
+        require(review.ofTeam(team));
+
+        review.update(content, score);
     }
 }

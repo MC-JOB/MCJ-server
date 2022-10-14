@@ -1,5 +1,6 @@
 package com.minecraft.job.common.review.service;
 
+import com.minecraft.job.common.fixture.ReviewFixture;
 import com.minecraft.job.common.fixture.TeamFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.review.domain.Review;
@@ -17,6 +18,7 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 @Transactional
 @SpringBootTest
@@ -36,22 +38,48 @@ class DomainReviewServiceTest {
     private TeamRepository teamRepository;
 
     private User user;
+    private User leader;
     private Team team;
+    private Review review;
 
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
 
-        User leader = userRepository.save(UserFixture.getAntherUser("leader"));
+        leader = userRepository.save(UserFixture.getAntherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
+
+        review = reviewRepository.save(ReviewFixture.create(user, team));
     }
 
     @Test
     void 리뷰_생성_성공() {
-        Review review = reviewService.create(user.getId(), team.getId(), "content", 3L);
-
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
 
         assertThat(findReview.getId()).isNotNull();
+    }
+
+    @Test
+    void 리뷰_수정_성공() {
+        reviewService.update(review.getId(), user.getId(), team.getId(), "updateContent", 1L);
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+
+        assertThat(findReview.getContent()).isEqualTo("updateContent");
+        assertThat(findReview.getScore()).isEqualTo(1L);
+    }
+
+    @Test
+    void 리뷰_수정_실패__유저의_리뷰가_아님() {
+        User fakerUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(() -> reviewService.update(review.getId(), fakerUser.getId(), team.getId(), "updateContent", 1L));
+    }
+
+    @Test
+    void 리뷰_수정_실패__팀의_리뷰가_아님() {
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(leader));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> reviewService.update(review.getId(), user.getId(), fakeTeam.getId(), "updateContent", 1L));
     }
 }
