@@ -45,6 +45,14 @@ public class Review {
     public static final Long MAX_SCORE = 5L;
     public static final Long MIN_SCORE = 0L;
 
+    public boolean ofUser(User user) {
+        return this.user == user;
+    }
+
+    public boolean ofTeam(Team team) {
+        return this.team == team;
+    }
+
     private Review(String content, Long score, User user, Team team) {
         this.content = content;
         this.score = score;
