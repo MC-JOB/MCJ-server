@@ -53,6 +53,22 @@ public class Review {
         return this.team == team;
     }
 
+    public String getTeamName() {
+        return team.getName();
+    }
+
+    public String getTeamOfLeaderEmail() {
+        return team.getLeaderEmail();
+    }
+
+    public Long getTeamOfAveragePoint() {
+        return team.getAveragePoint();
+    }
+
+    public String getUserNickname() {
+        return user.getNickname();
+    }
+
     private Review(String content, Long score, User user, Team team) {
         this.content = content;
         this.score = score;
