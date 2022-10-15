@@ -89,4 +89,11 @@ public class RecruitmentProcess {
         this.status = CANCELED;
         this.closedAt = LocalDateTime.now();
     }
+
+    public void passed() {
+        check(this.status == IN_PROGRESS);
+
+        this.status = PASSED;
+        this.closedAt = LocalDateTime.now();
+    }
 }
