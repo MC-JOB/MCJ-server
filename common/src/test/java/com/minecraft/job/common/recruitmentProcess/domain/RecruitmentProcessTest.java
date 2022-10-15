@@ -78,7 +78,7 @@ class RecruitmentProcessTest {
     void 채용과정_중도취소_성공() {
         RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
 
-        recruitmentProcess.canceled();
+        recruitmentProcess.cancel();
 
         assertThat(recruitmentProcess.getStatus()).isEqualTo(CANCELED);
         assertThat(recruitmentProcess.getClosedAt()).isNotNull();
@@ -91,7 +91,7 @@ class RecruitmentProcessTest {
 
         recruitmentProcess.setStatus(status);
 
-        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.canceled());
+        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.cancel());
     }
 
     @Test
@@ -100,7 +100,7 @@ class RecruitmentProcessTest {
 
         recruitmentProcess.inProgress();
 
-        recruitmentProcess.passed();
+        recruitmentProcess.pass();
 
         assertThat(recruitmentProcess.getStatus()).isEqualTo(PASSED);
         assertThat(recruitmentProcess.getClosedAt()).isNotNull();
@@ -113,6 +113,26 @@ class RecruitmentProcessTest {
 
         recruitmentProcess.setStatus(status);
 
-        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.passed());
+        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.pass());
+    }
+
+    @Test
+    void 채용과정_불합격_성공() {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
+
+        recruitmentProcess.fail();
+
+        assertThat(recruitmentProcess.getStatus()).isEqualTo(FAILED);
+        assertThat(recruitmentProcess.getClosedAt()).isNotNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = RecruitmentProcessStatus.class, names = {"PASSED", "CANCELED", "FAILED"}, mode = INCLUDE)
+    void 채용과정_불합격_실패__불합격_가능한_상태아님(RecruitmentProcessStatus status) {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
+
+        recruitmentProcess.setStatus(status);
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.fail());
     }
 }
