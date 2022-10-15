@@ -1,7 +1,7 @@
 package com.minecraft.job.integration.mail;
 
 public enum MailTemplate {
-    TEST("테스트입니다.", "test.html");
+    REVIEW_CREATE("[MCJ] 팀에 리뷰가 작성되었습니다.", "review_create.html");
 
     public String subject;
     public String code;

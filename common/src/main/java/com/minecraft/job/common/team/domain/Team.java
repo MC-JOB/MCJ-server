@@ -53,6 +53,10 @@ public class Team {
         return this.user == user;
     }
 
+    public String getLeaderEmail() {
+        return user.getEmail();
+    }
+
     private Team(String name, String description, String logo, Long memberNum, User user) {
         this.name = name;
         this.description = description;
