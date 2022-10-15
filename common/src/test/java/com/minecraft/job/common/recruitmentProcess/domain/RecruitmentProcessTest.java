@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.IN_PROGRESS;
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.WAITING;
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
@@ -73,5 +72,24 @@ class RecruitmentProcessTest {
         recruitmentProcess.setStatus(status);
 
         assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.inProgress());
+    }
+
+    @Test
+    void 채용과정_중도취소_성공() {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
+
+        recruitmentProcess.canceled();
+
+        assertThat(recruitmentProcess.getStatus()).isEqualTo(CANCELED);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = RecruitmentProcessStatus.class, names = {"PASSED", "CANCELED", "FAILED"}, mode = INCLUDE)
+    void 채용과정_중도취소_실패__중도취소_가능한_상태아님(RecruitmentProcessStatus status) {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
+
+        recruitmentProcess.setStatus(status);
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.canceled());
     }
 }

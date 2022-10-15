@@ -7,8 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.IN_PROGRESS;
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.WAITING;
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static com.minecraft.job.common.support.Preconditions.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -82,5 +81,12 @@ public class RecruitmentProcess {
         check(this.status == WAITING);
 
         this.status = IN_PROGRESS;
+    }
+
+    public void canceled() {
+        check(CAN_MOVE_CANCELED.contains(status));
+
+        this.status = CANCELED;
+        this.closedAt = LocalDateTime.now();
     }
 }
