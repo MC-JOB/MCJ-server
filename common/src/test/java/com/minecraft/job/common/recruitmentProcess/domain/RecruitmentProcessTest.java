@@ -93,4 +93,26 @@ class RecruitmentProcessTest {
 
         assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.canceled());
     }
+
+    @Test
+    void 채용과정_최종합격_성공() {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
+
+        recruitmentProcess.inProgress();
+
+        recruitmentProcess.passed();
+
+        assertThat(recruitmentProcess.getStatus()).isEqualTo(PASSED);
+        assertThat(recruitmentProcess.getClosedAt()).isNotNull();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = RecruitmentProcessStatus.class, names = {"WAITING", "PASSED", "CANCELED", "FAILED"}, mode = INCLUDE)
+    void 채용과정_최종합격_실패__최종합격_가능한_상태아님(RecruitmentProcessStatus status) {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user);
+
+        recruitmentProcess.setStatus(status);
+
+        assertThatIllegalStateException().isThrownBy(() -> recruitmentProcess.passed());
+    }
 }
