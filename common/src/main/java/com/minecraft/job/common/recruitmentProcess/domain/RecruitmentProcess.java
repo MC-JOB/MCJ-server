@@ -83,6 +83,13 @@ public class RecruitmentProcess {
         this.status = IN_PROGRESS;
     }
 
+    public void passed() {
+        check(this.status == IN_PROGRESS);
+
+        this.status = PASSED;
+        this.closedAt = LocalDateTime.now();
+    }
+
     public void canceled() {
         check(CAN_MOVE_CANCELED.contains(status));
 
@@ -90,10 +97,10 @@ public class RecruitmentProcess {
         this.closedAt = LocalDateTime.now();
     }
 
-    public void passed() {
-        check(this.status == IN_PROGRESS);
+    public void failed() {
+        check(CAN_MOVE_FAILED.contains(status));
 
-        this.status = PASSED;
+        this.status = FAILED;
         this.closedAt = LocalDateTime.now();
     }
 }
