@@ -81,6 +81,7 @@ class RecruitmentProcessTest {
         recruitmentProcess.canceled();
 
         assertThat(recruitmentProcess.getStatus()).isEqualTo(CANCELED);
+        assertThat(recruitmentProcess.getClosedAt()).isNotNull();
     }
 
     @ParameterizedTest
