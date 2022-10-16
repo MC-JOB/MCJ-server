@@ -35,10 +35,10 @@ public class DefaultReviewAppService implements ReviewAppService {
     private final MailApi mailApi;
 
     @Override
-    public Pair<Review, Long> create(ReviewCreateDto dto) {
+    public Pair<Review, Double> create(ReviewCreateDto dto) {
         Review review = reviewService.create(dto.userId(), dto.teamId(), dto.content(), dto.score());
 
-        Long averagePoint = getAveragePoint(dto.teamId());
+        Double averagePoint = getAveragePoint(dto.teamId());
 
         teamService.applyAveragePoint(dto.teamId(), averagePoint);
 
@@ -49,23 +49,23 @@ public class DefaultReviewAppService implements ReviewAppService {
     public void update(ReviewUpdateDto dto) {
         reviewService.update(dto.reviewId(), dto.userId(), dto.teamId(), dto.content(), dto.score());
 
-        Long averagePoint = getAveragePoint(dto.teamId());
+        Double averagePoint = getAveragePoint(dto.teamId());
 
         teamService.applyAveragePoint(dto.teamId(), averagePoint);
     }
 
 
-    private long getAveragePoint(Long teamId) {
+    private double getAveragePoint(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
 
         List<Review> reviews = reviewRepository.findReviewByTeam(team);
 
-        return Double.valueOf(
-                        reviews.stream()
-                                .flatMapToLong(it -> LongStream.of(it.getScore()))
-                                .average()
-                                .orElseThrow())
-                .longValue();
+        double averagePoint = reviews.stream()
+                .flatMapToLong(it -> LongStream.of(it.getScore()))
+                .average()
+                .orElseThrow();
+
+        return Math.round(averagePoint * 10) / 10.0;
     }
 
     @Async
@@ -77,7 +77,7 @@ public class DefaultReviewAppService implements ReviewAppService {
         String teamName = review.getTeamName();
         String userNickname = review.getUserNickname();
         Long score = review.getScore();
-        Long averagePoint = review.getTeamOfAveragePoint();
+        Double averagePoint = review.getTeamOfAveragePoint();
 
         mailApi.send(new Mail(
                 new String[]{leaderEmail},

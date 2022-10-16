@@ -1,7 +1,7 @@
 create table team
 (
     id            bigint not null auto_increment,
-    average_point bigint,
+    average_point double precision,
     created_at    datetime(6),
     description   varchar(255),
     logo          varchar(255),

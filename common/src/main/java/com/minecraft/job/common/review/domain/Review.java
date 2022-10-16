@@ -61,7 +61,7 @@ public class Review {
         return team.getLeaderEmail();
     }
 
-    public Long getTeamOfAveragePoint() {
+    public Double getTeamOfAveragePoint() {
         return team.getAveragePoint();
     }
 

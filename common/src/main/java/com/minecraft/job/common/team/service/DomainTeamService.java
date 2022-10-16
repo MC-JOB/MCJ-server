@@ -29,7 +29,7 @@ public class DomainTeamService implements TeamService {
     }
 
     @Override
-    public void applyAveragePoint(Long teamId, Long averagePoint) {
+    public void applyAveragePoint(Long teamId, Double averagePoint) {
         Team team = teamRepository.findById(teamId).orElseThrow();
 
         team.applyAveragePoint(averagePoint);

@@ -7,7 +7,7 @@ import org.springframework.data.util.Pair;
 
 public interface ReviewAppService {
 
-    Pair<Review, Long> create(ReviewCreateDto dto);
+    Pair<Review, Double> create(ReviewCreateDto dto);
 
     void update(ReviewUpdateDto dto);
 }

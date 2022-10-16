@@ -49,19 +49,19 @@ class DefaultReviewAppServiceTest {
     @Test
     void 리뷰_생성_성공__평점_적용() {
         User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
-        reviewRepository.save(Review.create("content", 3L, user1, team));
+        reviewRepository.save(Review.create("content", 5L, user1, team));
 
         User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
         reviewRepository.save(Review.create("content", 4L, user2, team));
 
-        ReviewCreateDto dto = new ReviewCreateDto(user.getId(), team.getId(), "content", 5L);
+        ReviewCreateDto dto = new ReviewCreateDto(user.getId(), team.getId(), "content", 1L);
         Review review = reviewAppService.create(dto).getFirst();
 
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findReview.getId()).isNotNull();
-        assertThat(findTeam.getAveragePoint()).isEqualTo((3 + 4 + 5) / 3);
+        assertThat(findTeam.getAveragePoint()).isEqualTo(Math.round((5 + 4 + 1) / 3.0 * 10) / 10.0);
     }
 
     @Test
@@ -81,6 +81,6 @@ class DefaultReviewAppServiceTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findReview.getId()).isNotNull();
-        assertThat(findTeam.getAveragePoint()).isEqualTo((5 + 4 + 1) / 3);
+        assertThat(findTeam.getAveragePoint()).isEqualTo(Math.round((5 + 4 + 1) / 3.0 * 10) / 10.0);
     }
 }
