@@ -58,8 +58,8 @@ class RecruitmentProcessRepositoryTest {
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
         assertThat(findRecruitmentProcess.getId()).isNotNull();
-        assertThat(findRecruitmentProcess.getUser()).isNotNull();
-        assertThat(findRecruitmentProcess.getRecruitment()).isNotNull();
+        assertThat(findRecruitmentProcess.getUser()).isEqualTo(user);
+        assertThat(findRecruitmentProcess.getRecruitment()).isEqualTo(recruitment);
         assertThat(findRecruitmentProcess.getStatus()).isEqualTo(WAITING);
         assertThat(findRecruitmentProcess.getCreatedAt()).isNotNull();
     }
