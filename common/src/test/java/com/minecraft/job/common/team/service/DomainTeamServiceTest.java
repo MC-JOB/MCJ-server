@@ -50,7 +50,7 @@ class DomainTeamServiceTest {
     void 팀_평점_적용_성공() {
         Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
 
-        teamService.applyAveragePoint(team.getId(), 3L);
+        teamService.applyAveragePoint(team.getId(), 3.0);
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 

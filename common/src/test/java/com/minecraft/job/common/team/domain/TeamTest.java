@@ -52,7 +52,7 @@ class TeamTest {
     void 팀_평점_적용_성공() {
         Team team = TeamFixture.create(user);
 
-        team.applyAveragePoint(5L);
+        team.applyAveragePoint(5.0);
 
         assertThat(team.getAveragePoint()).isEqualTo(5L);
     }
@@ -61,14 +61,14 @@ class TeamTest {
     void 팀_평점_적용_실패__평점_최소값보다_낮음() {
         Team team = TeamFixture.create(user);
 
-        assertThatIllegalArgumentException().isThrownBy(() -> team.applyAveragePoint(MIN_AVERAGE_POINT - 1L));
+        assertThatIllegalArgumentException().isThrownBy(() -> team.applyAveragePoint(MIN_AVERAGE_POINT - 1));
     }
 
     @Test
     void 팀_평점_적용_실패__평점_최대값보다_높음() {
         Team team = TeamFixture.create(user);
 
-        assertThatIllegalArgumentException().isThrownBy(() -> team.applyAveragePoint(MAX_AVERAGE_POINT + 1L));
+        assertThatIllegalArgumentException().isThrownBy(() -> team.applyAveragePoint(MAX_AVERAGE_POINT + 1));
     }
 
     @Test

@@ -21,7 +21,7 @@ public class ReviewApi {
 
     @PostMapping
     public ReviewCreateResponse create(@RequestBody ReviewCreateRequest req) {
-        Pair<Review, Long> pair = reviewAppService.create(req.toDto());
+        Pair<Review, Double> pair = reviewAppService.create(req.toDto());
 
         return ReviewCreateResponse.create(pair);
     }

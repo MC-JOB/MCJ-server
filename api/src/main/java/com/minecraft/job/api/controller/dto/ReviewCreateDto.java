@@ -16,9 +16,9 @@ public class ReviewCreateDto {
 
     public record ReviewCreateResponse(
             ReviewCreateData review,
-            Long averagePoint
+            Double averagePoint
     ) {
-        public static ReviewCreateResponse create(Pair<Review, Long> pair) {
+        public static ReviewCreateResponse create(Pair<Review, Double> pair) {
             return new ReviewCreateResponse(
                     ReviewCreateData.create(pair),
                     pair.getSecond()
@@ -32,7 +32,7 @@ public class ReviewCreateDto {
             Long score
     ) {
 
-        public static ReviewCreateData create(Pair<Review, Long> pair) {
+        public static ReviewCreateData create(Pair<Review, Double> pair) {
             return new ReviewCreateData(pair.getFirst().getId(), pair.getFirst().getScore());
         }
     }

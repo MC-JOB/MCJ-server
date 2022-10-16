@@ -42,12 +42,11 @@ public class Team {
     @Enumerated(value = EnumType.STRING)
     private TeamStatus status = ACTIVATED;
 
-    private Long averagePoint = 0L;
+    public static final Double MAX_AVERAGE_POINT = Review.MAX_SCORE.doubleValue();
 
     private final LocalDateTime createdAt = LocalDateTime.now();
-
-    public static final Long MAX_AVERAGE_POINT = Review.MAX_SCORE;
-    public static final Long MIN_AVERAGE_POINT = Review.MIN_SCORE;
+    public static final Double MIN_AVERAGE_POINT = Review.MIN_SCORE.doubleValue();
+    private Double averagePoint = 0.0;
 
     public boolean ofUser(User user) {
         return this.user == user;
@@ -75,7 +74,7 @@ public class Team {
         return new Team(name, description, logo, memberNum, user);
     }
 
-    public void applyAveragePoint(Long averagePoint) {
+    public void applyAveragePoint(Double averagePoint) {
         require(averagePoint >= MIN_AVERAGE_POINT);
         require(averagePoint <= MAX_AVERAGE_POINT);
 
