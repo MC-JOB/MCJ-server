@@ -50,7 +50,7 @@ class RecruitmentRepositoryTest {
         assertThat(findRecruitment.getId()).isNotNull();
         assertThat(findRecruitment.getTitle()).isEqualTo("title");
         assertThat(findRecruitment.getContent()).isEqualTo("content");
-        assertThat(findRecruitment.getTeam()).isNotNull();
+        assertThat(findRecruitment.getTeam()).isEqualTo(team);
         assertThat(findRecruitment.getStatus()).isEqualTo(CREATED);
         assertThat(findRecruitment.getCreatedAt()).isNotNull();
     }
