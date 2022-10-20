@@ -63,6 +63,10 @@ public class RecruitmentProcess {
 
     private LocalDateTime closedAt;
 
+    public String getUserNickname() {
+        return user.getNickname();
+    }
+
     private RecruitmentProcess(Recruitment recruitment, User user) {
         this.recruitment = recruitment;
         this.user = user;

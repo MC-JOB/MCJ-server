@@ -45,6 +45,14 @@ public class Recruitment {
         return this.team.ofUser(user);
     }
 
+    public String getTeamName() {
+        return team.getName();
+    }
+
+    public String getTeamOfLeaderEmail() {
+        return team.getLeaderEmail();
+    }
+
     private Recruitment(String title, String content, Team team) {
         this.title = title;
         this.content = content;
