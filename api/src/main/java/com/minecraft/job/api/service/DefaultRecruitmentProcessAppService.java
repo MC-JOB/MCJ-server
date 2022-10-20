@@ -36,7 +36,7 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
 
         mailApi.send(new Mail(
                 new String[]{leaderEmail},
-                MailTemplate.REVIEW_CREATE,
+                MailTemplate.RECRUITMENT_PROCESS_CREATE,
                 Map.of("teamName", teamName, "userNickname", userNickname,
                         "recruitmentName", recruitmentName)
         ));
