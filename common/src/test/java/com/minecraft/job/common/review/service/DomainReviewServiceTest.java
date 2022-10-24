@@ -19,6 +19,7 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import javax.transaction.Transactional;
 
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
+import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -106,5 +107,16 @@ class DomainReviewServiceTest {
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
 
         assertThat(findReview.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 리뷰_비활성화_성공() {
+        Review review = reviewService.create(user.getId(), team.getId(), "content", 3L);
+
+        reviewService.inactive(review.getId());
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+
+        assertThat(findReview.getStatus()).isEqualTo(INACTIVATED);
     }
 }

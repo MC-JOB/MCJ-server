@@ -4,6 +4,7 @@ import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.service.dto.ReviewActivateDto;
 import com.minecraft.job.api.service.dto.ReviewCreateDto;
+import com.minecraft.job.api.service.dto.ReviewInactivateDto;
 import com.minecraft.job.api.service.dto.ReviewUpdateDto;
 import com.minecraft.job.common.review.domain.Review;
 import com.minecraft.job.common.review.domain.ReviewRepository;
@@ -19,7 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
+import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 @Transactional
 @SpringBootTest
@@ -112,5 +115,48 @@ class DefaultReviewAppServiceTest {
         assertThat(findReview.getId()).isNotNull();
         assertThat(findReview.getStatus()).isEqualTo(ACTIVATED);
         assertThat(findTeam.getAveragePoint()).isEqualTo(Math.round((5 + 4 + 1) / 3.0 * 10) / 10.0);
+    }
+
+    @Test
+    void 리뷰_비활성화_성공__평점_적용() {
+        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        reviewRepository.save(Review.create("content", 5L, user1, team));
+
+        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        reviewRepository.save(Review.create("content", 4L, user2, team));
+
+        Review review = reviewRepository.save(Review.create("content", 3L, user, team));
+
+        ReviewInactivateDto dto = new ReviewInactivateDto(review.getId(), user.getId(), team.getId());
+        reviewAppService.inactivate(dto);
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findReview.getId()).isNotNull();
+        assertThat(findReview.getStatus()).isEqualTo(INACTIVATED);
+        assertThat(findTeam.getAveragePoint()).isEqualTo(Math.round((5 + 4) / 2.0 * 10) / 10.0);
+    }
+
+    @Test
+    void 리뷰_비활성화_실패__유저의_리뷰가_아님() {
+        Review review = reviewRepository.save(Review.create("content", 3L, user, team));
+
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+
+        ReviewInactivateDto dto = new ReviewInactivateDto(review.getId(), fakeUser.getId(), team.getId());
+
+        assertThatIllegalArgumentException().isThrownBy(() -> reviewAppService.inactivate(dto));
+    }
+
+    @Test
+    void 리뷰_비활성화_실패__팀의_리뷰가_아님() {
+        Review review = reviewRepository.save(Review.create("content", 3L, user, team));
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        ReviewInactivateDto dto = new ReviewInactivateDto(review.getId(), user.getId(), fakeTeam.getId());
+
+        assertThatIllegalArgumentException().isThrownBy(() -> reviewAppService.inactivate(dto));
     }
 }
