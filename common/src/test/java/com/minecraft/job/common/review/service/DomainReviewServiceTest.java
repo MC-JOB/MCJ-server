@@ -18,6 +18,7 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 import javax.transaction.Transactional;
 
+import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -92,5 +93,18 @@ class DomainReviewServiceTest {
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(leader));
 
         assertThatIllegalArgumentException().isThrownBy(() -> reviewService.update(review.getId(), user.getId(), fakeTeam.getId(), "updateContent", 1L));
+    }
+
+    @Test
+    void 리뷰_활성화_성공() {
+        Review review = reviewService.create(user.getId(), team.getId(), "content", 3L);
+
+        review.inactivate();
+
+        reviewService.active(review.getId());
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+
+        assertThat(findReview.getStatus()).isEqualTo(ACTIVATED);
     }
 }
