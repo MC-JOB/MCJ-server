@@ -10,7 +10,6 @@ import com.minecraft.job.common.review.service.ReviewService;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.service.TeamService;
-import com.minecraft.job.common.user.domain.UserRepository;
 import com.minecraft.job.integration.mail.Mail;
 import com.minecraft.job.integration.mail.MailApi;
 import com.minecraft.job.integration.mail.MailTemplate;
@@ -34,7 +33,6 @@ public class DefaultReviewAppService implements ReviewAppService {
     private final ReviewRepository reviewRepository;
     private final TeamService teamService;
     private final TeamRepository teamRepository;
-    private UserRepository userRepository;
     private final MailApi mailApi;
 
     @Override
@@ -71,7 +69,7 @@ public class DefaultReviewAppService implements ReviewAppService {
     private double getAveragePoint(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
 
-        List<Review> reviews = reviewRepository.findReviewByTeam(team);
+        List<Review> reviews = reviewRepository.findAllActivated(team);
 
         double averagePoint = reviews.stream()
                 .flatMapToLong(it -> LongStream.of(it.getScore()))
