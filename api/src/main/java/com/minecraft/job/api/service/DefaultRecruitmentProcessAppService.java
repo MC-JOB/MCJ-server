@@ -30,8 +30,8 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
         String recruitmentName = recruitment.getTitle();
-        String leaderEmail = recruitment.getTeamName();
-        String teamName = recruitment.getTeamOfLeaderEmail();
+        String teamName = recruitment.getTeamName();
+        String leaderEmail = recruitment.getTeamOfLeaderEmail();
         String userNickname = recruitmentProcess.getUserNickname();
 
         mailApi.send(new Mail(
