@@ -57,4 +57,11 @@ public class DomainReviewService implements ReviewService {
 
         review.activate();
     }
+
+    @Override
+    public void inactive(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+
+        review.inactivate();
+    }
 }

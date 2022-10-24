@@ -9,4 +9,6 @@ public interface ReviewService {
     void update(Long reviewId, Long userId, Long teamId, String content, Long score);
 
     void active(Long reviewId);
+
+    void inactive(Long reviewId);
 }
