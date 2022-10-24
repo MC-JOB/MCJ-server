@@ -67,6 +67,10 @@ public class RecruitmentProcess {
         return user.getNickname();
     }
 
+    public String getUserEmail() {
+        return user.getEmail();
+    }
+
     private RecruitmentProcess(Recruitment recruitment, User user) {
         this.recruitment = recruitment;
         this.user = user;
