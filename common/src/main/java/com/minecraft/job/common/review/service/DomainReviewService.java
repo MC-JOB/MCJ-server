@@ -50,4 +50,11 @@ public class DomainReviewService implements ReviewService {
 
         review.update(content, score);
     }
+
+    @Override
+    public void active(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+
+        review.activate();
+    }
 }
