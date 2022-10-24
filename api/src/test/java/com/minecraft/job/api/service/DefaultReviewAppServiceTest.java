@@ -56,6 +56,11 @@ class DefaultReviewAppServiceTest {
         User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
         reviewRepository.save(Review.create("content", 4L, user2, team));
 
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
+        Review fakeReview = reviewRepository.save(Review.create("content", 5L, fakeUser, team));
+
+        fakeReview.inactivate();
+
         ReviewCreateDto dto = new ReviewCreateDto(user.getId(), team.getId(), "content", 1L);
         Review review = reviewAppService.create(dto).getFirst();
 

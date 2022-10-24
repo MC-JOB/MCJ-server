@@ -58,15 +58,20 @@ class ReviewRepositoryTest {
     }
 
     @Test
-    void 리뷰_팀으로_조회() {
+    void 리뷰_팀으로_활성화_상태_조회() {
         User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
         User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        User user3 = userRepository.save(UserFixture.getAntherUser("user3"));
 
         Review review1 = reviewRepository.save(Review.create("content", 4L, user1, team));
         Review review2 = reviewRepository.save(Review.create("content", 3L, user2, team));
+        Review review3 = reviewRepository.save(Review.create("content", 3L, user3, team));
 
-        List<Review> reviewScoreByTeam = reviewRepository.findReviewByTeam(team);
+        review3.inactivate();
 
-        assertThat(reviewScoreByTeam).containsExactly(review1, review2);
+        List<Review> findReviews = reviewRepository.findAllActivated(team);
+
+        assertThat(findReviews).containsExactly(review1, review2);
+        assertThat(findReviews).doesNotContain(review3);
     }
 }
