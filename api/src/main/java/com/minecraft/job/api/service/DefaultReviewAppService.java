@@ -1,5 +1,6 @@
 package com.minecraft.job.api.service;
 
+import com.minecraft.job.api.service.dto.ReviewActivateDto;
 import com.minecraft.job.api.service.dto.ReviewCreateDto;
 import com.minecraft.job.api.service.dto.ReviewUpdateDto;
 import com.minecraft.job.common.review.domain.Review;
@@ -9,6 +10,7 @@ import com.minecraft.job.common.review.service.ReviewService;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.service.TeamService;
+import com.minecraft.job.common.user.domain.UserRepository;
 import com.minecraft.job.integration.mail.Mail;
 import com.minecraft.job.integration.mail.MailApi;
 import com.minecraft.job.integration.mail.MailTemplate;
@@ -32,6 +34,7 @@ public class DefaultReviewAppService implements ReviewAppService {
     private final ReviewRepository reviewRepository;
     private final TeamService teamService;
     private final TeamRepository teamRepository;
+    private UserRepository userRepository;
     private final MailApi mailApi;
 
     @Override
@@ -54,6 +57,16 @@ public class DefaultReviewAppService implements ReviewAppService {
         teamService.applyAveragePoint(dto.teamId(), averagePoint);
     }
 
+    @Override
+    public void activate(ReviewActivateDto dto) {
+        reviewService.active(dto.reviewId());
+
+        reviewService.update(dto.reviewId(), dto.userId(), dto.teamId(), dto.content(), dto.score());
+
+        Double averagePoint = getAveragePoint(dto.teamId());
+
+        teamService.applyAveragePoint(dto.teamId(), averagePoint);
+    }
 
     private double getAveragePoint(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
