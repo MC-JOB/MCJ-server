@@ -2,6 +2,7 @@ package com.minecraft.job.api.service;
 
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
+import com.minecraft.job.api.service.dto.ReviewActivateDto;
 import com.minecraft.job.api.service.dto.ReviewCreateDto;
 import com.minecraft.job.api.service.dto.ReviewUpdateDto;
 import com.minecraft.job.common.review.domain.Review;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -81,6 +83,29 @@ class DefaultReviewAppServiceTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findReview.getId()).isNotNull();
+        assertThat(findTeam.getAveragePoint()).isEqualTo(Math.round((5 + 4 + 1) / 3.0 * 10) / 10.0);
+    }
+
+    @Test
+    void 리뷰_활성화_성공__평점_적용() {
+        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        reviewRepository.save(Review.create("content", 5L, user1, team));
+
+        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        reviewRepository.save(Review.create("content", 4L, user2, team));
+
+        Review review = reviewRepository.save(Review.create("content", 3L, user, team));
+
+        review.inactivate();
+
+        ReviewActivateDto dto = new ReviewActivateDto(review.getId(), user.getId(), team.getId(), "updateContent", 1L);
+        reviewAppService.activate(dto);
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findReview.getId()).isNotNull();
+        assertThat(findReview.getStatus()).isEqualTo(ACTIVATED);
         assertThat(findTeam.getAveragePoint()).isEqualTo(Math.round((5 + 4 + 1) / 3.0 * 10) / 10.0);
     }
 }
