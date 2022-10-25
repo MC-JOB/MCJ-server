@@ -54,4 +54,15 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
 
         recruitmentProcess.inProgress();
     }
+
+    @Override
+    public void cancel(Long recruitmentProcessId, Long userId, Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
+        Recruitment recruitment = recruitmentProcess.getRecruitment();
+
+        require(recruitment.ofTeam(team));
+
+        recruitmentProcess.cancel();
+    }
 }
