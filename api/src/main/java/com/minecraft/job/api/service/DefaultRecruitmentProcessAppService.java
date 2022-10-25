@@ -3,6 +3,7 @@ package com.minecraft.job.api.service;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessCreateEvent;
+import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessInProgressEvent;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
 import com.minecraft.job.integration.mail.Mail;
 import com.minecraft.job.integration.mail.MailApi;
@@ -38,6 +39,24 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
                 new String[]{leaderEmail},
                 MailTemplate.RECRUITMENT_PROCESS_CREATE,
                 Map.of("teamName", teamName, "userNickname", userNickname,
+                        "recruitmentName", recruitmentName)
+        ));
+    }
+
+    @Async
+    @TransactionalEventListener(RecruitmentProcessInProgressEvent.class)
+    public void onCreateRecruitmentProcessListener(RecruitmentProcessInProgressEvent event) throws Exception {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(event.recruitmentProcessId()).orElseThrow();
+        Recruitment recruitment = recruitmentProcess.getRecruitment();
+
+        String recruitmentName = recruitment.getTitle();
+        String userEmail = recruitmentProcess.getUserEmail();
+        String userNickname = recruitmentProcess.getUserNickname();
+
+        mailApi.send(new Mail(
+                new String[]{userEmail},
+                MailTemplate.RECRUITMENT_PROCESS_INPROGRESS,
+                Map.of("userNickname", userNickname,
                         "recruitmentName", recruitmentName)
         ));
     }
