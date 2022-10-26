@@ -1,7 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentCreateDto;
-import com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.service.RecruitmentProcessService;
 import lombok.RequiredArgsConstructor;
