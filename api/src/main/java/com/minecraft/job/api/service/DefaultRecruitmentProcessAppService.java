@@ -1,10 +1,7 @@
 package com.minecraft.job.api.service;
 
 import com.minecraft.job.common.recruitment.domain.Recruitment;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessCreateEvent;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessInProgressEvent;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
+import com.minecraft.job.common.recruitmentProcess.domain.*;
 import com.minecraft.job.integration.mail.Mail;
 import com.minecraft.job.integration.mail.MailApi;
 import com.minecraft.job.integration.mail.MailTemplate;
@@ -56,6 +53,24 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
         mailApi.send(new Mail(
                 new String[]{userEmail},
                 MailTemplate.RECRUITMENT_PROCESS_INPROGRESS,
+                Map.of("userNickname", userNickname,
+                        "recruitmentName", recruitmentName)
+        ));
+    }
+
+    @Async
+    @TransactionalEventListener(RecruitmentProcessFailEvent.class)
+    public void onCreateRecruitmentProcessListener(RecruitmentProcessFailEvent event) throws Exception {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(event.recruitmentProcessId()).orElseThrow();
+        Recruitment recruitment = recruitmentProcess.getRecruitment();
+
+        String recruitmentName = recruitment.getTitle();
+        String userEmail = recruitmentProcess.getUserEmail();
+        String userNickname = recruitmentProcess.getUserNickname();
+
+        mailApi.send(new Mail(
+                new String[]{userEmail},
+                MailTemplate.RECRUITMENT_PROCESS_FAIL,
                 Map.of("userNickname", userNickname,
                         "recruitmentName", recruitmentName)
         ));
