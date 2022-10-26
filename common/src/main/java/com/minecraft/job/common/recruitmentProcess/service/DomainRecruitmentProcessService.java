@@ -2,10 +2,7 @@ package com.minecraft.job.common.recruitmentProcess.service;
 
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessCreateEvent;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessInProgressEvent;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
+import com.minecraft.job.common.recruitmentProcess.domain.*;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -64,5 +61,18 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
         require(recruitment.ofTeam(team));
 
         recruitmentProcess.cancel();
+    }
+
+    @Override
+    public void fail(Long recruitmentProcessId, Long userId, Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
+        Recruitment recruitment = recruitmentProcess.getRecruitment();
+
+        require(recruitment.ofTeam(team));
+
+        eventPublisher.publishEvent(new RecruitmentProcessFailEvent(recruitmentProcess.getId()));
+
+        recruitmentProcess.fail();
     }
 }

@@ -9,4 +9,6 @@ public interface RecruitmentProcessService {
     void inProgress(Long recruitmentProcessId, Long userId, Long teamId);
 
     void cancel(Long recruitmentProcessId, Long userId, Long teamId);
+
+    void fail(Long recruitmentProcessId, Long userId, Long teamId);
 }

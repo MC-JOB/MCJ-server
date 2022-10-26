@@ -20,8 +20,7 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.CANCELED;
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.IN_PROGRESS;
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -114,6 +113,29 @@ public class DomainRecruitmentProcessServiceTest {
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), user.getId(), fakeTeam.getId())
+        );
+    }
+
+    @Test
+    void 채용과정_불합격_성공() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+
+        recruitmentProcess.fail();
+
+        RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
+
+        assertThat(findRecruitmentProcess.getStatus()).isEqualTo(FAILED);
+        assertThat(findRecruitmentProcess.getClosedAt()).isNotNull();
+    }
+
+    @Test
+    void 채용과정_불합격_실패__팀의_채용과정이_아님() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentProcessService.fail(recruitmentProcess.getId(), user.getId(), fakeTeam.getId())
         );
     }
 }
