@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.ReviewActivateDto.ReviewActivateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
 import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
 import com.minecraft.job.api.fixture.ReviewFixture;
@@ -78,6 +79,27 @@ class ReviewApiTest extends ApiTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findReview.getContent()).isEqualTo("updateContent");
+        assertThat(findReview.getScore()).isEqualTo(1L);
+        assertThat(findTeam.getAveragePoint()).isEqualTo(1L);
+    }
+
+    @Test
+    void 리뷰_활성화_성공() throws Exception {
+        Review review = ReviewFixture.create(user, team);
+        review.inactivate();
+        review = reviewRepository.save(review);
+
+        ReviewActivateRequest req = new ReviewActivateRequest(review.getId(), user.getId(), team.getId(), "content", 1L);
+
+        mockMvc.perform(post("/review/activate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk());
+
+        Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
+
+        assertThat(findReview.getContent()).isEqualTo("content");
         assertThat(findReview.getScore()).isEqualTo(1L);
         assertThat(findTeam.getAveragePoint()).isEqualTo(1L);
     }
