@@ -65,6 +65,7 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
         String recruitmentName = recruitment.getTitle();
+        String teamName = recruitment.getTeamName();
         String userEmail = recruitmentProcess.getUserEmail();
         String userNickname = recruitmentProcess.getUserNickname();
 
@@ -72,7 +73,8 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
                 new String[]{userEmail},
                 MailTemplate.RECRUITMENT_PROCESS_FAIL,
                 Map.of("userNickname", userNickname,
-                        "recruitmentName", recruitmentName)
+                        "recruitmentName", recruitmentName,
+                        "teamName", teamName)
         ));
     }
 }
