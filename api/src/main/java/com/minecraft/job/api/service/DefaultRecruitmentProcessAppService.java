@@ -47,6 +47,7 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
         String recruitmentName = recruitment.getTitle();
+        String teamName = recruitment.getTeamName();
         String userEmail = recruitmentProcess.getUserEmail();
         String userNickname = recruitmentProcess.getUserNickname();
 
@@ -54,9 +55,31 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
                 new String[]{userEmail},
                 MailTemplate.RECRUITMENT_PROCESS_INPROGRESS,
                 Map.of("userNickname", userNickname,
-                        "recruitmentName", recruitmentName)
+                        "recruitmentName", recruitmentName,
+                        "teamName", teamName)
         ));
     }
+
+    @Async
+    @TransactionalEventListener(RecruitmentProcessInProgressEvent.class)
+    public void onCreateRecruitmentProcessListener(RecruitmentProcessPassEvent event) throws Exception {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(event.recruitmentProcessId()).orElseThrow();
+        Recruitment recruitment = recruitmentProcess.getRecruitment();
+
+        String recruitmentName = recruitment.getTitle();
+        String teamName = recruitment.getTeamName();
+        String userEmail = recruitmentProcess.getUserEmail();
+        String userNickname = recruitmentProcess.getUserNickname();
+
+        mailApi.send(new Mail(
+                new String[]{userEmail},
+                MailTemplate.RECRUITMENT_PROCESS_PASS,
+                Map.of("userNickname", userNickname,
+                        "recruitmentName", recruitmentName,
+                        "teamName", teamName)
+        ));
+    }
+
 
     @Async
     @TransactionalEventListener(RecruitmentProcessFailEvent.class)
