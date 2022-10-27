@@ -94,6 +94,30 @@ public class DomainRecruitmentProcessServiceTest {
     }
 
     @Test
+    void 채용과정_최용합격_성공() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+
+        recruitmentProcess.inProgress();
+
+        recruitmentProcess.pass();
+
+        RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
+
+        assertThat(findRecruitmentProcess.getStatus()).isEqualTo(PASSED);
+    }
+
+    @Test
+    void 채용과정_최종합격_실패__팀의_채용과정이_아님() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentProcessService.pass(recruitmentProcess.getId(), fakeTeam.getId())
+        );
+    }
+
+    @Test
     void 채용과정_중도취소_성공() {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
 

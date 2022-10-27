@@ -53,6 +53,19 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
     }
 
     @Override
+    public void pass(Long recruitmentProcessId, Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
+        Recruitment recruitment = recruitmentProcess.getRecruitment();
+
+        require(recruitment.ofTeam(team));
+
+        eventPublisher.publishEvent(new RecruitmentProcessPassEvent(recruitmentProcess.getId()));
+
+        recruitmentProcess.pass();
+    }
+
+    @Override
     public void cancel(Long recruitmentProcessId, Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
