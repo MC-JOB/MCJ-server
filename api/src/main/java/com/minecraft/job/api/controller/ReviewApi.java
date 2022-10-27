@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.ReviewActivateDto.ReviewActivateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateResponse;
 import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
@@ -26,8 +27,13 @@ public class ReviewApi {
         return ReviewCreateResponse.create(pair);
     }
 
-    @PostMapping("update")
+    @PostMapping("/update")
     public void update(@RequestBody ReviewUpdateRequest req) {
         reviewAppService.update(req.toDto());
+    }
+
+    @PostMapping("/activate")
+    public void update(@RequestBody ReviewActivateRequest req) {
+        reviewAppService.activate(req.toDto());
     }
 }
