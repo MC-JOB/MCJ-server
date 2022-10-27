@@ -89,7 +89,7 @@ public class DomainRecruitmentProcessServiceTest {
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), user.getId(), fakeTeam.getId())
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId())
         );
     }
 
@@ -112,7 +112,7 @@ public class DomainRecruitmentProcessServiceTest {
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), user.getId(), fakeTeam.getId())
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId())
         );
     }
 
@@ -135,7 +135,7 @@ public class DomainRecruitmentProcessServiceTest {
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.fail(recruitmentProcess.getId(), user.getId(), fakeTeam.getId())
+                () -> recruitmentProcessService.fail(recruitmentProcess.getId(), fakeTeam.getId())
         );
     }
 }
