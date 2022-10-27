@@ -8,6 +8,8 @@ public interface RecruitmentProcessService {
 
     void inProgress(Long recruitmentProcessId, Long teamId);
 
+    void pass(Long recruitmentProcessId, Long teamId);
+
     void cancel(Long recruitmentProcessId, Long teamId);
 
     void fail(Long recruitmentProcessId, Long teamId);
