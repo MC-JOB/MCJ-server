@@ -45,11 +45,11 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
-        eventPublisher.publishEvent(new RecruitmentProcessInProgressEvent(recruitmentProcess.getId()));
-
         require(recruitment.ofTeam(team));
 
         recruitmentProcess.inProgress();
+
+        eventPublisher.publishEvent(new RecruitmentProcessInProgressEvent(recruitmentProcess.getId()));
     }
 
     @Override
@@ -58,11 +58,11 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
-        eventPublisher.publishEvent(new RecruitmentProcessPassEvent(recruitmentProcess.getId()));
-
         require(recruitment.ofTeam(team));
 
         recruitmentProcess.pass();
+
+        eventPublisher.publishEvent(new RecruitmentProcessPassEvent(recruitmentProcess.getId()));
     }
 
     @Override
@@ -82,10 +82,10 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
-        eventPublisher.publishEvent(new RecruitmentProcessFailEvent(recruitmentProcess.getId()));
-
         require(recruitment.ofTeam(team));
 
         recruitmentProcess.fail();
+
+        eventPublisher.publishEvent(new RecruitmentProcessFailEvent(recruitmentProcess.getId()));
     }
 }
