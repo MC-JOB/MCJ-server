@@ -3,6 +3,7 @@ package com.minecraft.job.api.controller;
 import com.minecraft.job.api.controller.dto.ReviewActivateDto.ReviewActivateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateResponse;
+import com.minecraft.job.api.controller.dto.ReviewInactivateDto.ReviewInactivateRequest;
 import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
 import com.minecraft.job.api.service.ReviewAppService;
 import com.minecraft.job.common.review.domain.Review;
@@ -33,7 +34,12 @@ public class ReviewApi {
     }
 
     @PostMapping("/activate")
-    public void update(@RequestBody ReviewActivateRequest req) {
+    public void activate(@RequestBody ReviewActivateRequest req) {
         reviewAppService.activate(req.toDto());
+    }
+
+    @PostMapping("/inactivate")
+    public void inactivate(@RequestBody ReviewInactivateRequest req) {
+        reviewAppService.inactivate(req.toDto());
     }
 }
