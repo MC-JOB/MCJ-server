@@ -1,5 +1,6 @@
 env:
   RESOURCE_PATH: ./api/src/main/resources/application.yml
+  INTEGRATION_PATH: ./integration/src/main/resources/integration.yml
   S3_BUCKET_NAME: mcjserver
   CODE_DEPLOY_APPLICATION_NAME: title-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: title-server
@@ -29,8 +30,7 @@ jobs:
           java-version: 17
 
 
-        #[1]
-      - name: "Set yml file "
+      - name: "application.yml Set"
         uses: microsoft/variable-substitution@v1
         with:
           files: ${{ env.RESOURCE_PATH }} 
@@ -38,6 +38,15 @@ jobs:
           spring.datasource.url: ${{ secrets.RDB_URL }} 
           spring.datasource.username: ${{ secrets.RDB_USER_NAME }} 
           spring.datasource.password: ${{ secrets.RDB_PASSWORD }} 
+          
+
+      - name: "integration.yml Set"
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.INTEGRATION_PATH }} 
+        env:
+          spring.mail.username: ${{ secrets.MAIL_USER_NAME }} 
+          spring.mail.password: ${{ secrets.MAIL_PASSWORD }} 
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
