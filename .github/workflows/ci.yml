@@ -8,14 +8,12 @@ env:
 name: Java CI
 
 on:
-  pull_request:
-    branches: [ "main" ]
-    types: 
-      - open
   push:
-    branches: [ "main" ]
-      
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
+    
 permissions:
   contents: read
 
