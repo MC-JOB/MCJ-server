@@ -91,7 +91,7 @@ project(":api") {
     }
 
     jar {
-        enabled = true
+        enabled = false
     }
 
     tasks.named('test') {
