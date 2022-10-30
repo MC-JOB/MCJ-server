@@ -5,7 +5,7 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: title-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: title-server
 
-name: Java CI
+name: CI
 
 on:
   push:
