@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ubuntu/app/build/libs/*.jar)
+BUILD_JAR=$(ls /home/ubuntu/app/api/build/libs/*.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 echo "> build 파일명: $JAR_NAME" >> /home/ec2-user/action/deploy.log
 
