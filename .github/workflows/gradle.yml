@@ -8,16 +8,18 @@ env:
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    types: 
+      - closed
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  development:
+    if: github.event.pull_request.merged == true
+    
     runs-on: ubuntu-latest
 
     steps:
