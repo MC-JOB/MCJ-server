@@ -5,7 +5,7 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: title-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: title-server
 
-name: Java CI with Gradle
+name: Java CI/CD
 
 on:
   pull_request:
