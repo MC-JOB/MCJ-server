@@ -47,4 +47,14 @@ public class TeamLogo {
 
         return new TeamLogo(name, savedName, size, team);
     }
+
+    public void update(String name, String savedName, Long size) {
+        require(Strings.isNotBlank(name));
+        require(Strings.isNotBlank(savedName));
+        require(0 < size);
+
+        this.name = name;
+        this.savedName = savedName;
+        this.size = size;
+    }
 }
