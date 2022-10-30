@@ -19,7 +19,7 @@ public class RecruitmentProcessApi {
 
     @PostMapping
     public RecruitmentProcessResponse create(@RequestBody RecruitmentProcessCreateRequest req) {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(req.recruitmentId(), req.userId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(req.recruitmentId(), req.userId(), req.resumeId());
 
         return RecruitmentProcessResponse.create(RecruitmentProcessCreateData.create(recruitmentProcess));
     }
