@@ -4,7 +4,7 @@ import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 
 public interface RecruitmentProcessService {
 
-    RecruitmentProcess create(Long recruitmentId, Long userId);
+    RecruitmentProcess create(Long recruitmentId, Long userId, Long resumeId);
 
     void inProgress(Long recruitmentProcessId, Long teamId);
 

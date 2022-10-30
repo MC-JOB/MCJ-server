@@ -1,6 +1,7 @@
 package com.minecraft.job.common.recruitmentProcess.service;
 
 import com.minecraft.job.common.fixture.RecruitmentFixture;
+import com.minecraft.job.common.fixture.ResumeFixture;
 import com.minecraft.job.common.fixture.TeamFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
@@ -8,6 +9,8 @@ import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessCreateEvent;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
+import com.minecraft.job.common.resume.domain.Resume;
+import com.minecraft.job.common.resume.domain.ResumeRepository;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -47,8 +50,12 @@ public class DomainRecruitmentProcessServiceTest {
     @Autowired
     private RecruitmentProcessRepository recruitmentProcessRepository;
 
+    @Autowired
+    private ResumeRepository resumeRepository;
+
     private Recruitment recruitment;
     private User user;
+    private Resume resume;
 
     @BeforeEach
     void setUp() {
@@ -58,11 +65,13 @@ public class DomainRecruitmentProcessServiceTest {
         Team team = teamRepository.save(TeamFixture.create(leader));
 
         recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
+
+        resume = resumeRepository.save(ResumeFixture.create(user));
     }
 
     @Test
     void 채용과정_생성_성공() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -73,7 +82,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_서류합격_성공() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         recruitmentProcess.inProgress();
 
@@ -84,7 +93,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_서류합격_실패__팀의_채용과정이_아님() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
@@ -95,7 +104,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_최용합격_성공() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         recruitmentProcess.inProgress();
 
@@ -108,7 +117,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_최종합격_실패__팀의_채용과정이_아님() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
@@ -119,7 +128,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_중도취소_성공() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         recruitmentProcess.cancel();
 
@@ -131,7 +140,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_중도취소_실패__팀의_채용과정이_아님() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
@@ -142,7 +151,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_불합격_성공() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         recruitmentProcess.fail();
 
@@ -154,7 +163,7 @@ public class DomainRecruitmentProcessServiceTest {
 
     @Test
     void 채용과정_불합격_실패__팀의_채용과정이_아님() {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId());
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 

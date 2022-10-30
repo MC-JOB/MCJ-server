@@ -1,11 +1,14 @@
 package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.fixture.RecruitmentFixture;
+import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
+import com.minecraft.job.common.resume.domain.Resume;
+import com.minecraft.job.common.resume.domain.ResumeRepository;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -28,9 +31,12 @@ public class RecruitmentProcessApiTest extends ApiTest {
     private TeamRepository teamRepository;
     @Autowired
     private RecruitmentRepository recruitmentRepository;
+    @Autowired
+    private ResumeRepository resumeRepository;
 
     private User user;
     private Recruitment recruitment;
+    private Resume resume;
 
 
     @BeforeEach
@@ -39,11 +45,12 @@ public class RecruitmentProcessApiTest extends ApiTest {
         User leader = userRepository.save(UserFixture.getAntherUser("leader"));
         Team team = teamRepository.save(TeamFixture.create(leader));
         recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
+        resume = resumeRepository.save(ResumeFixture.create(user));
     }
 
     @Test
     void 채용과정_생성_성공() throws Exception {
-        RecruitmentProcessCreateRequest recruitmentProcessCreateRequest = new RecruitmentProcessCreateRequest(recruitment.getId(), user.getId());
+        RecruitmentProcessCreateRequest recruitmentProcessCreateRequest = new RecruitmentProcessCreateRequest(recruitment.getId(), user.getId(), resume.getId());
 
         mockMvc.perform(post("/recruitmentProcess")
                         .contentType(MediaType.APPLICATION_JSON)

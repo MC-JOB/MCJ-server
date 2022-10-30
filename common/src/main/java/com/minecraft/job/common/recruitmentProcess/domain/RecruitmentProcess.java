@@ -1,6 +1,7 @@
 package com.minecraft.job.common.recruitmentProcess.domain;
 
 import com.minecraft.job.common.recruitment.domain.Recruitment;
+import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.user.domain.User;
 import lombok.*;
 
@@ -56,6 +57,9 @@ public class RecruitmentProcess {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Resume resume;
+
     @Enumerated(value = EnumType.STRING)
     private RecruitmentProcessStatus status = WAITING;
 
@@ -71,18 +75,21 @@ public class RecruitmentProcess {
         return user.getEmail();
     }
 
-    private RecruitmentProcess(Recruitment recruitment, User user) {
+    private RecruitmentProcess(Recruitment recruitment, User user, Resume resume) {
         this.recruitment = recruitment;
         this.user = user;
+        this.resume = resume;
     }
 
-    public static RecruitmentProcess create(Recruitment recruitment, User user) {
+    public static RecruitmentProcess create(Recruitment recruitment, User user, Resume resume) {
         notNull(recruitment);
         notNull(user);
+        notNull(resume);
 
         require(!recruitment.ofUser(user));
+        require(resume.ofUser(user));
 
-        return new RecruitmentProcess(recruitment, user);
+        return new RecruitmentProcess(recruitment, user, resume);
     }
 
     public void inProgress() {
