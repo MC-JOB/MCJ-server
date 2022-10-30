@@ -18,7 +18,8 @@ permissions:
   contents: read
 
 jobs:
-  CI:    
+  CI:
+    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
 
     steps:
