@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:    
+  CI:    
     runs-on: ubuntu-latest
 
     steps:
