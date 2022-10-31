@@ -3,14 +3,14 @@ spring:
     import: classpath:integration.yml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
+    url: ${db.url:jdbc:mysql://localhost:3306/minecraftjob}
+    username: ${db.username:root}
+    password: ${db.password:1234}
   flyway:
-    enabled: false
+    enabled: true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: false
