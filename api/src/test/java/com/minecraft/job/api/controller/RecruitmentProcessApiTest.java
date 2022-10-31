@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,12 +53,24 @@ public class RecruitmentProcessApiTest extends ApiTest {
     void 채용과정_생성_성공() throws Exception {
         RecruitmentProcessCreateRequest recruitmentProcessCreateRequest = new RecruitmentProcessCreateRequest(recruitment.getId(), user.getId(), resume.getId());
 
-        mockMvc.perform(post("/recruitmentProcess")
+        mockMvc.perform(post("/recruitment-process")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recruitmentProcessCreateRequest)))
                 .andExpectAll(
                         status().isOk(),
                         jsonPath("$.recruitmentProcess.id").isNotEmpty()
+                );
+    }
+
+    @Test
+    void 채용과정_서류합격_성공() throws Exception {
+        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitment.getId(), user.getId());
+
+        mockMvc.perform(post("/recruitment-process/in-progress")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentProcessInProgressRequest)))
+                .andExpectAll(
+                        status().isOk()
                 );
     }
 }

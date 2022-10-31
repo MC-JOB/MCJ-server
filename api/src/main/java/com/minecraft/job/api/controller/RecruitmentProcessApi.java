@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 
 @RestController
-@RequestMapping("/recruitmentProcess")
+@RequestMapping("/recruitment-process")
 @RequiredArgsConstructor
 public class RecruitmentProcessApi {
 
@@ -22,5 +23,10 @@ public class RecruitmentProcessApi {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(req.recruitmentId(), req.userId(), req.resumeId());
 
         return RecruitmentProcessResponse.create(RecruitmentProcessCreateData.create(recruitmentProcess));
+    }
+
+    @PostMapping("/in-progress")
+    public void inProgress(@RequestBody RecruitmentProcessInProgressRequest req) {
+        recruitmentProcessService.inProgress(req.recruitmentProcessId(), req.teamId());
     }
 }
