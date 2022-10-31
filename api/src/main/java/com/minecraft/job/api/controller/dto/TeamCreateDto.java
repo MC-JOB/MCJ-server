@@ -4,7 +4,7 @@ import com.minecraft.job.common.team.domain.Team;
 
 public class TeamCreateDto {
 
-    public record TeamCreateRequest(Long userId, String name, String description, String logo, Long memberNum) {
+    public record TeamCreateRequest(Long userId, String name, String description, Long memberNum) {
     }
 
     public record TeamCreateResponse(TeamCreateData team) {

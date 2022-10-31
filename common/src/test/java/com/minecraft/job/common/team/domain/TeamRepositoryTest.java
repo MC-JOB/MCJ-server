@@ -32,7 +32,7 @@ class TeamRepositoryTest {
 
     @Test
     void 팀_생성_성공() {
-        Team team = Team.create("name", "description", "logo", 5L, user);
+        Team team = Team.create("name", "description", 5L, user);
 
         team = teamRepository.save(team);
 
@@ -41,7 +41,6 @@ class TeamRepositoryTest {
         assertThat(findTeam.getId()).isNotNull();
         assertThat(findTeam.getName()).isEqualTo("name");
         assertThat(findTeam.getDescription()).isEqualTo("description");
-        assertThat(findTeam.getLogo()).isEqualTo("logo");
         assertThat(findTeam.getMemberNum()).isEqualTo(5L);
         assertThat(findTeam.getUser()).isEqualTo(user);
         assertThat(findTeam.getStatus()).isEqualTo(ACTIVATED);

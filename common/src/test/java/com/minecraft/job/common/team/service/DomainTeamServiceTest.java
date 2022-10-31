@@ -39,7 +39,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_생성_성공() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -48,7 +48,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_평점_적용_성공() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         teamService.applyAveragePoint(team.getId(), 3.0);
 
@@ -59,32 +59,31 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_수정_성공() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
-        teamService.update(team.getId(), user.getId(), "updateName", "updateDescription", "updateLogo", 10L);
+        teamService.update(team.getId(), user.getId(), "updateName", "updateDescription", 10L);
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findTeam.getName()).isEqualTo("updateName");
         assertThat(findTeam.getDescription()).isEqualTo("updateDescription");
-        assertThat(findTeam.getLogo()).isEqualTo("updateLogo");
         assertThat(findTeam.getMemberNum()).isEqualTo(10L);
     }
 
     @Test
     void 팀_수정_실패_유저의_팀이_아님() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         User fakerUser = userRepository.save(getFakerUser());
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> teamService.update(team.getId(), fakerUser.getId(), "updateName", "updateDescription", "updateLogo", 10L)
+                () -> teamService.update(team.getId(), fakerUser.getId(), "updateName", "updateDescription", 10L)
         );
     }
 
     @Test
     void 팀_비활성화_성공() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         teamService.inactivate(team.getId(), user.getId());
 
@@ -95,7 +94,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_비활성화_실패_유저의_팀이_아님() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         User fakerUser = userRepository.save(getFakerUser());
 
@@ -107,7 +106,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_활성화_성공() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         team.inactivate();
 
@@ -120,7 +119,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_활성화_실패_유저의_팀이_아님() {
-        Team team = teamService.create(user.getId(), "name", "description", "logo", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         team.inactivate();
 

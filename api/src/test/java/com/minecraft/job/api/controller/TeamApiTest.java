@@ -46,7 +46,7 @@ class TeamApiTest extends ApiTest {
 
     @Test
     void 팀_생성_성공() throws Exception {
-        TeamCreateRequest teamCreateRequest = new TeamCreateRequest(user.getId(), "teamName", "description", "logo", 10L);
+        TeamCreateRequest teamCreateRequest = new TeamCreateRequest(user.getId(), "teamName", "description", 10L);
 
         mockMvc.perform(post("/team")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +60,7 @@ class TeamApiTest extends ApiTest {
 
     @Test
     void 팀_수정_성공() throws Exception {
-        TeamUpdateRequest teamUpdateRequest = new TeamUpdateRequest(team.getId(), user.getId(), "updateName", "updateDescription", "updateLogo", 1L);
+        TeamUpdateRequest teamUpdateRequest = new TeamUpdateRequest(team.getId(), user.getId(), "updateName", "updateDescription", 1L);
 
         mockMvc.perform(post("/team/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,6 @@ class TeamApiTest extends ApiTest {
 
         assertThat(findTeam.getName()).isEqualTo("updateName");
         assertThat(findTeam.getDescription()).isEqualTo("updateDescription");
-        assertThat(findTeam.getLogo()).isEqualTo("updateLogo");
         assertThat(findTeam.getMemberNum()).isEqualTo(1L);
     }
 

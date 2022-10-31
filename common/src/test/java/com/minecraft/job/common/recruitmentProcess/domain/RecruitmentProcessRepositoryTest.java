@@ -46,6 +46,7 @@ class RecruitmentProcessRepositoryTest {
     private User teamUser;
     private Team team;
     private Resume resume;
+
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
