@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 import static com.minecraft.job.common.support.Preconditions.notNull;
 import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.teamlogo.domain.TeamLogoStatus.CREATED;
 
 @Entity
 @Getter
@@ -30,6 +32,10 @@ public class TeamLogo {
 
     @ManyToOne
     private Team team;
+
+    private final LocalDateTime createdAt = LocalDateTime.now();
+    @Enumerated(EnumType.STRING)
+    private TeamLogoStatus status = CREATED;
 
     private TeamLogo(String name, String savedName, Long size, Team team) {
         this.name = name;
