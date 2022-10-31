@@ -1,5 +1,5 @@
 env:
-  RESOURCE_PATH: ./api/src/main/resources/application.yml
+  RESOURCE_PATH: ./api/src/test/resources/application.yml
 
 name: CI
 
@@ -24,7 +24,7 @@ jobs:
         with:
           files: ${{ env.RESOURCE_PATH }}
         env:
-          spring.datasource.url: ${{ secrets.RDB_URL }}
+          spring.datasource.url: ${{ secrets.RDB_TEST_URL }}
           spring.datasource.username: ${{ secrets.RDB_USER_NAME }}
           spring.datasource.password: ${{ secrets.RDB_PASSWORD }}
 
