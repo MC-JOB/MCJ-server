@@ -8,11 +8,9 @@ env:
 name: CI
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
-
+    types: [opened, edited]
     
 permissions:
   contents: read
