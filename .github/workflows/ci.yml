@@ -38,5 +38,5 @@ jobs:
         shell: bash
 
       - name: Test with Gradle
-        run: ./gradlew clean test
+        run: ./gradlew :common:test
         shell: bash
