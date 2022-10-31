@@ -38,6 +38,6 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Test with Gradle
+      - name: All Test with Gradle
         run: ./gradlew test
         shell: bash
