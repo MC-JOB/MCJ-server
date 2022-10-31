@@ -17,7 +17,6 @@ permissions:
 
 jobs:
   CI:
-    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +33,6 @@ jobs:
         shell: bash
 
         # [2]
-      - name: Build with Gradle
-        run: ./gradlew clean :api:buildNeeded --stacktrace --info -x test
+      - name: Test with Gradle
+        run: ./gradlew clean test
         shell: bash
