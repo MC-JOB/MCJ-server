@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.minecraft.job.common.support.Preconditions.require;
+
 
 @Service
 @Transactional
@@ -26,7 +28,7 @@ public class DomainTeamLogoService implements TeamLogoService {
         User user = userRepository.getReferenceById(userId);
         Team team = teamRepository.getReferenceById(teamId);
 
-        team.ofUser(user);
+        require(team.ofUser(user));
 
         TeamLogo teamLogo = TeamLogo.create(name, savedName, size, team);
 

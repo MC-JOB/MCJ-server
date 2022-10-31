@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 
 import static com.minecraft.job.common.teamlogo.domain.TeamLogoStatus.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 
 @Transactional
@@ -57,5 +58,14 @@ class DomainTeamLogoServiceTest {
         assertThat(findTeamLogo.getTeam()).isSameAs(team);
         assertThat(findTeamLogo.getStatus()).isEqualTo(CREATED);
         assertThat(findTeamLogo.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void 팀로고_생성_실패_유저의_팀이_아님() {
+        User fakerUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> teamLogoService.create(team.getId(), fakerUser.getId(), "name", "savedName", 1L)
+        );
     }
 }
