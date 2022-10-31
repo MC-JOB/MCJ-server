@@ -33,9 +33,10 @@ public class TeamLogo {
     @ManyToOne
     private Team team;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
     @Enumerated(EnumType.STRING)
     private TeamLogoStatus status = CREATED;
+
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     private TeamLogo(String name, String savedName, Long size, Team team) {
         this.name = name;
