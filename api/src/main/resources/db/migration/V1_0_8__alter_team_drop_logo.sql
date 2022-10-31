@@ -1,3 +1,2 @@
-alter table team
-drop
-column logo;
+alter table team;
+drop column logo;
