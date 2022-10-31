@@ -55,7 +55,7 @@ public class RecruitmentApiTest extends ApiTest {
     void 채용공고_생성_성공() throws Exception {
         RecruitmentCreateRequest recruitmentCreateRequest = new RecruitmentCreateRequest(user.getId(), team.getId(), "title", "content");
 
-        mockMvc.perform(post("/recruitmffㄴent")
+        mockMvc.perform(post("/recruitmffent")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recruitmentCreateRequest)))
                 .andExpectAll(
