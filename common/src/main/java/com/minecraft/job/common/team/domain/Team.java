@@ -32,8 +32,6 @@ public class Team {
 
     private String description;
 
-    private String logo;
-
     private Long memberNum;
 
     @ManyToOne(fetch = LAZY)
@@ -56,22 +54,21 @@ public class Team {
         return user.getEmail();
     }
 
-    private Team(String name, String description, String logo, Long memberNum, User user) {
+    private Team(String name, String description, Long memberNum, User user) {
         this.name = name;
         this.description = description;
-        this.logo = logo;
         this.memberNum = memberNum;
         this.user = user;
     }
 
-    public static Team create(String name, String description, String logo, Long memberNum, User user) {
+    public static Team create(String name, String description, Long memberNum, User user) {
         notNull(user);
 
         require(Strings.isNotBlank(name));
         require(memberNum >= 0);
 
 
-        return new Team(name, description, logo, memberNum, user);
+        return new Team(name, description, memberNum, user);
     }
 
     public void applyAveragePoint(Double averagePoint) {
@@ -81,7 +78,7 @@ public class Team {
         this.averagePoint = averagePoint;
     }
 
-    public void update(String name, String description, String logo, Long memberNum) {
+    public void update(String name, String description, Long memberNum) {
         require(Strings.isNotBlank(name));
         require(memberNum >= 0);
 
@@ -89,7 +86,6 @@ public class Team {
 
         this.name = name;
         this.description = description;
-        this.logo = logo;
         this.memberNum = memberNum;
     }
 

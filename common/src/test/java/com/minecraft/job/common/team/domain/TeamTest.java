@@ -25,11 +25,10 @@ class TeamTest {
 
     @Test
     void 팀_생성_성공() {
-        Team team = Team.create("name", "description", "logo", 5L, user);
+        Team team = Team.create("name", "description", 5L, user);
 
         assertThat(team.getName()).isEqualTo("name");
         assertThat(team.getDescription()).isEqualTo("description");
-        assertThat(team.getLogo()).isEqualTo("logo");
         assertThat(team.getMemberNum()).isEqualTo(5L);
         assertThat(team.getUser()).isEqualTo(user);
         assertThat(team.getStatus()).isEqualTo(ACTIVATED);
@@ -40,12 +39,12 @@ class TeamTest {
     @ParameterizedTest
     @NullAndEmptySource
     void 팀_생성_실패__name이_널이거나_공백(String name) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Team.create(name, "description", "logo", 5L, user));
+        assertThatIllegalArgumentException().isThrownBy(() -> Team.create(name, "description", 5L, user));
     }
 
     @Test
     void 팀_생성_실패__memberNum이_음수() {
-        assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", "description", "logo", -1L, user));
+        assertThatIllegalArgumentException().isThrownBy(() -> Team.create("name", "description", -1L, user));
     }
 
     @Test
@@ -75,11 +74,10 @@ class TeamTest {
     void 팀_업데이트_성공() {
         Team team = TeamFixture.create(user);
 
-        team.update("updateName", "updateDescription", "updateLogo", 1L);
+        team.update("updateName", "updateDescription", 1L);
 
         assertThat(team.getName()).isEqualTo("updateName");
         assertThat(team.getDescription()).isEqualTo("updateDescription");
-        assertThat(team.getLogo()).isEqualTo("updateLogo");
         assertThat(team.getMemberNum()).isEqualTo(1L);
     }
 
@@ -88,14 +86,14 @@ class TeamTest {
     void 팀_업데이트_실패__name이_널이거나_공백(String name) {
         Team team = TeamFixture.create(user);
 
-        assertThatIllegalArgumentException().isThrownBy(() -> team.update(name, "updateDescription", "updateLogo", 1L));
+        assertThatIllegalArgumentException().isThrownBy(() -> team.update(name, "updateDescription", 1L));
     }
 
     @Test
     void 팀_업데이트_실패__memberNum이_음수() {
         Team team = TeamFixture.create(user);
 
-        assertThatIllegalArgumentException().isThrownBy(() -> team.update("updateName", "updateDescription", "updateLogo", -1L));
+        assertThatIllegalArgumentException().isThrownBy(() -> team.update("updateName", "updateDescription", -1L));
     }
 
     @Test
@@ -104,7 +102,7 @@ class TeamTest {
 
         team.inactivate();
 
-        assertThatIllegalStateException().isThrownBy(() -> team.update("updateName", "updateDescription", "updateLogo", 1L));
+        assertThatIllegalStateException().isThrownBy(() -> team.update("updateName", "updateDescription", 1L));
     }
 
     @Test

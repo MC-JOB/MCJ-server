@@ -24,7 +24,7 @@ public class TeamApi {
 
     @PostMapping
     public TeamCreateResponse create(@RequestBody TeamCreateRequest req) {
-        Team team = teamService.create(req.userId(), req.name(), req.description(), req.logo(), req.memberNum());
+        Team team = teamService.create(req.userId(), req.name(), req.description(), req.memberNum());
 
         return TeamCreateResponse.create(TeamCreateData.create(team));
     }
@@ -32,7 +32,7 @@ public class TeamApi {
     @PostMapping("/update")
     public void update(@RequestBody TeamUpdateRequest req) {
 
-        teamService.update(req.teamId(), req.userId(), req.name(), req.description(), req.logo(), req.memberNum());
+        teamService.update(req.teamId(), req.userId(), req.name(), req.description(), req.memberNum());
     }
 
     @PostMapping("/inactivate")

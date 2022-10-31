@@ -20,10 +20,10 @@ public class DomainTeamService implements TeamService {
     private final UserRepository userRepository;
 
     @Override
-    public Team create(Long userId, String name, String description, String logo, Long memberNum) {
+    public Team create(Long userId, String name, String description, Long memberNum) {
         User user = userRepository.findById(userId).orElseThrow();
 
-        Team team = Team.create(name, description, logo, memberNum, user);
+        Team team = Team.create(name, description, memberNum, user);
 
         return teamRepository.save(team);
     }
@@ -36,13 +36,13 @@ public class DomainTeamService implements TeamService {
     }
 
     @Override
-    public void update(Long teamId, Long userId, String name, String description, String logo, Long memberNum) {
+    public void update(Long teamId, Long userId, String name, String description, Long memberNum) {
         Team team = teamRepository.findById(teamId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
 
         require(team.ofUser(user));
 
-        team.update(name, description, logo, memberNum);
+        team.update(name, description, memberNum);
     }
 
     @Override
