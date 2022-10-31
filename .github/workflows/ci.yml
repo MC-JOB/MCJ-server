@@ -1,5 +1,5 @@
 env:
-  RESOURCE_PATH: ./api/src/test/resources/application.yml
+  RESOURCE_PATH: ./common/src/test/resources/application.yml
 
 name: CI
 
