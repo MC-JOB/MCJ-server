@@ -23,7 +23,7 @@ jobs:
       - name: "Test application.yml Setting"
         uses: microsoft/variable-substitution@v1
         with:
-          files: ${{ env.COMMON_RESOURCE_PATH }, { env.API_RESOURCE_PATH } }
+          files: ${{ env.COMMON_RESOURCE_PATH }, { env.API_RESOURCE_PATH }}
         env:
           spring.datasource.url: ${{ secrets.RDB_TEST_URL }}
           spring.datasource.username: ${{ secrets.RDB_USER_NAME }}
