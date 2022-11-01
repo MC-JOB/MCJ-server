@@ -18,6 +18,9 @@ import static com.minecraft.job.common.teamlogo.domain.TeamLogoStatus.DELETED;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uq_team", columnNames = "team_id")
+})
 public class TeamLogo {
 
     @Id
@@ -37,6 +40,10 @@ public class TeamLogo {
     private TeamLogoStatus status = CREATED;
 
     private final LocalDateTime createdAt = LocalDateTime.now();
+
+    public boolean ofTeam(Team team) {
+        return this.team == team;
+    }
 
     private TeamLogo(String name, String savedName, Long size, Team team) {
         this.name = name;

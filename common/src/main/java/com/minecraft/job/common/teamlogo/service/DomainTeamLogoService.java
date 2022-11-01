@@ -34,4 +34,18 @@ public class DomainTeamLogoService implements TeamLogoService {
 
         return teamLogoRepository.save(teamLogo);
     }
+
+    @Override
+    public TeamLogo update(Long teamLogoId, Long teamId, Long userId, String name, String savedName, Long size) {
+        User user = userRepository.getReferenceById(userId);
+        Team team = teamRepository.getReferenceById(teamId);
+        TeamLogo teamLogo = teamLogoRepository.findById(teamLogoId).orElseThrow();
+
+        require(teamLogo.ofTeam(team));
+        require(team.ofUser(user));
+
+        teamLogo.update(name, savedName, size);
+
+        return teamLogo;
+    }
 }
