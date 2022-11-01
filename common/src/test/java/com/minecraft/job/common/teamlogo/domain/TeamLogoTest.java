@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import static com.minecraft.job.common.teamlogo.domain.TeamLogoStatus.DELETED;
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -87,5 +88,32 @@ class TeamLogoTest {
         TeamLogo teamLogo = TeamLogoFixture.create(team);
 
         assertThatIllegalArgumentException().isThrownBy(() -> teamLogo.update("updateName", "UpdateSavedName", 0L));
+    }
+
+    @Test
+    void 팀로고_수정_실패_생성됨_상태가_아님() {
+        TeamLogo teamLogo = TeamLogoFixture.create(team);
+
+        teamLogo.delete();
+
+        assertThatIllegalStateException().isThrownBy(() -> teamLogo.update("updateName", "UpdateSavedName", 1L));
+    }
+
+    @Test
+    void 팀로고_삭제_성공() {
+        TeamLogo teamLogo = TeamLogoFixture.create(team);
+
+        teamLogo.delete();
+
+        assertThat(teamLogo.getStatus()).isEqualTo(DELETED);
+    }
+
+    @Test
+    void 팀로고_삭제_실패_이미_삭제된_상태임() {
+        TeamLogo teamLogo = TeamLogoFixture.create(team);
+
+        teamLogo.delete();
+
+        assertThatIllegalStateException().isThrownBy(teamLogo::delete);
     }
 }

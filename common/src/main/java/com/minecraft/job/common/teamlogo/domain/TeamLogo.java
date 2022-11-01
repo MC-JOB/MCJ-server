@@ -10,9 +10,9 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.support.Preconditions.notNull;
-import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.support.Preconditions.*;
 import static com.minecraft.job.common.teamlogo.domain.TeamLogoStatus.CREATED;
+import static com.minecraft.job.common.teamlogo.domain.TeamLogoStatus.DELETED;
 
 @Entity
 @Getter
@@ -60,8 +60,16 @@ public class TeamLogo {
         require(Strings.isNotBlank(savedName));
         require(0 < size);
 
+        check(this.status == CREATED);
+
         this.name = name;
         this.savedName = savedName;
         this.size = size;
+    }
+
+    public void delete() {
+        check(this.status != DELETED);
+
+        this.status = DELETED;
     }
 }
