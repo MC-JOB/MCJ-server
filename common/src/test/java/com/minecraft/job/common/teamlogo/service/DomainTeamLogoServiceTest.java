@@ -68,4 +68,40 @@ class DomainTeamLogoServiceTest {
                 () -> teamLogoService.create(team.getId(), fakerUser.getId(), "name", "savedName", 1L)
         );
     }
+
+    @Test
+    void 팀로고_수정_성공() {
+        TeamLogo teamLogo = teamLogoService.create(team.getId(), user.getId(), "name", "savedName", 1L);
+
+        teamLogoService.update(teamLogo.getId(), team.getId(), user.getId(), "updateName", "updateSavedName", 3L);
+
+        TeamLogo findTeamLogo = teamLogoRepository.findById(teamLogo.getId()).orElseThrow();
+
+        assertThat(findTeamLogo.getId()).isNotNull();
+        assertThat(findTeamLogo.getName()).isEqualTo("updateName");
+        assertThat(findTeamLogo.getSavedName()).isEqualTo("updateSavedName");
+        assertThat(findTeamLogo.getSize()).isEqualTo(3L);
+    }
+
+    @Test
+    void 팀로고_수정_실패__팀로고의_팀이_아님() {
+        TeamLogo teamLogo = teamLogoService.create(team.getId(), user.getId(), "name", "savedName", 1L);
+
+        Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> teamLogoService.update(teamLogo.getId(), fakeTeam.getId(), user.getId(), "updateName", "updateSavedName", 3L)
+        );
+    }
+
+    @Test
+    void 팀로고_수정_실패__유저의_팀이_아님() {
+        TeamLogo teamLogo = teamLogoService.create(team.getId(), user.getId(), "name", "savedName", 1L);
+
+        User fakerUser = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> teamLogoService.update(teamLogo.getId(), team.getId(), fakerUser.getId(), "updateName", "updateSavedName", 3L)
+        );
+    }
 }
