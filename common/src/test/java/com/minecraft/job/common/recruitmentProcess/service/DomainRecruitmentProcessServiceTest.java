@@ -171,7 +171,9 @@ public class DomainRecruitmentProcessServiceTest {
     void 채용과정_불합격_성공() {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
-        recruitmentProcess.fail();
+        User leader = team.getUser();
+
+        recruitmentProcessService.fail(recruitmentProcess.getId(), team.getId(), leader.getId());
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -185,8 +187,21 @@ public class DomainRecruitmentProcessServiceTest {
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
+        User leader = team.getUser();
+
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.fail(recruitmentProcess.getId(), fakeTeam.getId())
+                () -> recruitmentProcessService.fail(recruitmentProcess.getId(), fakeTeam.getId(), leader.getId())
+        );
+    }
+
+    @Test
+    void 채용과정_불합격_실패__팀의_리더가_아님() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
+
+        User fakeLeader = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentProcessService.fail(recruitmentProcess.getId(), team.getId(), fakeLeader.getId())
         );
     }
 }

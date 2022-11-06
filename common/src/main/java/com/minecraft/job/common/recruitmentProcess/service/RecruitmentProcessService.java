@@ -12,5 +12,5 @@ public interface RecruitmentProcessService {
 
     void cancel(Long recruitmentProcessId, Long teamId);
 
-    void fail(Long recruitmentProcessId, Long teamId);
+    void fail(Long recruitmentProcessId, Long teamId, Long leaderId);
 }
