@@ -47,16 +47,16 @@ class DefaultReviewAppServiceTest {
     void setUp() {
         user = userRepository.save(UserFixture.create());
 
-        User leader = userRepository.save(UserFixture.getAntherUser("leader"));
+        User leader = userRepository.save(UserFixture.getAnotherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
     }
 
     @Test
     void 리뷰_생성_성공__평점_적용() {
-        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        User user1 = userRepository.save(UserFixture.getAnotherUser("user1"));
         reviewRepository.save(Review.create("content", 5L, user1, team));
 
-        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        User user2 = userRepository.save(UserFixture.getAnotherUser("user2"));
         reviewRepository.save(Review.create("content", 4L, user2, team));
 
         User fakeUser = userRepository.save(UserFixture.getFakerUser());
@@ -76,10 +76,10 @@ class DefaultReviewAppServiceTest {
 
     @Test
     void 리뷰_수정_성공__평점_적용() {
-        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        User user1 = userRepository.save(UserFixture.getAnotherUser("user1"));
         reviewRepository.save(Review.create("content", 5L, user1, team));
 
-        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        User user2 = userRepository.save(UserFixture.getAnotherUser("user2"));
         reviewRepository.save(Review.create("content", 4L, user2, team));
 
         Review review = reviewRepository.save(Review.create("content", 3L, user, team));
@@ -96,10 +96,10 @@ class DefaultReviewAppServiceTest {
 
     @Test
     void 리뷰_활성화_성공__평점_적용() {
-        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        User user1 = userRepository.save(UserFixture.getAnotherUser("user1"));
         reviewRepository.save(Review.create("content", 5L, user1, team));
 
-        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        User user2 = userRepository.save(UserFixture.getAnotherUser("user2"));
         reviewRepository.save(Review.create("content", 4L, user2, team));
 
         Review review = reviewRepository.save(Review.create("content", 3L, user, team));
@@ -119,10 +119,10 @@ class DefaultReviewAppServiceTest {
 
     @Test
     void 리뷰_비활성화_성공__평점_적용() {
-        User user1 = userRepository.save(UserFixture.getAntherUser("user1"));
+        User user1 = userRepository.save(UserFixture.getAnotherUser("user1"));
         reviewRepository.save(Review.create("content", 5L, user1, team));
 
-        User user2 = userRepository.save(UserFixture.getAntherUser("user2"));
+        User user2 = userRepository.save(UserFixture.getAnotherUser("user2"));
         reviewRepository.save(Review.create("content", 4L, user2, team));
 
         Review review = reviewRepository.save(Review.create("content", 3L, user, team));

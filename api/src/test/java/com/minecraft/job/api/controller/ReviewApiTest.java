@@ -44,7 +44,7 @@ class ReviewApiTest extends ApiTest {
     void setUp() {
         user = userRepository.save(UserFixture.create());
 
-        User leader = userRepository.save(UserFixture.getAntherUser("leader"));
+        User leader = userRepository.save(UserFixture.getAnotherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
     }
 
