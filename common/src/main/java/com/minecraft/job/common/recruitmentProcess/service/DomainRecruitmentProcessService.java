@@ -44,12 +44,14 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
     }
 
     @Override
-    public void inProgress(Long recruitmentProcessId, Long teamId) {
+    public void inProgress(Long recruitmentProcessId, Long teamId, Long leaderId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
+        User leader = userRepository.findById(leaderId).orElseThrow();
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
         require(recruitment.ofTeam(team));
+        require(team.ofUser(leader));
 
         recruitmentProcess.inProgress();
 

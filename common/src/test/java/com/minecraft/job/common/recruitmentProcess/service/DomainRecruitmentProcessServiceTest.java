@@ -55,14 +55,15 @@ public class DomainRecruitmentProcessServiceTest {
 
     private Recruitment recruitment;
     private User user;
+    private Team team;
     private Resume resume;
 
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
-
         User leader = userRepository.save(UserFixture.getAntherUser("leader"));
-        Team team = teamRepository.save(TeamFixture.create(leader));
+
+        team = teamRepository.save(TeamFixture.create(leader));
 
         recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
 
@@ -84,7 +85,9 @@ public class DomainRecruitmentProcessServiceTest {
     void 채용과정_서류합격_성공() {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
-        recruitmentProcess.inProgress();
+        User leader = team.getUser();
+
+        recruitmentProcessService.inProgress(recruitmentProcess.getId(), team.getId(), leader.getId());
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -97,8 +100,21 @@ public class DomainRecruitmentProcessServiceTest {
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
+        User leader = team.getUser();
+
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId())
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), leader.getId())
+        );
+    }
+
+    @Test
+    void 채용과정_서류합격_실패__팀의_리더가_아님() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
+
+        User fakeLeader = userRepository.save(UserFixture.getFakerUser());
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), team.getId(), fakeLeader.getId())
         );
     }
 
@@ -144,8 +160,10 @@ public class DomainRecruitmentProcessServiceTest {
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
+        User fakeLeader = fakeTeam.getUser();
+
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId())
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), fakeLeader.getId())
         );
     }
 
