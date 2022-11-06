@@ -6,7 +6,7 @@ public interface RecruitmentProcessService {
 
     RecruitmentProcess create(Long recruitmentId, Long userId, Long resumeId);
 
-    void inProgress(Long recruitmentProcessId, Long teamId, Long teamLeaderId);
+    void inProgress(Long recruitmentProcessId, Long teamId, Long leaderId);
 
     void pass(Long recruitmentProcessId, Long teamId);
 
