@@ -27,6 +27,6 @@ public class RecruitmentProcessApi {
 
     @PostMapping("/in-progress")
     public void inProgress(@RequestBody RecruitmentProcessInProgressRequest req) {
-        recruitmentProcessService.inProgress(req.recruitmentProcessId(), req.teamId());
+        recruitmentProcessService.inProgress(req.recruitmentProcessId(), req.teamId(), req.teamLeaderId());
     }
 }

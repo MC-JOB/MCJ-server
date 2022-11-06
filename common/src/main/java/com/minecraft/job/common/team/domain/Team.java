@@ -54,6 +54,10 @@ public class Team {
         return user.getEmail();
     }
 
+    public Long getLeaderId() {
+        return user.getId();
+    }
+
     private Team(String name, String description, Long memberNum, User user) {
         this.name = name;
         this.description = description;
