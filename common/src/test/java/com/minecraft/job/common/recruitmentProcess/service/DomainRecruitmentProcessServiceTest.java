@@ -85,7 +85,9 @@ public class DomainRecruitmentProcessServiceTest {
     void 채용과정_서류합격_성공() {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
-        recruitmentProcessService.inProgress(recruitmentProcess.getId(), team.getId(), team.getLeaderId());
+        User leader = team.getUser();
+
+        recruitmentProcessService.inProgress(recruitmentProcess.getId(), team.getId(), leader.getId());
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -98,10 +100,10 @@ public class DomainRecruitmentProcessServiceTest {
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
-        Long teamLeaderId = fakeTeam.getLeaderId();
+        User leader = team.getUser();
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), teamLeaderId)
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), leader.getId())
         );
     }
 
@@ -158,10 +160,10 @@ public class DomainRecruitmentProcessServiceTest {
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
-        Long teamLeaderId = fakeTeam.getLeaderId();
+        User fakeLeader = fakeTeam.getUser();
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), teamLeaderId)
+                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), fakeLeader.getId())
         );
     }
 

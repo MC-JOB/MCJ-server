@@ -65,7 +65,9 @@ public class RecruitmentProcessApiTest extends ApiTest {
 
     @Test
     void 채용과정_서류합격_성공() throws Exception {
-        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitment.getId(), user.getId(), team.getLeaderId());
+        User leader = team.getUser();
+
+        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitment.getId(), user.getId(), leader.getId());
 
         mockMvc.perform(post("/recruitment-process/in-progress")
                         .contentType(MediaType.APPLICATION_JSON)
