@@ -44,7 +44,7 @@ public class RecruitmentProcessApiTest extends ApiTest {
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
-        User leader = userRepository.save(UserFixture.getAntherUser("leader"));
+        User leader = userRepository.save(UserFixture.getAnotherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
         recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
         resume = resumeRepository.save(ResumeFixture.create(user));
