@@ -160,7 +160,10 @@ public class DomainRecruitmentProcessServiceTest {
     void 채용과정_중도취소_성공() {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
 
-        recruitmentProcess.cancel();
+        User leader = team.getUser();
+
+        recruitmentProcessService.inProgress(recruitmentProcess.getId(), team.getId(), leader.getId());
+        recruitmentProcessService.cancel(recruitmentProcess.getId(), team.getId(), user.getId());
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -174,10 +177,19 @@ public class DomainRecruitmentProcessServiceTest {
 
         Team fakeTeam = teamRepository.save(TeamFixture.getFakeTeam(user));
 
-        User fakeLeader = fakeTeam.getUser();
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> recruitmentProcessService.cancel(recruitmentProcess.getId(), fakeTeam.getId(), user.getId())
+        );
+    }
+
+    @Test
+    void 채용과정_중도취소_실패__채용과정의_유저가_아님() {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
+
+        User fakeUser = userRepository.save(UserFixture.getFakerUser());
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> recruitmentProcessService.inProgress(recruitmentProcess.getId(), fakeTeam.getId(), fakeLeader.getId())
+                () -> recruitmentProcessService.cancel(recruitmentProcess.getId(), team.getId(), fakeUser.getId())
         );
     }
 

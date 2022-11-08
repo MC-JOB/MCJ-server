@@ -75,6 +75,10 @@ public class RecruitmentProcess {
         return user.getEmail();
     }
 
+    public boolean ofUser(User user) {
+        return this.user == user;
+    }
+
     private RecruitmentProcess(Recruitment recruitment, User user, Resume resume) {
         this.recruitment = recruitment;
         this.user = user;
