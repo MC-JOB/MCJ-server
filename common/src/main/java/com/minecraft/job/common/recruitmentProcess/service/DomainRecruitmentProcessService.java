@@ -74,12 +74,14 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
     }
 
     @Override
-    public void cancel(Long recruitmentProcessId, Long teamId) {
+    public void cancel(Long recruitmentProcessId, Long teamId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
         Team team = teamRepository.findById(teamId).orElseThrow();
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcessId).orElseThrow();
         Recruitment recruitment = recruitmentProcess.getRecruitment();
 
         require(recruitment.ofTeam(team));
+        require(recruitmentProcess.ofUser(user));
 
         recruitmentProcess.cancel();
     }

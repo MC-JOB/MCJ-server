@@ -10,7 +10,7 @@ public interface RecruitmentProcessService {
 
     void pass(Long recruitmentProcessId, Long teamId, Long leaderId);
 
-    void cancel(Long recruitmentProcessId, Long teamId);
+    void cancel(Long recruitmentProcessId, Long teamId, Long userId);
 
     void fail(Long recruitmentProcessId, Long teamId, Long leaderId);
 }
