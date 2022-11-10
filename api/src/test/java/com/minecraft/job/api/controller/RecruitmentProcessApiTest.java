@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -72,6 +73,20 @@ public class RecruitmentProcessApiTest extends ApiTest {
         mockMvc.perform(post("/recruitment-process/in-progress")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recruitmentProcessInProgressRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+    }
+
+    @Test
+    void 채용과정_중도취소_성공() throws Exception {
+        User leader = team.getUser();
+
+        RecruitmentProcessCancelRequest recruitmentProcessCancelRequest = new RecruitmentProcessCancelRequest(recruitment.getId(), user.getId(), leader.getId());
+
+        mockMvc.perform(post("/recruitment-process/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentProcessCancelRequest)))
                 .andExpectAll(
                         status().isOk()
                 );
