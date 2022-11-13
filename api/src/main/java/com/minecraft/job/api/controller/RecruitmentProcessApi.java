@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 
@@ -28,5 +29,10 @@ public class RecruitmentProcessApi {
     @PostMapping("/in-progress")
     public void inProgress(@RequestBody RecruitmentProcessInProgressRequest req) {
         recruitmentProcessService.inProgress(req.recruitmentProcessId(), req.teamId(), req.leaderId());
+    }
+
+    @PostMapping("/cancel")
+    public void cancel(@RequestBody RecruitmentProcessCancelRequest req) {
+        recruitmentProcessService.cancel(req.recruitmentProcessId(), req.teamId(), req.leaderId());
     }
 }
