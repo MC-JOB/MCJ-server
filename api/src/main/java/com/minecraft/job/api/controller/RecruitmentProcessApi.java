@@ -38,7 +38,7 @@ public class RecruitmentProcessApi {
     }
 
     @PostMapping("/fail")
-    public void cancel(@RequestBody RecruitmentProcessFailRequest req) {
+    public void fail(@RequestBody RecruitmentProcessFailRequest req) {
         recruitmentProcessService.fail(req.recruitmentProcessId(), req.teamId(), req.leaderId());
     }
 }
