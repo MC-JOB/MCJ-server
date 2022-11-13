@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 
 @RestController
@@ -33,6 +34,11 @@ public class RecruitmentProcessApi {
 
     @PostMapping("/cancel")
     public void cancel(@RequestBody RecruitmentProcessCancelRequest req) {
-        recruitmentProcessService.cancel(req.recruitmentProcessId(), req.teamId(), req.leaderId());
+        recruitmentProcessService.cancel(req.recruitmentProcessId(), req.teamId(), req.userId());
+    }
+
+    @PostMapping("/fail")
+    public void cancel(@RequestBody RecruitmentProcessFailRequest req) {
+        recruitmentProcessService.fail(req.recruitmentProcessId(), req.teamId(), req.leaderId());
     }
 }

@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -87,6 +89,20 @@ public class RecruitmentProcessApiTest extends ApiTest {
         mockMvc.perform(post("/recruitment-process/cancel")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recruitmentProcessCancelRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+    }
+
+    @Test
+    void 채용과정_불합격_성공() throws Exception {
+        User leader = team.getUser();
+
+        RecruitmentProcessFailDto.RecruitmentProcessFailRequest recruitmentProcessFailRequest = new RecruitmentProcessFailRequest(recruitment.getId(), user.getId(), leader.getId());
+
+        mockMvc.perform(post("/recruitment-process/fail")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentProcessFailRequest)))
                 .andExpectAll(
                         status().isOk()
                 );
