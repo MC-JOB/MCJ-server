@@ -44,19 +44,18 @@ public class RecruitmentProcessApiTest extends ApiTest {
     private RecruitmentProcessRepository recruitmentProcessRepository;
 
     private User user;
+    private User leader;
     private Team team;
     private Recruitment recruitment;
     private Resume resume;
-    private RecruitmentProcess recruitmentProcess;
 
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
-        User leader = userRepository.save(UserFixture.getAnotherUser("leader"));
+        leader = userRepository.save(UserFixture.getAnotherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
         recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
         resume = resumeRepository.save(ResumeFixture.create(user));
-        recruitmentProcess = recruitmentProcessRepository.save(recruitmentProcess.create(recruitment, user, resume));
     }
 
     @Test
@@ -74,9 +73,9 @@ public class RecruitmentProcessApiTest extends ApiTest {
 
     @Test
     void 채용과정_서류합격_성공() throws Exception {
-        User leader = team.getUser();
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
 
-        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitmentProcess.getId(), user.getId(), leader.getId());
+        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitmentProcess.getId(), team.getId(), leader.getId());
 
         mockMvc.perform(post("/recruitment-process/in-progress")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -92,6 +91,7 @@ public class RecruitmentProcessApiTest extends ApiTest {
 
     @Test
     void 채용과정_중도취소_성공() throws Exception {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
         RecruitmentProcessCancelRequest recruitmentProcessCancelRequest = new RecruitmentProcessCancelRequest(recruitmentProcess.getId(), team.getId(), user.getId());
 
         mockMvc.perform(post("/recruitment-process/cancel")
@@ -108,9 +108,9 @@ public class RecruitmentProcessApiTest extends ApiTest {
 
     @Test
     void 채용과정_불합격_성공() throws Exception {
-        User leader = team.getUser();
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
 
-        RecruitmentProcessFailRequest recruitmentProcessFailRequest = new RecruitmentProcessFailRequest(recruitmentProcess.getId(), user.getId(), leader.getId());
+        RecruitmentProcessFailRequest recruitmentProcessFailRequest = new RecruitmentProcessFailRequest(recruitmentProcess.getId(), team.getId(), leader.getId());
 
         mockMvc.perform(post("/recruitment-process/fail")
                         .contentType(MediaType.APPLICATION_JSON)
