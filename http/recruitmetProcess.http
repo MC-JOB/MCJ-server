@@ -1,8 +1,39 @@
 ###Create
-POST http://localhost:8080/recruitmentProcess
+POST http://localhost:8080/recruitment-process
 Content-Type: application/json
 
 {
   "recruitmentId": "",
+  "userId": "",
+  "resumeId": ""
+}
+
+###InProgress
+POST http://localhost:8080/recruitment-process/in-progress
+Content-Type: application/json
+
+{
+  "recruitmentProcessId": "",
+  "teamId": "",
+  "leaderId": ""
+}
+
+###Cancel
+POST http://localhost:8080/recruitment-process/cancel
+Content-Type: application/json
+
+{
+  "recruitmentProcessId": "",
+  "teamId": "",
   "userId": ""
+}
+
+###Fail
+POST http://localhost:8080/recruitment-process/fail
+Content-Type: application/json
+
+{
+  "recruitmentProcessId": "",
+  "teamId": "",
+  "leaderId": ""
 }
