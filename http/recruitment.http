@@ -3,10 +3,10 @@ POST http://localhost:8080/recruitment
 Content-Type: application/json
 
 {
-  "userId": "",
-  "teamId": "",
-  "title": "",
-  "content": ""
+  "userId": "1",
+  "teamId": "1",
+  "title": "test",
+  "content": "test"
 }
 
 ###Update

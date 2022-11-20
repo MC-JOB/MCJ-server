@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.service.RecruitmentProcessService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.R
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
 
 @RestController
 @RequestMapping("/recruitment-process")
@@ -30,6 +32,11 @@ public class RecruitmentProcessApi {
     @PostMapping("/in-progress")
     public void inProgress(@RequestBody RecruitmentProcessInProgressRequest req) {
         recruitmentProcessService.inProgress(req.recruitmentProcessId(), req.teamId(), req.leaderId());
+    }
+
+    @PostMapping("/pass")
+    public void pass(@RequestBody RecruitmentProcessPassRequest req) {
+        recruitmentProcessService.pass(req.recruitmentProcessId(), req.teamId(), req.leaderId());
     }
 
     @PostMapping("/cancel")
