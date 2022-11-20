@@ -61,7 +61,7 @@ public class DefaultRecruitmentProcessAppService implements RecruitmentProcessAp
     }
 
     @Async
-    @TransactionalEventListener(RecruitmentProcessInProgressEvent.class)
+    @TransactionalEventListener(RecruitmentProcessPassEvent.class)
     public void onCreateRecruitmentProcessListener(RecruitmentProcessPassEvent event) throws Exception {
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findById(event.recruitmentProcessId()).orElseThrow();
         Recruitment recruitment = recruitmentProcess.getRecruitment();

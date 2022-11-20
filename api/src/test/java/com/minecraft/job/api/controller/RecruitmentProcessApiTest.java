@@ -24,6 +24,7 @@ import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.R
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -87,6 +88,26 @@ public class RecruitmentProcessApiTest extends ApiTest {
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
         assertThat(findRecruitmentProcess.getStatus()).isEqualTo(IN_PROGRESS);
+    }
+
+    @Test
+    void 채용과정_최종합격_성공() throws Exception {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
+
+        recruitmentProcess.inProgress();
+
+        RecruitmentProcessPassRequest recruitmentProcessPassRequest = new RecruitmentProcessPassRequest(recruitmentProcess.getId(), team.getId(), leader.getId());
+
+        mockMvc.perform(post("/recruitment-process/pass")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(recruitmentProcessPassRequest)))
+                .andExpectAll(
+                        status().isOk()
+                );
+
+        RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
+
+        assertThat(findRecruitmentProcess.getStatus()).isEqualTo(PASSED);
     }
 
     @Test

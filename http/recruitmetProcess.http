@@ -18,6 +18,16 @@ Content-Type: application/json
   "leaderId": ""
 }
 
+###Pass
+POST http://localhost:8080/recruitment-process/pass
+Content-Type: application/json
+
+{
+  "recruitmentProcessId": "",
+  "teamId": "",
+  "leaderId": ""
+}
+
 ###Cancel
 POST http://localhost:8080/recruitment-process/cancel
 Content-Type: application/json
