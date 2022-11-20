@@ -1,6 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
