@@ -115,4 +115,18 @@ public class UserTest {
 
         assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(() -> user.changePassword("fakePassword", "newPassword"));
     }
+
+    @Test
+    void 유저_비활성화() {
+        user.inactivate();
+
+        assertThat(user.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @Test
+    void 유저_비활성화_실패__활성화_상태가_아님() {
+        user.inactivate();
+
+        assertThatIllegalStateException().isThrownBy(() -> user.inactivate());
+    }
 }

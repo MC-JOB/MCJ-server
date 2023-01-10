@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import static com.minecraft.job.common.support.ErrorCode.NOT_SAME_PASSWORD;
 import static com.minecraft.job.common.support.Preconditions.*;
 import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
+import static com.minecraft.job.common.user.domain.UserStatus.INACTIVATED;
 import static javax.persistence.GenerationType.IDENTITY;
 
 
@@ -80,5 +81,11 @@ public class User {
         validate(this.password.equals(password), NOT_SAME_PASSWORD);
 
         this.password = newPassword;
+    }
+
+    public void inactivate() {
+        check(status == ACTIVATED);
+
+        this.status = INACTIVATED;
     }
 }
