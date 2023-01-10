@@ -6,8 +6,8 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.support.Preconditions.check;
-import static com.minecraft.job.common.support.Preconditions.require;
+import static com.minecraft.job.common.support.ErrorCode.NOT_SAME_PASSWORD;
+import static com.minecraft.job.common.support.Preconditions.*;
 import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -69,5 +69,16 @@ public class User {
         this.nickname = nickname;
         this.interest = interest;
         this.age = age;
+    }
+
+    public void changePassword(String password, String newPassword) {
+        require(Strings.isNotBlank(password));
+        require(Strings.isNotBlank(newPassword));
+
+        check(status == ACTIVATED);
+
+        validate(this.password.equals(password), NOT_SAME_PASSWORD);
+
+        this.password = newPassword;
     }
 }
