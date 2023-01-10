@@ -1,0 +1,20 @@
+spring:
+  config:
+    import: classpath:integration.yml
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${db.url:jdbc:mysql://localhost:3306/minecraftjob}
+    username: ${db.username:root}
+    password: ${db.password:1234}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+      javax:
+        persistence:
+          validation:
+            mode: none
+    show-sql: true
