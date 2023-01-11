@@ -78,7 +78,7 @@ public class UserTest {
 
     @Test
     void 정보_변경_실패__비활성화_상태임() {
-        user.setStatus(INACTIVATED);
+        user.inactivate();
 
         assertThatIllegalStateException().isThrownBy(() -> user.changeInformation("changeNickName", "changeInterest", 10L));
     }
@@ -104,14 +104,14 @@ public class UserTest {
 
     @Test
     void 비밀번호_변경_실패_비활성화_상태임() {
-        user.setStatus(INACTIVATED);
+        user.inactivate();
 
         assertThatIllegalStateException().isThrownBy(() -> user.changePassword("password", "newPassword"));
     }
 
     @Test
     void 비밀번호_변경_실패__기존_비밀번호와_다름() {
-        user.setPassword("password");
+        user.changePassword("password", "newPassword");
 
         assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(() -> user.changePassword("fakePassword", "newPassword"));
     }
@@ -128,5 +128,19 @@ public class UserTest {
         user.inactivate();
 
         assertThatIllegalStateException().isThrownBy(() -> user.inactivate());
+    }
+
+    @Test
+    void 유저_활성화() {
+        user.inactivate();
+
+        user.activate();
+
+        assertThat(user.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 유저_활성화_실패__비활성화_상태가_아님() {
+        assertThatIllegalStateException().isThrownBy(() -> user.activate());
     }
 }

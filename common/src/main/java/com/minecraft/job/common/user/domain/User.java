@@ -1,6 +1,9 @@
 package com.minecraft.job.common.user.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
@@ -15,7 +18,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-@Setter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
@@ -87,5 +89,11 @@ public class User {
         check(status == ACTIVATED);
 
         this.status = INACTIVATED;
+    }
+
+    public void activate() {
+        check(status == INACTIVATED);
+
+        this.status = ACTIVATED;
     }
 }
