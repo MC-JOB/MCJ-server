@@ -24,4 +24,11 @@ public class DomainUserService implements UserService {
 
         return userRepository.save(user);
     }
+
+    @Override
+    public void changeInformation(Long userId, String nickname, String interest, Long age) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        user.changeInformation(nickname, interest, age);
+    }
 }
