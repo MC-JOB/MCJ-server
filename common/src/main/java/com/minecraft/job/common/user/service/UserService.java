@@ -8,4 +8,6 @@ public interface UserService {
             String email, String password,
             String nickname, String interest, Long age
     );
+
+    void changeInformation(Long userId, String nickname, String interest, Long age);
 }
