@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -62,5 +63,14 @@ class DomainUserServiceTest {
         userService.changePassword(user.getId(), user.getPassword(), "newPassword");
 
         assertThat(user.getPassword()).isEqualTo("newPassword");
+    }
+
+    @Test
+    void 유저_활성화() {
+        user.inactivate();
+
+        userService.activate(user.getId());
+
+        assertThat(user.getStatus()).isEqualTo(ACTIVATED);
     }
 }
