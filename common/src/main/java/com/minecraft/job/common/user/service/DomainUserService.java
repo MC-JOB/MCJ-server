@@ -31,4 +31,11 @@ public class DomainUserService implements UserService {
 
         user.changeInformation(nickname, interest, age);
     }
+
+    @Override
+    public void changePassword(Long userId, String password, String newPassword) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        user.changePassword(password, newPassword);
+    }
 }
