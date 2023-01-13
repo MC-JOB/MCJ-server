@@ -56,4 +56,11 @@ class DomainUserServiceTest {
         assertThat(user.getInterest()).isEqualTo("changeInterest");
         assertThat(user.getAge()).isEqualTo(30L);
     }
+
+    @Test
+    void 유저_비밀번호_변경() {
+        userService.changePassword(user.getId(), user.getPassword(), "newPassword");
+
+        assertThat(user.getPassword()).isEqualTo("newPassword");
+    }
 }
