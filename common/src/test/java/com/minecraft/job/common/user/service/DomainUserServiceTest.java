@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
+import static com.minecraft.job.common.user.domain.UserStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -72,5 +73,12 @@ class DomainUserServiceTest {
         userService.activate(user.getId());
 
         assertThat(user.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 유저_비활성화() {
+        userService.inactivate(user.getId());
+
+        assertThat(user.getStatus()).isEqualTo(INACTIVATED);
     }
 }
