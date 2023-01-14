@@ -38,4 +38,11 @@ public class DomainUserService implements UserService {
 
         user.changePassword(password, newPassword);
     }
+
+    @Override
+    public void activate(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        user.activate();
+    }
 }
