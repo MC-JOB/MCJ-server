@@ -45,4 +45,11 @@ public class DomainUserService implements UserService {
 
         user.activate();
     }
+
+    @Override
+    public void inactivate(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        user.inactivate();
+    }
 }
