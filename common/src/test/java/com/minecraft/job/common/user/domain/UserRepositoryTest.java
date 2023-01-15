@@ -20,6 +20,13 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    private void createUsers() {
+        for (int i = 1; i <= 20; i++) {
+            User user = User.create("email" + i, "password" + i, "nickname", "interest", 10L);
+            userRepository.save(user);
+        }
+    }
+
     @Test
     void 유저_생성_성공() {
         User user = User.create("email", "password", "nickname", "interest", 10L);
@@ -38,20 +45,57 @@ class UserRepositoryTest {
     }
 
     @Test
-    void 유저_리스트_조회_성공() {
-        for (int i = 1; i <= 10; i++) {
-            User user = User.create("email" + i, "password" + i, "nickname", "interest", 10L);
-            userRepository.save(user);
-        }
+    void 유저_리스트_조회_성공__이메일이_일치하는_경우() {
+        createUsers();
 
-        Specification<User> spec = Specification.where(UserSpecification.equalEmail("email1"))
-                .and(UserSpecification.equalNickname("nickname"))
-                .and(UserSpecification.likeInterest("interest"));
+        Specification<User> spec = Specification.where(UserSpecification.equalEmail("email1"));
 
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         Page<User> findUserList = userRepository.findAll(spec, pageRequest);
 
         assertThat(findUserList.getNumberOfElements()).isEqualTo(1);
+        assertThat(findUserList.getContent().get(0).getEmail()).isEqualTo("email1");
+    }
+
+    @Test
+    void 유저_리스트_조회_성공__닉네임이_일치하는_경우() {
+        createUsers();
+
+        Specification<User> spec = Specification.where(UserSpecification.equalNickname("nickname"));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userRepository.findAll(spec, pageRequest);
+
+        assertThat(findUserList.getNumberOfElements()).isEqualTo(10);
+        assertThat(findUserList.getContent().get(0).getNickname()).isEqualTo("nickname");
+    }
+
+    @Test
+    void 유저_리스트_조회_성공__관심사가_포함되는_경우() {
+        createUsers();
+
+        Specification<User> spec = Specification.where(UserSpecification.likeInterest("interest"));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userRepository.findAll(spec, pageRequest);
+
+        assertThat(findUserList.getNumberOfElements()).isEqualTo(10);
+        assertThat(findUserList.getContent().get(0).getInterest()).isEqualTo("interest");
+    }
+
+    @Test
+    void 유저_리스트_조회_성공__페이징_처리() {
+        createUsers();
+
+        Specification<User> spec = Specification.where(UserSpecification.likeInterest("interest"));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userRepository.findAll(spec, pageRequest);
+
+        assertThat(findUserList.getTotalPages()).isEqualTo(2);
     }
 }
