@@ -3,7 +3,7 @@ env:
   COMMON_TEST_RESOURCE_PATH: ./common/src/test/resources/application.yml
   S3_BUCKET_NAME: mcjrestdocs
 
-name: Merge
+name: RestDocs
 
 on:
   pull_request:
