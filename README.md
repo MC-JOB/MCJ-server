@@ -21,6 +21,7 @@
   - CI/CD : github action, EC2, S3, CodeDeploy, RDS
 - 서버 목록
   - API server : http://ec2-15-165-81-53.ap-northeast-2.compute.amazonaws.com:8080
+  - Rest Docs : http://mcjrestdocs.s3-website.ap-northeast-2.amazonaws.com
 - 작업 현황
   - 준혁 : https://github.com/MC-JOB/MCJ-server/pulls?q=is%3Apr+is%3Aclosed+assignee%3Apeubel
   - 경민 : https://github.com/MC-JOB/MCJ-server/pulls?q=is%3Apr+is%3Aclosed+assignee%3Arud2403
