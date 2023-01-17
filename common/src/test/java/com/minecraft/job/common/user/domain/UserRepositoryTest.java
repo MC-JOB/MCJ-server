@@ -1,6 +1,5 @@
 package com.minecraft.job.common.user.domain;
 
-import com.minecraft.job.common.user.domain.Specification.UserSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,12 +19,9 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private void createUsers() {
-        for (int i = 1; i <= 20; i++) {
-            User user = User.create("email" + i, "password" + i, "nickname", "interest", 10L);
-            userRepository.save(user);
-        }
-    }
+    private String nickname = "nickname";
+    private String email = "email";
+    private String interest = "interest";
 
     @Test
     void 유저_생성_성공() {
@@ -46,49 +42,53 @@ class UserRepositoryTest {
 
     @Test
     void 유저_리스트_조회_성공__이메일이_일치하는_경우() {
-        createUsers();
+        유저_목록_생성(email, "password", "nickname", "interest", 10L);
 
-        Specification<User> spec = Specification.where(UserSpecification.equalEmail("email1"));
+        Specification<User> spec = Specification.where(UserSpecification.equalEmail(email + "1"));
 
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         Page<User> findUserList = userRepository.findAll(spec, pageRequest);
 
         assertThat(findUserList.getNumberOfElements()).isEqualTo(1);
-        assertThat(findUserList.getContent().get(0).getEmail()).isEqualTo("email1");
+        assertThat(findUserList.getContent().get(0).getEmail()).isEqualTo(email + "1");
     }
 
     @Test
     void 유저_리스트_조회_성공__닉네임이_일치하는_경우() {
-        createUsers();
+        유저_목록_생성("email", "password", nickname, "interest", 10L);
 
-        Specification<User> spec = Specification.where(UserSpecification.equalNickname("nickname"));
+        Specification<User> spec = Specification.where(UserSpecification.equalNickname(nickname));
 
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         Page<User> findUserList = userRepository.findAll(spec, pageRequest);
 
         assertThat(findUserList.getNumberOfElements()).isEqualTo(10);
-        assertThat(findUserList.getContent().get(0).getNickname()).isEqualTo("nickname");
+        for (User user : findUserList) {
+            assertThat(user.getNickname()).isEqualTo(nickname);
+        }
     }
 
     @Test
     void 유저_리스트_조회_성공__관심사가_포함되는_경우() {
-        createUsers();
+        유저_목록_생성("email", "password", "nickname", interest, 10L);
 
-        Specification<User> spec = Specification.where(UserSpecification.likeInterest("interest"));
+        Specification<User> spec = Specification.where(UserSpecification.likeInterest(interest));
 
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         Page<User> findUserList = userRepository.findAll(spec, pageRequest);
 
         assertThat(findUserList.getNumberOfElements()).isEqualTo(10);
-        assertThat(findUserList.getContent().get(0).getInterest()).isEqualTo("interest");
+        for (User user : findUserList) {
+            assertThat(user.getInterest()).isEqualTo(interest);
+        }
     }
 
     @Test
     void 유저_리스트_조회_성공__페이징_처리() {
-        createUsers();
+        유저_목록_생성("email", "password", "nickname", "interest", 10L);
 
         Specification<User> spec = Specification.where(UserSpecification.likeInterest("interest"));
 
@@ -97,5 +97,12 @@ class UserRepositoryTest {
         Page<User> findUserList = userRepository.findAll(spec, pageRequest);
 
         assertThat(findUserList.getTotalPages()).isEqualTo(2);
+    }
+
+    private void 유저_목록_생성(String email, String password, String nickname, String interest, Long age) {
+        for (int i = 1; i <= 20; i++) {
+            User user = User.create(email + i, password + i, nickname, interest, age);
+            userRepository.save(user);
+        }
     }
 }
