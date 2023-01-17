@@ -14,15 +14,16 @@ name: Merge
 on:
   pull_request:
     branches: [ "main" ]
-    types:
-      - closed
+    types: [ opened, synchronize, edited ]
+#    types:
+#      - closed
 
 permissions:
   contents: read
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
+#    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -80,7 +81,7 @@ jobs:
 
 
       - name: Build with Gradle
-        run: ./gradlew clean :api:buildNeeded --stacktrace --info
+        run: ./gradlew clean :api:buildNeeded --stacktrace
         shell: bash
 
 
