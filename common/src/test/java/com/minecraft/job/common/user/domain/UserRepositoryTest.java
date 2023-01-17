@@ -19,10 +19,6 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private String nickname = "nickname";
-    private String email = "email";
-    private String interest = "interest";
-
     @Test
     void 유저_생성_성공() {
         User user = User.create("email", "password", "nickname", "interest", 10L);
@@ -42,6 +38,8 @@ class UserRepositoryTest {
 
     @Test
     void 유저_리스트_조회_성공__이메일이_일치하는_경우() {
+        String email = "email";
+
         유저_목록_생성(email, "password", "nickname", "interest", 10L);
 
         Specification<User> spec = Specification.where(UserSpecification.equalEmail(email + "1"));
@@ -56,6 +54,8 @@ class UserRepositoryTest {
 
     @Test
     void 유저_리스트_조회_성공__닉네임이_일치하는_경우() {
+        String nickname = "nickname";
+
         유저_목록_생성("email", "password", nickname, "interest", 10L);
 
         Specification<User> spec = Specification.where(UserSpecification.equalNickname(nickname));
@@ -72,6 +72,8 @@ class UserRepositoryTest {
 
     @Test
     void 유저_리스트_조회_성공__관심사가_포함되는_경우() {
+        String interest = "interest";
+
         유저_목록_생성("email", "password", "nickname", interest, 10L);
 
         Specification<User> spec = Specification.where(UserSpecification.likeInterest(interest));
