@@ -14,16 +14,15 @@ name: Merge
 on:
   pull_request:
     branches: [ "main" ]
-    types: [ opened, synchronize, edited ]
-#    types:
-#      - closed
+    types:
+      - closed
 
 permissions:
   contents: read
 
 jobs:
   deploy:
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
