@@ -7,6 +7,7 @@ env:
   REST_DOCS_BUCKET_NAME: mcjrestdocs
   CODE_DEPLOY_APPLICATION_NAME: title-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: title-server
+  REST_DOCS: ./api/build/docs/asciidoc/index.html
 
 name: Merge
 
@@ -106,7 +107,7 @@ jobs:
 
 
       - name: RestDocs Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./api/build/docs/asciidoc/index.html s3://$REST_DOCS_BUCKET_NAME/index.html
+        run: aws s3 cp --region ap-northeast-2 $REST_DOCS s3://$REST_DOCS_BUCKET_NAME/index.html
 
 
       - name: Code Deploy
