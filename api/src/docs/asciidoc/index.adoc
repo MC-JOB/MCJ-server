@@ -11,7 +11,7 @@ ifndef::snippets[]
 endif::[]
 
 [[User]]
-== 회원가입 API
+== 유저 생성 API
 
 === Request
 include::{snippets}/user/create/curl-request.adoc[]
@@ -26,7 +26,7 @@ include::{snippets}/user/create/http-response.adoc[]
 include::{snippets}/user/create/response-body.adoc[]
 
 [[Team]]
-== 생성 API
+== 팀 생성 API
 
 === Request
 include::{snippets}/team/create/curl-request.adoc[]

@@ -79,13 +79,8 @@ jobs:
         shell: bash
 
 
-      - name: Test with Gradle
-        run: ./gradlew clean test
-        shell: bash
-
-
       - name: Build with Gradle
-        run: ./gradlew clean :api:buildNeeded --stacktrace --info -x test
+        run: ./gradlew clean :api:buildNeeded --stacktrace --info
         shell: bash
 
 
