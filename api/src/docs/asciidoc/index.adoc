@@ -24,3 +24,18 @@ include::{snippets}/user/create/http-response.adoc[]
 
 === ResponseBody
 include::{snippets}/user/create/response-body.adoc[]
+
+[[Team]]
+== 생성 API
+
+=== Request
+include::{snippets}/team/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/team/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/team/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/team/create/response-body.adoc[]

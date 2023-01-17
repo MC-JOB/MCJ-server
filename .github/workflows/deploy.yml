@@ -3,7 +3,8 @@ env:
   COMMON_TEST_RESOURCE_PATH: ./common/src/test/resources/application.yml
   RESOURCE_PATH: ./api/src/main/resources/application.yml
   INTEGRATION_PATH: ./integration/src/main/resources/integration.yml
-  S3_BUCKET_NAME: mcjserver
+  SERVER_BUCKET_NAME: mcjserver
+  REST_DOCS_BUCKET_NAME: mcjrestdocs
   CODE_DEPLOY_APPLICATION_NAME: title-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: title-server
 
@@ -100,8 +101,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
 
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
+      - name: Server Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$SERVER_BUCKET_NAME/$GITHUB_SHA.zip
+
+
+      - name: RestDocs Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./api/build/docs/asciidoc/index.html s3://$REST_DOCS_BUCKET_NAME/index.html
 
 
       - name: Code Deploy
