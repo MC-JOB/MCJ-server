@@ -27,7 +27,7 @@ class UserRepositoryTest {
 
         User findUser = userRepository.findById(user.getId()).orElseThrow();
 
-        assertThat(findUser.getEmail()).isEqualTo("email");
+        assertThat(findUser.getEmail()).isEqualTo("email!");
         assertThat(findUser.getPassword()).isEqualTo("password");
         assertThat(findUser.getNickname()).isEqualTo("nickname");
         assertThat(findUser.getInterest()).isEqualTo("interest");
