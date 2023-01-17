@@ -1,0 +1,41 @@
+= MCJ API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+[[User]]
+== 회원가입 API
+
+=== Request
+include::{snippets}/user/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/user/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/user/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/user/create/response-body.adoc[]
+
+[[Team]]
+== 생성 API
+
+=== Request
+include::{snippets}/team/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/team/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/team/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/team/create/response-body.adoc[]
