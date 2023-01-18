@@ -88,7 +88,7 @@ public class DefaultReviewAppService implements ReviewAppService {
         double averagePoint = reviews.stream()
                 .flatMapToLong(it -> LongStream.of(it.getScore()))
                 .average()
-                .orElseThrow();
+                .orElse(0);
 
         averagePoint = Math.round(averagePoint * 10) / 10.0;
 

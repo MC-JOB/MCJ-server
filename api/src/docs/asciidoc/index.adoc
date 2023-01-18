@@ -10,6 +10,8 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+
+
 [[User]]
 == 유저 생성 API
 
@@ -25,6 +27,8 @@ include::{snippets}/user/create/http-response.adoc[]
 === ResponseBody
 include::{snippets}/user/create/response-body.adoc[]
 
+
+
 [[Team]]
 == 팀 생성 API
 
@@ -39,3 +43,356 @@ include::{snippets}/team/create/http-response.adoc[]
 
 === ResponseBody
 include::{snippets}/team/create/response-body.adoc[]
+
+
+== 팀 수정 API
+
+=== Request
+include::{snippets}/team/update/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/team/update/request-body.adoc[]
+
+=== Response
+include::{snippets}/team/update/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/team/update/response-body.adoc[]
+
+
+== 팀 비활성화 API
+
+=== Request
+include::{snippets}/team/inactivate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/team/inactivate/request-body.adoc[]
+
+=== Response
+include::{snippets}/team/inactivate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/team/inactivate/response-body.adoc[]
+
+
+== 팀 활성화 API
+
+=== Request
+include::{snippets}/team/activate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/team/activate/request-body.adoc[]
+
+=== Response
+include::{snippets}/team/activate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/team/activate/response-body.adoc[]
+
+
+
+[[Review]]
+== 리뷰 생성 API
+
+=== Request
+include::{snippets}/review/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/review/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/review/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/review/create/response-body.adoc[]
+
+
+== 리뷰 수정 API
+
+=== Request
+include::{snippets}/review/update/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/review/update/request-body.adoc[]
+
+=== Response
+include::{snippets}/review/update/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/review/update/response-body.adoc[]
+
+
+== 리뷰 비활성화 API
+
+=== Request
+include::{snippets}/review/inactivate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/review/inactivate/request-body.adoc[]
+
+=== Response
+include::{snippets}/review/inactivate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/review/inactivate/response-body.adoc[]
+
+
+== 리뷰 활성화 API
+
+=== Request
+include::{snippets}/review/activate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/review/activate/request-body.adoc[]
+
+=== Response
+include::{snippets}/review/activate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/review/activate/response-body.adoc[]
+
+
+
+[[Resume]]
+== 이력서 생성 API
+
+=== Request
+include::{snippets}/resume/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/resume/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/resume/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/resume/create/response-body.adoc[]
+
+
+== 이력서 수정 API
+
+=== Request
+include::{snippets}/resume/update/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/resume/update/request-body.adoc[]
+
+=== Response
+include::{snippets}/resume/update/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/resume/update/response-body.adoc[]
+
+
+== 이력서 비활성화 API
+
+=== Request
+include::{snippets}/resume/inactivate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/resume/inactivate/request-body.adoc[]
+
+=== Response
+include::{snippets}/resume/inactivate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/resume/inactivate/response-body.adoc[]
+
+
+== 이력서 활성화 API
+
+=== Request
+include::{snippets}/resume/activate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/resume/activate/request-body.adoc[]
+
+=== Response
+include::{snippets}/resume/activate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/resume/activate/response-body.adoc[]
+
+
+== 이력서 삭제 API
+
+=== Request
+include::{snippets}/resume/delete/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/resume/delete/request-body.adoc[]
+
+=== Response
+include::{snippets}/resume/delete/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/resume/delete/response-body.adoc[]
+
+
+
+[[Recruitment]]
+== 채용공고 생성 API
+
+=== Request
+include::{snippets}/recruitment/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment/create/response-body.adoc[]
+
+
+== 채용공고 수정 API
+
+=== Request
+include::{snippets}/recruitment/update/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment/update/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment/update/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment/update/response-body.adoc[]
+
+
+== 채용공고 비활성화 API
+
+=== Request
+include::{snippets}/recruitment/inactivate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment/inactivate/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment/inactivate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment/inactivate/response-body.adoc[]
+
+
+== 채용공고 활성화 API
+
+=== Request
+include::{snippets}/recruitment/activate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment/activate/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment/activate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment/activate/response-body.adoc[]
+
+
+== 채용공고 삭제 API
+
+=== Request
+include::{snippets}/recruitment/delete/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment/delete/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment/delete/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment/delete/response-body.adoc[]
+
+
+== 채용공고 기간연장 API
+
+=== Request
+include::{snippets}/recruitment/closedAtExtend/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment/closedAtExtend/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment/closedAtExtend/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment/closedAtExtend/response-body.adoc[]
+
+
+
+[[RecruitmentProcess]]
+== 채용과정 생성 API
+
+=== Request
+include::{snippets}/recruitment-process/create/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment-process/create/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment-process/create/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment-process/create/response-body.adoc[]
+
+
+== 채용과정 서류합격 API
+
+=== Request
+include::{snippets}/recruitment-process/in-progress/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment-process/in-progress/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment-process/in-progress/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment-process/in-progress/response-body.adoc[]
+
+
+== 채용과정 최종합격 API
+
+=== Request
+include::{snippets}/recruitment-process/pass/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment-process/pass/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment-process/pass/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment-process/pass/response-body.adoc[]
+
+
+== 채용과정 중도취소 API
+
+=== Request
+include::{snippets}/recruitment-process/cancel/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment-process/cancel/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment-process/cancel/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment-process/cancel/response-body.adoc[]
+
+
+== 채용과정 불합 API
+
+=== Request
+include::{snippets}/recruitment-process/fail/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/recruitment-process/fail/request-body.adoc[]
+
+=== Response
+include::{snippets}/recruitment-process/fail/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/recruitment-process/fail/response-body.adoc[]

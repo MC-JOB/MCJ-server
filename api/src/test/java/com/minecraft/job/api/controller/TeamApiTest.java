@@ -72,7 +72,10 @@ class TeamApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(teamUpdateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("team/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -90,7 +93,10 @@ class TeamApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(teamInactivateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("team/inactivate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -108,7 +114,10 @@ class TeamApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(teamActivateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("team/activate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
