@@ -19,6 +19,8 @@ import static com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateR
 import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,7 +53,10 @@ class ResumeApiTest extends ApiTest {
                         status().isOk(),
                         jsonPath("$.resume.id").isNotEmpty(),
                         jsonPath("$.resume.title").value("title")
-                );
+                ).andDo(document("resume/create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Resume findResume = resumeRepository.findAll().get(0);
 
@@ -73,7 +78,10 @@ class ResumeApiTest extends ApiTest {
                 .content(objectMapper.writeValueAsString(req))
         ).andExpectAll(
                 status().isOk()
-        );
+        ).andDo(document("resume/update",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())
+        ));
 
         Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
 
@@ -89,7 +97,11 @@ class ResumeApiTest extends ApiTest {
         mockMvc.perform(post("/resume/activate")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpectAll(status().isOk());
+                .andExpectAll(status().isOk())
+                .andDo(document("resume/activate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
 
@@ -103,7 +115,11 @@ class ResumeApiTest extends ApiTest {
         mockMvc.perform(post("/resume/inactivate")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpectAll(status().isOk());
+                .andExpectAll(status().isOk())
+                .andDo(document("resume/inactivate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
 
@@ -117,7 +133,11 @@ class ResumeApiTest extends ApiTest {
         mockMvc.perform(post("/resume/delete")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpectAll(status().isOk());
+                .andExpectAll(status().isOk())
+                .andDo(document("resume/delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
 

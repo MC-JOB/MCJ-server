@@ -25,6 +25,8 @@ import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.Recr
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,7 +64,10 @@ public class RecruitmentApiTest extends ApiTest {
                         status().isOk(),
                         jsonPath("$.recruitment.id").isNotEmpty(),
                         jsonPath("$.recruitment.title").value("title")
-                );
+                ).andDo(document("recruitment/create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     @Test
@@ -74,7 +79,10 @@ public class RecruitmentApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentUpdateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
@@ -91,7 +99,11 @@ public class RecruitmentApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentInactivateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment/inactivate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
         assertThat(findRecruitment.getStatus()).isEqualTo(INACTIVATED);
@@ -106,7 +118,10 @@ public class RecruitmentApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentActivateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment/activate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
@@ -122,7 +137,10 @@ public class RecruitmentApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentDeleteRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment/delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
@@ -142,7 +160,10 @@ public class RecruitmentApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentClosedAtExtendRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment/closedAtExtend",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
