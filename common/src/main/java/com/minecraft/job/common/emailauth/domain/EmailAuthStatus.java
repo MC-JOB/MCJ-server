@@ -1,0 +1,1 @@
+package com.minecraft.job.common.emailauth.domain;public enum EmailAuthStatus {    CREATED, ISSUED, VALIDATED, FAILED}
