@@ -77,6 +77,10 @@ public class EmailAuth {
         return true;
     }
 
+    public boolean isValidated() {
+        return status == VALIDATED;
+    }
+
     private void tryCountTimeValidate() {
         if (OffsetDateTime.now().isAfter(this.sentAt.plusMinutes(MAX_CODE_TRY_TIME))) {
             this.status = FAILED;
