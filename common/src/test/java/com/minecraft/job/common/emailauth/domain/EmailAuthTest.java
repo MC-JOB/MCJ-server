@@ -94,4 +94,15 @@ class EmailAuthTest {
 
         assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(() -> emailAuth.validate("fakerCode"));
     }
+
+    @Test
+    void 이메일_인증_검증_확인() {
+        emailAuth.issue();
+
+        emailAuth.validate(emailAuth.getCode());
+
+        boolean result = emailAuth.isValidated();
+
+        assertThat(result).isTrue();
+    }
 }
