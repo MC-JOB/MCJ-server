@@ -28,6 +28,21 @@ include::{snippets}/user/create/http-response.adoc[]
 include::{snippets}/user/create/response-body.adoc[]
 
 
+== 유저 정보 변경 API
+
+=== Request
+include::{snippets}/user/change-information/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/user/change-information/request-body.adoc[]
+
+=== Response
+include::{snippets}/user/change-information/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/user/change-information/response-body.adoc[]
+
+
 
 [[Team]]
 == 팀 생성 API
