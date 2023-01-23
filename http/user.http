@@ -1,9 +1,21 @@
+###Create
 POST http://localhost:8080/user
 Content-Type: application/json
 
 {
   "email": "",
   "password": "",
+  "nickname": "",
+  "interest": "",
+  "age": ""
+}
+
+###ChagneInformation
+POST http://localhost:8080/user/change-information
+Content-Type: application/json
+
+{
+  "userId": "",
   "nickname": "",
   "interest": "",
   "age": ""
