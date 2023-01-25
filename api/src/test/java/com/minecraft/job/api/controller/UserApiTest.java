@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.user.domain.User;
@@ -65,5 +66,23 @@ class UserApiTest extends ApiTest {
         assertThat(findUser.getNickname()).isEqualTo("updateNickname");
         assertThat(findUser.getInterest()).isEqualTo("updateInterest");
         assertThat(findUser.getAge()).isEqualTo(30L);
+    }
+
+    @Test
+    void 유저_비밀번호_변경() throws Exception {
+        UserChangePasswordRequest req = new UserChangePasswordRequest(user.getId(), user.getPassword(), "newPassword");
+
+        mockMvc.perform(post("/user/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andDo(document("user/change-password",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        User findUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertThat(findUser.getPassword()).isEqualTo("newPassword");
     }
 }

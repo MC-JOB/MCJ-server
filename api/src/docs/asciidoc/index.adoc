@@ -43,6 +43,21 @@ include::{snippets}/user/change-information/http-response.adoc[]
 include::{snippets}/user/change-information/response-body.adoc[]
 
 
+== 유저 비밀번호 변경 API
+
+=== Request
+include::{snippets}/user/change-password/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/user/change-password/request-body.adoc[]
+
+=== Response
+include::{snippets}/user/change-password/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/user/change-password/response-body.adoc[]
+
+
 
 [[Team]]
 == 팀 생성 API
