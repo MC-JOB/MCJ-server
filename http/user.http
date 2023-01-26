@@ -30,3 +30,11 @@ Content-Type: application/json
   "password": "",
   "newPassword": ""
 }
+
+###Activate
+POST http://localhost:8080/user/activate
+Content-Type: application/json
+
+{
+  "userId": ""
+}
