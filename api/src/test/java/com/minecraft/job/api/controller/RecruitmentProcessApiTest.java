@@ -27,6 +27,8 @@ import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressD
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,7 +71,10 @@ public class RecruitmentProcessApiTest extends ApiTest {
                 .andExpectAll(
                         status().isOk(),
                         jsonPath("$.recruitmentProcess.id").isNotEmpty()
-                );
+                ).andDo(document("recruitment-process/create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     @Test
@@ -83,7 +88,10 @@ public class RecruitmentProcessApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentProcessInProgressRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment-process/in-progress",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -103,7 +111,10 @@ public class RecruitmentProcessApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentProcessPassRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment-process/pass",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -120,7 +131,10 @@ public class RecruitmentProcessApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentProcessCancelRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment-process/cancel",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -138,7 +152,10 @@ public class RecruitmentProcessApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(recruitmentProcessFailRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("recruitment-process/fail",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 

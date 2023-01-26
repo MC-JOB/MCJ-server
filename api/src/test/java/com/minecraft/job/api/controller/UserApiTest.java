@@ -1,15 +1,35 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
+import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
+import com.minecraft.job.common.user.domain.User;
+import com.minecraft.job.common.user.domain.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import static com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
 import static com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserApiTest extends ApiTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        user = userRepository.save(UserFixture.getAnotherUser("test"));
+    }
 
     @Test
     void 유저_생성() throws Exception {
@@ -22,6 +42,47 @@ class UserApiTest extends ApiTest {
                         status().isOk(),
                         jsonPath("$.user.id").isNotEmpty(),
                         jsonPath("$.user.nickname").value("nickname")
-                );
+                ).andDo(document("user/create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    void 유저_정보_수정() throws Exception {
+        UserChangeInformationRequest req = new UserChangeInformationRequest(user.getId(), "updateNickname", "updateInterest", 30L);
+
+        mockMvc.perform(post("/user/change-information")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andDo(document("user/change-information",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        User findUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertThat(findUser.getNickname()).isEqualTo("updateNickname");
+        assertThat(findUser.getInterest()).isEqualTo("updateInterest");
+        assertThat(findUser.getAge()).isEqualTo(30L);
+    }
+
+    @Test
+    void 유저_비밀번호_변경() throws Exception {
+        UserChangePasswordRequest req = new UserChangePasswordRequest(user.getId(), user.getPassword(), "newPassword");
+
+        mockMvc.perform(post("/user/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andDo(document("user/change-password",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        User findUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertThat(findUser.getPassword()).isEqualTo("newPassword");
     }
 }

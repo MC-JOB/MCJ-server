@@ -22,6 +22,8 @@ import org.springframework.http.MediaType;
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,7 +62,10 @@ class ReviewApiTest extends ApiTest {
                         jsonPath("$.review.id").isNotEmpty(),
                         jsonPath("$.review.score").value(3L),
                         jsonPath("$.averagePoint").value(3L)
-                );
+                ).andDo(document("review/create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -76,7 +81,11 @@ class ReviewApiTest extends ApiTest {
         mockMvc.perform(post("/review/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("review/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
@@ -97,7 +106,11 @@ class ReviewApiTest extends ApiTest {
         mockMvc.perform(post("/review/activate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("review/activate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
@@ -116,7 +129,11 @@ class ReviewApiTest extends ApiTest {
         mockMvc.perform(post("/review/inactivate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("review/inactivate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();

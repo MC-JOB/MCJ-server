@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,7 +57,10 @@ class TeamApiTest extends ApiTest {
                         status().isOk(),
                         jsonPath("$.team.id").isNotEmpty(),
                         jsonPath("$.team.name").value("teamName")
-                );
+                ).andDo(document("team/create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
     }
 
     @Test
@@ -67,7 +72,10 @@ class TeamApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(teamUpdateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("team/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -85,7 +93,10 @@ class TeamApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(teamInactivateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("team/inactivate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -103,7 +114,10 @@ class TeamApiTest extends ApiTest {
                         .content(objectMapper.writeValueAsString(teamActivateRequest)))
                 .andExpectAll(
                         status().isOk()
-                );
+                ).andDo(document("team/activate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 

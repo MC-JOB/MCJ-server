@@ -1,0 +1,1 @@
+package com.minecraft.job.api.controller.dto;public class UserChangeInformationDto {    public record UserChangeInformationRequest(            Long userId, String nickname, String interest, Long age    ) {    }}

@@ -23,9 +23,6 @@ public class ApiAdvice {
 
     @ExceptionHandler(MinecraftJobException.class)
     public ErrorResponse exception(MinecraftJobException ex) {
-
-        System.out.println("debug");
-
         final String message = messageSource.getMessage(ex.getMessage(), null, Locale.getDefault());
 
         return new ErrorResponse(new ErrorData(message));
