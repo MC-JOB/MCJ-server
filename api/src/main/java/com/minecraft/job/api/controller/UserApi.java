@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.UserActivateDto.UserActivateRequest;
 import com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
 import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateData;
@@ -41,5 +42,12 @@ public class UserApi {
             @RequestBody UserChangePasswordRequest req
     ) {
         userService.changePassword(req.userId(), req.password(), req.newPassword());
+    }
+
+    @PostMapping("/activate")
+    public void activate(
+            @RequestBody UserActivateRequest req
+    ) {
+        userService.activate(req.userId());
     }
 }
