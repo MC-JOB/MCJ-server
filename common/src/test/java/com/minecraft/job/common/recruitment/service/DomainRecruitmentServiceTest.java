@@ -270,7 +270,7 @@ class DomainRecruitmentServiceTest {
         Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.CONTENT, content, 0);
 
         for (Recruitment recruitment : findRecruitmentList) {
-            assertThat(recruitment.getTitle()).contains(content);
+            assertThat(recruitment.getContent()).contains(content);
         }
     }
 
