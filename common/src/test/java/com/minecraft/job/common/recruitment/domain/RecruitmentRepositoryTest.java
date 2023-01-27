@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,5 +56,75 @@ class RecruitmentRepositoryTest {
         assertThat(findRecruitment.getTeam()).isEqualTo(team);
         assertThat(findRecruitment.getStatus()).isEqualTo(CREATED);
         assertThat(findRecruitment.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__제목이_포함되는_경우() {
+        String title = "title";
+        채용공고_목록_생성(title, "content", team);
+
+        Specification<Recruitment> spec = Specification.where(RecruitmentSpecification.likeTitle(title));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentRepository.findAll(spec, pageRequest);
+
+        assertThat(findRecruitmentList.getNumberOfElements()).isEqualTo(10);
+        for (Recruitment recruitment : findRecruitmentList) {
+            assertThat(recruitment.getTitle()).contains(title);
+        }
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__내용이_포함되는_경우() {
+        String content = "content";
+        채용공고_목록_생성("title", content, team);
+
+        Specification<Recruitment> spec = Specification.where(RecruitmentSpecification.likeContent(content));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentRepository.findAll(spec, pageRequest);
+
+        assertThat(findRecruitmentList.getNumberOfElements()).isEqualTo(10);
+        for (Recruitment recruitment : findRecruitmentList) {
+            assertThat(recruitment.getContent()).contains(content);
+        }
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__팀이_일치하는_경우() {
+        채용공고_목록_생성("title", "content", team);
+
+        Specification<Recruitment> spec = Specification.where(RecruitmentSpecification.equalTeam(team));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentRepository.findAll(spec, pageRequest);
+
+        assertThat(findRecruitmentList.getNumberOfElements()).isEqualTo(10);
+        for (Recruitment recruitment : findRecruitmentList) {
+            assertThat(recruitment.getTeam()).isEqualTo(team);
+        }
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__페이징_처리() {
+        채용공고_목록_생성("title", "content", team);
+
+        Specification<Recruitment> spec = Specification.where(RecruitmentSpecification.likeContent("content"));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentRepository.findAll(spec, pageRequest);
+
+        assertThat(findRecruitmentList.getTotalPages()).isEqualTo(2);
+    }
+
+    private void 채용공고_목록_생성(String title, String content, Team team) {
+        for (int i = 1; i <= 20; i++) {
+            Recruitment recruitment = Recruitment.create(title + i, content + i, team);
+            recruitmentRepository.save(recruitment);
+        }
     }
 }
