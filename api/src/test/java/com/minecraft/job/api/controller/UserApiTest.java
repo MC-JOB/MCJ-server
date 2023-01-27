@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.UserActivateDto.UserActivateRequest;
 import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
 import static com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
+import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -84,5 +86,25 @@ class UserApiTest extends ApiTest {
         User findUser = userRepository.findById(user.getId()).orElseThrow();
 
         assertThat(findUser.getPassword()).isEqualTo("newPassword");
+    }
+
+    @Test
+    void 유저_활성화() throws Exception {
+        user.inactivate();
+
+        UserActivateRequest req = new UserActivateRequest(user.getId());
+
+        mockMvc.perform(post("/user/activate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andDo(document("user/activate",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        User findUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertThat(findUser.getStatus()).isEqualTo(ACTIVATED);
     }
 }

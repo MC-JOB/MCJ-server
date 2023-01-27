@@ -58,6 +58,21 @@ include::{snippets}/user/change-password/http-response.adoc[]
 include::{snippets}/user/change-password/response-body.adoc[]
 
 
+== 유저 활성화 API
+
+=== Request
+include::{snippets}/user/activate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/user/activate/request-body.adoc[]
+
+=== Response
+include::{snippets}/user/activate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/user/activate/response-body.adoc[]
+
+
 
 [[Team]]
 == 팀 생성 API
