@@ -2,11 +2,18 @@ package com.minecraft.job.common.recruitment.service;
 
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
+import com.minecraft.job.common.recruitment.domain.RecruitmentSearchType;
+import com.minecraft.job.common.recruitment.domain.RecruitmentSpecification;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
+import com.minecraft.job.common.user.domain.UserSearchType;
+import com.minecraft.job.common.user.domain.UserSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,5 +102,31 @@ public class DomainRecruitmentService implements RecruitmentService {
         require(recruitment.ofTeam(team));
 
         recruitment.closedAtExtend(closedAt);
+    }
+
+    @Override
+    public Page<Recruitment> getRecruitments(RecruitmentSearchType searchType, String searchName, int page) {
+
+        Specification<Recruitment> spec = getRecruitmentSpecification(searchType, searchName);
+
+        PageRequest pageRequest = PageRequest.of(page, 10);
+
+        return recruitmentRepository.findAll(spec, pageRequest);
+    }
+
+    private Specification<Recruitment> getRecruitmentSpecification(RecruitmentSearchType searchType, String searchName) {
+        Specification<Recruitment> spec = null;
+
+        if (searchType == RecruitmentSearchType.TITLE) {
+            spec = Specification.where(RecruitmentSpecification.likeTitle(searchName));
+        }
+        if (searchType == RecruitmentSearchType.CONTENT) {
+            spec = Specification.where(RecruitmentSpecification.likeContent(searchName));
+        }
+        if (searchType == RecruitmentSearchType.TEAM) {
+            Team team = teamRepository.findByName(searchName);
+            spec = Specification.where(RecruitmentSpecification.equalTeam(team));
+        }
+        return spec;
     }
 }

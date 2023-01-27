@@ -1,6 +1,8 @@
 package com.minecraft.job.common.recruitment.service;
 
 import com.minecraft.job.common.recruitment.domain.Recruitment;
+import com.minecraft.job.common.recruitment.domain.RecruitmentSearchType;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -17,4 +19,6 @@ public interface RecruitmentService {
     void update(Long recruitmentId, Long userId, long teamId, String title, String content);
 
     void closedAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt);
+
+    Page<Recruitment> getRecruitments(RecruitmentSearchType searchType, String searchName, int page);
 }

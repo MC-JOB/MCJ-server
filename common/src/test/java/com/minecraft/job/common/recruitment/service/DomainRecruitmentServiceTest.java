@@ -4,6 +4,7 @@ import com.minecraft.job.common.fixture.TeamFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
+import com.minecraft.job.common.recruitment.domain.RecruitmentSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -244,5 +246,58 @@ class DomainRecruitmentServiceTest {
         assertThatIllegalArgumentException().isThrownBy(
                 () -> recruitmentService.closedAtExtend(recruitment.getId(), user.getId(), fakeTeam.getId(), recruitment.getClosedAt().plusMinutes(1))
         );
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__제목이_포함되는_경우() {
+        String title = "title";
+
+        채용공고_목록_생성(title, "content", team);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TITLE, title, 0);
+
+        for (Recruitment recruitment : findRecruitmentList) {
+            assertThat(recruitment.getTitle()).contains(title);
+        }
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__내용이_포함되는_경우() {
+        String content = "content";
+
+        채용공고_목록_생성("title", content, team);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.CONTENT, content, 0);
+
+        for (Recruitment recruitment : findRecruitmentList) {
+            assertThat(recruitment.getTitle()).contains(content);
+        }
+    }
+
+    @Test
+    void 채용공고_리스트_조회_성공__팀이_일치하는_경우() {
+        채용공고_목록_생성("title", "content", team);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TEAM, team.getName(), 0);
+
+        for (Recruitment recruitment : findRecruitmentList) {
+            assertThat(recruitment.getTeam()).isEqualTo(team);
+        }
+    }
+
+    @Test
+    void 유저_리스트_조회_성공__페이징_처리() {
+        채용공고_목록_생성("title", "content", team);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TITLE, "title", 0);
+
+        assertThat(findRecruitmentList.getTotalPages()).isEqualTo(2);
+    }
+
+    private void 채용공고_목록_생성(String title, String content, Team team) {
+        for (int i = 1; i <= 20; i++) {
+            Recruitment recruitment = Recruitment.create(title + i, content + i, team);
+            recruitmentRepository.save(recruitment);
+        }
     }
 }
