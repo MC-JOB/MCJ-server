@@ -286,7 +286,7 @@ class DomainRecruitmentServiceTest {
     }
 
     @Test
-    void 유저_리스트_조회_성공__페이징_처리() {
+    void 채용공고_리스트_조회_성공__페이징_처리() {
         채용공고_목록_생성("title", "content", team);
 
         Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TITLE, "title", 0);
