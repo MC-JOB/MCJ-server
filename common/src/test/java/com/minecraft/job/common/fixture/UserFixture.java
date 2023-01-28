@@ -13,6 +13,6 @@ public class UserFixture {
     }
 
     public static User getAntherUser(String email) {
-        return User.create(email, "fakerPassword", "fakerNickname", "fakerInterest", 10L);
+        return User.create(email, "anotherPassword", "anotherNickname", "anotherInterest", 10L);
     }
 }
