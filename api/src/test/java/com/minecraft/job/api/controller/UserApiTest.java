@@ -2,8 +2,10 @@ package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.UserActivateDto.UserActivateRequest;
 import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
+import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
+import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,15 +28,21 @@ class UserApiTest extends ApiTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailAuthRepository emailAuthRepository;
+
     private User user;
 
     @BeforeEach
     void setUp() {
-        user = userRepository.save(UserFixture.getAnotherUser("test"));
+        user = userRepository.save(UserFixture.getAnotherUser("anotherEmail"));
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
     }
 
     @Test
     void 유저_생성() throws Exception {
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth("email"));
+
         UserCreateRequest req = new UserCreateRequest("email", "password", "nickname", "interest", 10L);
 
         mockMvc.perform(post("/user")

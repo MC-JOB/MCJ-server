@@ -1,5 +1,7 @@
 package com.minecraft.job.common.user.service;
 
+import com.minecraft.job.common.emailauth.domain.EmailAuth;
+import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import com.minecraft.job.common.user.domain.UserSearchType;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.support.ErrorCode.ALREADY_USED_EMAIL;
+import static com.minecraft.job.common.support.Preconditions.require;
 import static com.minecraft.job.common.support.Preconditions.validate;
+import static com.minecraft.job.common.user.domain.UserSearchType.*;
 
 @Service
 @Transactional
@@ -20,9 +24,14 @@ import static com.minecraft.job.common.support.Preconditions.validate;
 public class DomainUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final EmailAuthRepository emailAuthRepository;
 
     @Override
     public User create(String email, String password, String nickname, String interest, Long age) {
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(email).orElseThrow();
+
+        require(emailAuth.isValidated());
+
         validate(userRepository.getByEmail(email).isEmpty(), ALREADY_USED_EMAIL);
 
         User user = User.create(email, password, nickname, interest, age);
@@ -47,6 +56,9 @@ public class DomainUserService implements UserService {
     @Override
     public void activate(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(user.getEmail()).orElseThrow();
+
+        require(emailAuth.isValidated());
 
         user.activate();
     }
@@ -54,6 +66,9 @@ public class DomainUserService implements UserService {
     @Override
     public void inactivate(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(user.getEmail()).orElseThrow();
+
+        require(emailAuth.isValidated());
 
         user.inactivate();
     }
@@ -71,13 +86,13 @@ public class DomainUserService implements UserService {
     private Specification<User> getUserSpecification(UserSearchType searchType, String searchName) {
         Specification<User> spec = null;
 
-        if(searchType == UserSearchType.NICKNAME) {
+        if (searchType == NICKNAME) {
             spec = Specification.where(UserSpecification.equalNickname(searchName));
         }
-        if(searchType == UserSearchType.EMAIL) {
+        if (searchType == EMAIL) {
             spec = Specification.where(UserSpecification.equalEmail(searchName));
         }
-        if(searchType == UserSearchType.INTEREST) {
+        if (searchType == INTEREST) {
             spec = Specification.where(UserSpecification.likeInterest(searchName));
         }
         return spec;
