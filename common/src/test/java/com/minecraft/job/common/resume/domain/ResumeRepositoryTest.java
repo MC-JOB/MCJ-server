@@ -131,9 +131,9 @@ class ResumeRepositoryTest {
         assertThat(findResumeList.getTotalPages()).isEqualTo(2);
     }
 
-    private void 이력서_목록_생성(int page, String title, String content, String trainingHistory, User user) {
-        for (int i = 1; i <= page; i++) {
-            Resume resume = Resume.create(title + 1, content + i, trainingHistory, user);
+    private void 이력서_목록_생성(int count, String title, String content, String trainingHistory, User user) {
+        for (int i = 1; i <= count; i++) {
+            Resume resume = Resume.create(title + i, content + i, trainingHistory, user);
             resumeRepository.save(resume);
         }
     }
