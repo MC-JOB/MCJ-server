@@ -34,12 +34,6 @@ class DomainUserServiceTest {
 
     private User user;
 
-    @BeforeEach
-    void setUp() {
-        user = userRepository.save(UserFixture.getAntherUser("anotherEmail"));
-        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
-    }
-
     @Test
     void 유저_생성_성공() {
         emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth("email"));
@@ -64,6 +58,8 @@ class DomainUserServiceTest {
 
     @Test
     void 유저_정보_변경() {
+        유저_생성();
+
         userService.changeInformation(user.getId(), "changeNickname", "changeInterest", 30L);
 
         assertThat(user.getNickname()).isEqualTo("changeNickname");
@@ -73,6 +69,8 @@ class DomainUserServiceTest {
 
     @Test
     void 유저_비밀번호_변경() {
+        유저_생성();
+
         userService.changePassword(user.getId(), user.getPassword(), "newPassword");
 
         assertThat(user.getPassword()).isEqualTo("newPassword");
@@ -80,6 +78,8 @@ class DomainUserServiceTest {
 
     @Test
     void 유저_활성화() {
+        유저_생성();
+
         user.inactivate();
 
         userService.activate(user.getId());
@@ -89,6 +89,8 @@ class DomainUserServiceTest {
 
     @Test
     void 유저_비활성화() {
+        유저_생성();
+
         userService.inactivate(user.getId());
 
         assertThat(user.getStatus()).isEqualTo(INACTIVATED);
@@ -97,27 +99,27 @@ class DomainUserServiceTest {
     @Test
     void 유저_리스트_조회_성공__이메일이_일치하는_경우() {
         String email = "email";
+        String searchEmail = "email1";
 
         유저_목록_생성(10, email, "password", "nickname", "interest");
 
-        Page<User> findUserList = userService.getUsers(EMAIL, email, 0);
+        Page<User> findUserList = userService.getUsers(EMAIL, searchEmail, 0);
 
-        for (User user : findUserList) {
-            assertThat(user.getEmail()).isEqualTo(email);
-        }
+        assertThat(findUserList.getTotalElements()).isEqualTo(1);
+        assertThat(findUserList.getContent().get(0).getEmail()).isEqualTo(searchEmail);
     }
 
     @Test
     void 유저_리스트_조회_성공__닉네임이_일치하는_경우() {
         String nickname = "nickname";
+        String searchNickname = "nickname1";
 
         유저_목록_생성(10, "email", "password", nickname, "interest");
 
-        Page<User> findUserList = userService.getUsers(NICKNAME, nickname, 0);
+        Page<User> findUserList = userService.getUsers(NICKNAME, searchNickname, 0);
 
-        for (User user : findUserList) {
-            assertThat(user.getNickname()).isEqualTo(nickname);
-        }
+        assertThat(findUserList.getTotalElements()).isEqualTo(1);
+        assertThat(findUserList.getContent().get(0).getNickname()).isEqualTo(searchNickname);
     }
 
     @Test
@@ -129,22 +131,27 @@ class DomainUserServiceTest {
         Page<User> findUserList = userService.getUsers(INTEREST, interest, 0);
 
         for (User user : findUserList) {
-            assertThat(user.getInterest()).isEqualTo(interest);
+            assertThat(user.getInterest()).contains(interest);
         }
     }
 
     @Test
     void 유저_리스트_조회_성공__페이징_처리() {
-        유저_목록_생성(10, "email", "password", "nickname", "interest");
+        유저_목록_생성(20, "email", "password", "nickname", "interest");
 
         Page<User> findUserList = userService.getUsers(INTEREST, "interest", 0);
 
         assertThat(findUserList.getTotalPages()).isEqualTo(2);
     }
 
+    private void 유저_생성() {
+        user = userRepository.save(UserFixture.getAntherUser("anotherEmail"));
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
+    }
+
     private void 유저_목록_생성(int count, String email, String password, String nickname, String interest) {
         for (int i = 1; i <= count; i++) {
-            User user = User.create(email + i, password + i, nickname, interest, 10L);
+            User user = User.create(email + i, password + i, nickname + i, interest + i, 10L);
             userRepository.save(user);
         }
     }
