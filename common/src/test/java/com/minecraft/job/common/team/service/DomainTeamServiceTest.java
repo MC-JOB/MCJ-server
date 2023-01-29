@@ -135,7 +135,7 @@ class DomainTeamServiceTest {
     @Test
     void 팀_리스트_조회_성공__이름이_포함되는_경우() {
         String name = "name";
-        팀_목록_생성(name, "description", 5L, user);
+        팀_목록_생성(20, name, "description", 5L, user);
 
         Page<Team> findTeamList = teamService.getTeams(TeamSearchType.NAME, name, 0);
 
@@ -147,7 +147,7 @@ class DomainTeamServiceTest {
     @Test
     void 팀_리스트_조회_성공__설명이_포함되는_경우() {
         String description = "description";
-        팀_목록_생성("name", description, 5L, user);
+        팀_목록_생성(20, "name", description, 5L, user);
 
         Page<Team> findTeamList = teamService.getTeams(TeamSearchType.DESCRIPTION, description, 0);
 
@@ -158,7 +158,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_리스트_조회_성공__유저가_일치하는_경우() {
-        팀_목록_생성("name", "description", 5L, user);
+        팀_목록_생성(20, "name", "description", 5L, user);
 
         Page<Team> findTeamList = teamService.getTeams(TeamSearchType.USER, user.getNickname(), 0);
 
@@ -169,7 +169,7 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_리스트_조회_성공__페이징_처리() {
-        팀_목록_생성("name", "description", 5L, user);
+        팀_목록_생성(20, "name", "description", 5L, user);
 
         Page<Team> findTeamtList = teamService.getTeams(TeamSearchType.NAME, "name", 0);
 
@@ -177,9 +177,9 @@ class DomainTeamServiceTest {
     }
 
 
-    private void 팀_목록_생성(String name, String description, Long memberNum, User user) {
-        for (int i = 1; i <= 20; i++) {
-            Team team = Team.create(name + 1, description + i, memberNum, user);
+    private void 팀_목록_생성(int count, String name, String description, Long memberNum, User user) {
+        for (int i = 1; i <= count; i++) {
+            Team team = Team.create(name + i, description + i, memberNum, user);
             teamRepository.save(team);
         }
     }
