@@ -2,9 +2,16 @@ package com.minecraft.job.common.resume.service;
 
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
+import com.minecraft.job.common.resume.domain.ResumeSearchType;
+import com.minecraft.job.common.resume.domain.ResumeSpecification;
+import com.minecraft.job.common.team.domain.Team;
+import com.minecraft.job.common.team.domain.TeamSpecification;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,5 +73,33 @@ public class DomainResumeService implements ResumeService {
         require(resume.ofUser(user));
 
         resume.delete();
+    }
+
+    @Override
+    public Page<Resume> getResumes(ResumeSearchType searchType, String searchName, int page) {
+        Specification<Resume> spec = getResumeSpecification(searchType, searchName);
+
+        PageRequest pageRequest = PageRequest.of(page, 10);
+
+        return resumeRepository.findAll(spec, pageRequest);
+    }
+
+    private Specification<Resume> getResumeSpecification(ResumeSearchType searchType, String searchName) {
+        Specification<Resume> spec = null;
+
+        if (searchType == ResumeSearchType.TITLE) {
+            spec = Specification.where(ResumeSpecification.likeTitle(searchName));
+        }
+        if (searchType == ResumeSearchType.CONTENT) {
+            spec = Specification.where(ResumeSpecification.likeContent(searchName));
+        }
+        if (searchType == ResumeSearchType.TRAININGHISTORY) {
+            spec = Specification.where(ResumeSpecification.likeTrainingHistory(searchName));
+        }
+        if (searchType == ResumeSearchType.USER) {
+            User user = userRepository.findByNickname(searchName);
+            spec = Specification.where(ResumeSpecification.equalUser(user));
+        }
+        return spec;
     }
 }
