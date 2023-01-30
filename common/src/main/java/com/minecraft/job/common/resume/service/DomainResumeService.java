@@ -4,8 +4,6 @@ import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
 import com.minecraft.job.common.resume.domain.ResumeSearchType;
 import com.minecraft.job.common.resume.domain.ResumeSpecification;
-import com.minecraft.job.common.team.domain.Team;
-import com.minecraft.job.common.team.domain.TeamSpecification;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
