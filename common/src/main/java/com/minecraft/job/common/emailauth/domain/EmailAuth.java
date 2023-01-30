@@ -1,6 +1,5 @@
 package com.minecraft.job.common.emailauth.domain;
 
-import com.minecraft.job.common.support.MinecraftJobException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 import static com.minecraft.job.common.emailauth.domain.EmailAuthStatus.*;
-import static com.minecraft.job.common.support.ErrorCode.*;
 import static com.minecraft.job.common.support.Preconditions.check;
 import static com.minecraft.job.common.support.Preconditions.require;
 import static javax.persistence.EnumType.STRING;
@@ -63,7 +61,8 @@ public class EmailAuth {
         this.status = EmailAuthStatus.ISSUED;
     }
 
-    public boolean validate(String code) {
+    public boolean validate(String code)
+            throws TimeExceededException, TryCountExceededException, CodeNotValidException {
         require(Strings.isNotBlank(code));
 
         check(this.status == ISSUED);
@@ -81,27 +80,26 @@ public class EmailAuth {
         return status == VALIDATED;
     }
 
-    private void tryCountTimeValidate() {
+    private void tryCountTimeValidate() throws TimeExceededException {
         if (OffsetDateTime.now().isAfter(this.sentAt.plusMinutes(MAX_CODE_TRY_TIME))) {
             this.status = FAILED;
 
-            throw new MinecraftJobException(CODE_VALID_TIME_EXCEEDED);
+            throw new TimeExceededException();
         }
     }
 
-    private void tryCountValidate() {
-        if (!(tryCount > 0)) {
+    private void tryCountValidate() throws TryCountExceededException {
+        if (--tryCount < 0) {
             this.status = FAILED;
 
-            throw new MinecraftJobException(TRY_COUNT_EXCEEDED);
+            throw new TryCountExceededException();
         }
     }
 
-    private void codeValidate(String code) {
+    private void codeValidate(String code) throws CodeNotValidException {
         if (!this.code.equals(code)) {
-            tryCount--;
 
-            throw new MinecraftJobException(CODE_NOT_VALID);
+            throw new CodeNotValidException();
         }
     }
 }

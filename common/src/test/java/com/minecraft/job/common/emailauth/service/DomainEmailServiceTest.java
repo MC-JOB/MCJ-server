@@ -59,7 +59,7 @@ class DomainEmailServiceTest {
     }
 
     @Test
-    void 이메일_인증_검증() {
+    void 이메일_인증_검증() throws Exception {
         EmailAuth emailAuth = emailAuthRepository.save(EmailAuth.create("email"));
 
         emailAuthService.issue("email");

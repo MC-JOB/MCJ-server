@@ -1,8 +1,6 @@
 package com.minecraft.job.common.emailauth.service;
 
-import com.minecraft.job.common.emailauth.domain.EmailAuth;
-import com.minecraft.job.common.emailauth.domain.EmailAuthIssueEvent;
-import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
+import com.minecraft.job.common.emailauth.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,8 @@ public class DomainEmailService implements EmailAuthService {
     }
 
     @Override
-    public boolean validate(String email, String code) {
+    public boolean validate(String email, String code)
+            throws TimeExceededException, TryCountExceededException, CodeNotValidException {
         EmailAuth emailAuth = emailAuthRepository.findByEmail(email).orElseThrow();
 
         return emailAuth.validate(code);
