@@ -1,6 +1,5 @@
 package com.minecraft.job.common.emailauth.domain;
 
-import com.minecraft.job.common.support.MinecraftJobException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -46,7 +45,7 @@ class EmailAuthTest {
     }
 
     @Test
-    void 이메일_인증_검증() {
+    void 이메일_인증_검증() throws Exception {
         emailAuth.issue();
 
         boolean result = emailAuth.validate(emailAuth.getCode());
@@ -76,7 +75,7 @@ class EmailAuthTest {
 
         emailAuth.setSentAt(OffsetDateTime.now().minusMinutes(MAX_CODE_TRY_TIME));
 
-        assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(() -> emailAuth.validate(emailAuth.getCode()));
+        assertThatExceptionOfType(TimeExceededException.class).isThrownBy(() -> emailAuth.validate(emailAuth.getCode()));
     }
 
     @Test
@@ -85,18 +84,18 @@ class EmailAuthTest {
 
         emailAuth.setTryCount(0);
 
-        assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(() -> emailAuth.validate(emailAuth.getCode()));
+        assertThatExceptionOfType(TryCountExceededException.class).isThrownBy(() -> emailAuth.validate(emailAuth.getCode()));
     }
 
     @Test
     void 이메일_인증_검증_실패__검증_코드가_다름() {
         emailAuth.issue();
 
-        assertThatExceptionOfType(MinecraftJobException.class).isThrownBy(() -> emailAuth.validate("fakerCode"));
+        assertThatExceptionOfType(CodeNotValidException.class).isThrownBy(() -> emailAuth.validate("fakerCode"));
     }
 
     @Test
-    void 이메일_인증_검증_확인() {
+    void 이메일_인증_검증_확인() throws Exception {
         emailAuth.issue();
 
         emailAuth.validate(emailAuth.getCode());
