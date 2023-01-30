@@ -38,3 +38,11 @@ Content-Type: application/json
 {
   "userId": ""
 }
+
+###Inactivate
+POST http://localhost:8080/user/inactivate
+Content-Type: application/json
+
+{
+  "userId": ""
+}
