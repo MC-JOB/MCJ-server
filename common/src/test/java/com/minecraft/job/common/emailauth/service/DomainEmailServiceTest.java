@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 
 import static com.minecraft.job.common.emailauth.domain.EmailAuthStatus.ISSUED;
+import static com.minecraft.job.common.emailauth.domain.EmailAuthStatus.VALIDATED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -45,5 +46,19 @@ class DomainEmailServiceTest {
         assertThat(findEmailAuth.getCode()).isNotNull();
         assertThat(findEmailAuth.getTryCount()).isNotNull();
         assertThat(findEmailAuth.getSentAt()).isNotNull();
+    }
+
+    @Test
+    void 이메일_인증_검증() {
+        EmailAuth emailAuth = emailAuthRepository.save(EmailAuth.create("email"));
+
+        emailAuthService.issue("email");
+
+        boolean result = emailAuthService.validate("email", emailAuth.getCode());
+
+        EmailAuth findEmailAuth = emailAuthRepository.findByEmail("email").orElseThrow();
+
+        assertThat(result).isTrue();
+        assertThat(findEmailAuth.getStatus()).isEqualTo(VALIDATED);
     }
 }
