@@ -89,6 +89,23 @@ include::{snippets}/user/inactivate/response-body.adoc[]
 
 
 
+[[EmailAuth]]
+== 이메일 인증 발급 API
+
+=== Request
+include::{snippets}/email-auth/issue/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/email-auth/issue/request-body.adoc[]
+
+=== Response
+include::{snippets}/email-auth/issue/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/email-auth/issue/response-body.adoc[]
+
+
+
 [[Team]]
 == 팀 생성 API
 

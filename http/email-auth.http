@@ -1,0 +1,7 @@
+###Issue
+POST http://localhost:8080/email-auth/issue
+Content-Type: application/json
+
+{
+  "email": ""
+}
