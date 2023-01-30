@@ -105,6 +105,21 @@ include::{snippets}/email-auth/issue/http-response.adoc[]
 include::{snippets}/email-auth/issue/response-body.adoc[]
 
 
+== 이메일 인증 검증 API
+
+=== Request
+include::{snippets}/email-auth/validate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/email-auth/validate/request-body.adoc[]
+
+=== Response
+include::{snippets}/email-auth/validate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/email-auth/validate/response-body.adoc[]
+
+
 
 [[Team]]
 == 팀 생성 API

@@ -5,3 +5,12 @@ Content-Type: application/json
 {
   "email": ""
 }
+
+###Validate
+POST http://localhost:8080/email-auth/validate
+Content-Type: application/json
+
+{
+  "email": "",
+  "code": ""
+}

@@ -6,6 +6,14 @@ import static com.minecraft.job.common.emailauth.domain.EmailAuthStatus.VALIDATE
 
 public class EmailAuthFixture {
 
+    public static EmailAuth getIssuedEmailAuth(String email) {
+        EmailAuth emailAuth = EmailAuth.create(email);
+
+        emailAuth.issue();
+
+        return emailAuth;
+    }
+
     public static EmailAuth getValidatedEmailAuth(String email) {
         EmailAuth emailAuth = EmailAuth.create(email);
         emailAuth.setStatus(VALIDATED);
