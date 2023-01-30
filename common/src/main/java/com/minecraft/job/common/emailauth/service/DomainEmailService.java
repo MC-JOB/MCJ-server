@@ -24,4 +24,11 @@ public class DomainEmailService implements EmailAuthService {
 
         emailAuthRepository.save(emailAuth);
     }
+
+    @Override
+    public boolean validate(String email, String code) {
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(email).orElseThrow();
+
+        return emailAuth.validate(code);
+    }
 }
