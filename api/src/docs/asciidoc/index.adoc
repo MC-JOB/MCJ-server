@@ -73,6 +73,21 @@ include::{snippets}/user/activate/http-response.adoc[]
 include::{snippets}/user/activate/response-body.adoc[]
 
 
+== 유저 비활성화 API
+
+=== Request
+include::{snippets}/user/inactivate/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/user/inactivate/request-body.adoc[]
+
+=== Response
+include::{snippets}/user/inactivate/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/user/inactivate/response-body.adoc[]
+
+
 
 [[Team]]
 == 팀 생성 API

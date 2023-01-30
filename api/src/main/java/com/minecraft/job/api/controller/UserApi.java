@@ -6,6 +6,7 @@ import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePass
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateData;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateResponse;
+import com.minecraft.job.api.controller.dto.UserInactivateDto.UserInactivateRequest;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,12 @@ public class UserApi {
             @RequestBody UserActivateRequest req
     ) {
         userService.activate(req.userId());
+    }
+
+    @PostMapping("/inactivate")
+    public void activate(
+            @RequestBody UserInactivateRequest req
+    ) {
+        userService.inactivate(req.userId());
     }
 }
