@@ -6,7 +6,6 @@ import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.support.MinecraftJobException;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

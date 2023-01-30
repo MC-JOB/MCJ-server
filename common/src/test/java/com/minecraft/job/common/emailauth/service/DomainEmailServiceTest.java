@@ -1,10 +1,13 @@
 package com.minecraft.job.common.emailauth.service;
 
 import com.minecraft.job.common.emailauth.domain.EmailAuth;
+import com.minecraft.job.common.emailauth.domain.EmailAuthIssueEvent;
 import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@RecordApplicationEvents
 class DomainEmailServiceTest {
 
     @Autowired
@@ -21,6 +25,9 @@ class DomainEmailServiceTest {
 
     @Autowired
     private EmailAuthRepository emailAuthRepository;
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
 
     @Test
     void 이메일_인증_발급() {
@@ -32,6 +39,9 @@ class DomainEmailServiceTest {
         assertThat(findEmailAuth.getCode()).isNotNull();
         assertThat(findEmailAuth.getTryCount()).isNotNull();
         assertThat(findEmailAuth.getSentAt()).isNotNull();
+
+        assertThat(applicationEvents.stream(EmailAuthIssueEvent.class).toList().get(0).emailAuthId())
+                .isEqualTo(findEmailAuth.getId());
     }
 
     @Test

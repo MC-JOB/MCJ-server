@@ -5,7 +5,8 @@ public enum MailTemplate {
     RECRUITMENT_PROCESS_CREATE("[MCJ] 팀의 채용공고에 새로운 이력서가 도착했습니다.", "recruitmentProcess_create.html"),
     RECRUITMENT_PROCESS_INPROGRESS("[MCJ] 지원하신 채용공고에 새로운 소식이 도착했습니다.", "recruitmentProcess_InProgress.html"),
     RECRUITMENT_PROCESS_PASS("[MCJ] 지원하신 채용공고에 새로운 소식이 도착했습니다.", "recruitmentProcess_Pass.html"),
-    RECRUITMENT_PROCESS_FAIL("[MCJ] 지원하신 채용공고에 새로운 소식이 도착했습니다.", "recruitmentProcess_Fail.html");
+    RECRUITMENT_PROCESS_FAIL("[MCJ] 지원하신 채용공고에 새로운 소식이 도착했습니다.", "recruitmentProcess_Fail.html"),
+    EMAIL_AUTH_ISSUE("[MCJ] 인증 코드가 도착했습니다.", "emailAuth_issue.html");
 
     public String subject;
     public String code;
