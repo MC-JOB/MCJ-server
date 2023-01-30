@@ -1,7 +1,6 @@
 package com.minecraft.job.common.resume.domain;
 
 import com.minecraft.job.common.fixture.UserFixture;
-import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
