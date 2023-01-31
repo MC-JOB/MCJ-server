@@ -1,5 +1,7 @@
 package com.minecraft.job.common.team.service;
 
+import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
+import com.minecraft.job.common.fixture.EmailAuthFixture;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.domain.TeamSearchType;
@@ -32,11 +34,15 @@ class DomainTeamServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailAuthRepository emailAuthRepository;
+
     private User user;
 
     @BeforeEach
     void setUp() {
         user = userRepository.save(create());
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
     }
 
     @Test
@@ -99,6 +105,7 @@ class DomainTeamServiceTest {
         Team team = teamService.create(user.getId(), "name", "description", 5L);
 
         User fakerUser = userRepository.save(getFakerUser());
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(fakerUser.getEmail()));
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> teamService.inactivate(team.getId(), fakerUser.getId())
@@ -126,6 +133,7 @@ class DomainTeamServiceTest {
         team.inactivate();
 
         User fakerUser = userRepository.save(getFakerUser());
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(fakerUser.getEmail()));
 
         assertThatIllegalArgumentException().isThrownBy(
                 () -> teamService.activate(team.getId(), fakerUser.getId())

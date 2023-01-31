@@ -4,9 +4,11 @@ import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
+import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
+import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.service.TeamService;
@@ -35,6 +37,9 @@ class TeamApiTest extends ApiTest {
     private UserRepository userRepository;
 
     @Autowired
+    private EmailAuthRepository emailAuthRepository;
+
+    @Autowired
     private TeamService teamService;
 
     private Team team;
@@ -44,6 +49,7 @@ class TeamApiTest extends ApiTest {
     void setUp() {
         user = userRepository.save(UserFixture.create());
         team = teamRepository.save(TeamFixture.create(user));
+        emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
     }
 
     @Test
