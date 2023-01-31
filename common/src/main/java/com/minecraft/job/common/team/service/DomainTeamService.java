@@ -1,5 +1,7 @@
 package com.minecraft.job.common.team.service;
 
+import com.minecraft.job.common.emailauth.domain.EmailAuth;
+import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.domain.TeamSearchType;
@@ -13,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.support.Preconditions.check;
 import static com.minecraft.job.common.support.Preconditions.require;
 
 @Service
@@ -21,8 +24,8 @@ import static com.minecraft.job.common.support.Preconditions.require;
 public class DomainTeamService implements TeamService {
 
     private final TeamRepository teamRepository;
-
     private final UserRepository userRepository;
+    private final EmailAuthRepository emailAuthRepository;
 
     @Override
     public Team create(Long userId, String name, String description, Long memberNum) {
@@ -54,8 +57,11 @@ public class DomainTeamService implements TeamService {
     public void inactivate(Long teamId, Long userId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(user.getEmail()).orElseThrow();
 
         require(team.ofUser(user));
+
+        check(emailAuth.isValidated());
 
         team.inactivate();
     }
@@ -64,8 +70,11 @@ public class DomainTeamService implements TeamService {
     public void activate(Long teamId, Long userId) {
         Team team = teamRepository.findById(teamId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
+        EmailAuth emailAuth = emailAuthRepository.findByEmail(user.getEmail()).orElseThrow();
 
         require(team.ofUser(user));
+
+        check(emailAuth.isValidated());
 
         team.activate();
     }
