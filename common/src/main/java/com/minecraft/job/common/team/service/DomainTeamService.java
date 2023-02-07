@@ -11,6 +11,7 @@ import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,13 +81,11 @@ public class DomainTeamService implements TeamService {
     }
 
     @Override
-    public Page<Team> getTeams(TeamSearchType searchType, String searchName, int page) {
+    public Page<Team> getTeams(TeamSearchType searchType, String searchName, Pageable pageable) {
 
         Specification<Team> spec = getTeamSpecification(searchType, searchName);
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
-
-        return teamRepository.findAll(spec, pageRequest);
+        return teamRepository.findAll(spec, pageable);
     }
 
     private Specification<Team> getTeamSpecification(TeamSearchType searchType, String searchName) {
