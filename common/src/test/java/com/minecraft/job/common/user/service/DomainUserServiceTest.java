@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.user.domain.UserSearchType.*;
@@ -102,7 +104,9 @@ class DomainUserServiceTest {
 
         유저_목록_생성(10, email, "password", "nickname", "interest");
 
-        Page<User> findUserList = userService.getUsers(EMAIL, searchEmail, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userService.getUsers(EMAIL, searchEmail, pageable);
 
         assertThat(findUserList.getTotalElements()).isEqualTo(1);
         assertThat(findUserList.getContent().get(0).getEmail()).isEqualTo(searchEmail);
@@ -115,7 +119,9 @@ class DomainUserServiceTest {
 
         유저_목록_생성(10, "email", "password", nickname, "interest");
 
-        Page<User> findUserList = userService.getUsers(NICKNAME, searchNickname, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userService.getUsers(NICKNAME, searchNickname, pageable);
 
         assertThat(findUserList.getTotalElements()).isEqualTo(1);
         assertThat(findUserList.getContent().get(0).getNickname()).isEqualTo(searchNickname);
@@ -127,7 +133,9 @@ class DomainUserServiceTest {
 
         유저_목록_생성(10, "email", "password", "nickname", interest);
 
-        Page<User> findUserList = userService.getUsers(INTEREST, interest, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userService.getUsers(INTEREST, interest, pageable);
 
         for (User user : findUserList) {
             assertThat(user.getInterest()).contains(interest);
@@ -138,7 +146,9 @@ class DomainUserServiceTest {
     void 유저_리스트_조회_성공__페이징_처리() {
         유저_목록_생성(20, "email", "password", "nickname", "interest");
 
-        Page<User> findUserList = userService.getUsers(INTEREST, "interest", 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<User> findUserList = userService.getUsers(INTEREST, "interest", pageable);
 
         assertThat(findUserList.getTotalPages()).isEqualTo(2);
     }

@@ -3,6 +3,7 @@ package com.minecraft.job.common.user.service;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserSearchType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
@@ -19,5 +20,5 @@ public interface UserService {
 
     void inactivate(Long userId);
 
-    Page<User> getUsers(UserSearchType searchType, String searchName, int page);
+    Page<User> getUsers(UserSearchType searchType, String searchName, Pageable pageable);
 }
