@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.fixture.UserFixture.create;
@@ -145,7 +146,9 @@ class DomainTeamServiceTest {
         String name = "name";
         팀_목록_생성(20, name, "description", 5L, user);
 
-        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.NAME, name, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.NAME, name, pageable);
 
         for (Team team : findTeamList) {
             assertThat(team.getName()).contains(name);
@@ -157,7 +160,9 @@ class DomainTeamServiceTest {
         String description = "description";
         팀_목록_생성(20, "name", description, 5L, user);
 
-        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.DESCRIPTION, description, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.DESCRIPTION, description, pageable);
 
         for (Team team : findTeamList) {
             assertThat(team.getDescription()).contains(description);
@@ -168,7 +173,9 @@ class DomainTeamServiceTest {
     void 팀_리스트_조회_성공__유저가_일치하는_경우() {
         팀_목록_생성(20, "name", "description", 5L, user);
 
-        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.USER, user.getNickname(), 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.USER, user.getNickname(), pageable);
 
         for (Team team : findTeamList) {
             assertThat(team.getUser()).isEqualTo(user);
@@ -179,7 +186,9 @@ class DomainTeamServiceTest {
     void 팀_리스트_조회_성공__페이징_처리() {
         팀_목록_생성(20, "name", "description", 5L, user);
 
-        Page<Team> findTeamtList = teamService.getTeams(TeamSearchType.NAME, "name", 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Team> findTeamtList = teamService.getTeams(TeamSearchType.NAME, "name", pageable);
 
         assertThat(findTeamtList.getTotalPages()).isEqualTo(2);
     }

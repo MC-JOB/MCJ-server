@@ -3,6 +3,7 @@ package com.minecraft.job.common.team.service;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamSearchType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TeamService {
 
@@ -16,5 +17,5 @@ public interface TeamService {
 
     void activate(Long teamId, Long userId);
 
-    Page<Team> getTeams(TeamSearchType searchType, String searchName, int page);
+    Page<Team> getTeams(TeamSearchType searchType, String searchName, Pageable pageable);
 }
