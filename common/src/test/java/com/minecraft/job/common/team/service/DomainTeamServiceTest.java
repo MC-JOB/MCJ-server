@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.fixture.UserFixture.create;
 import static com.minecraft.job.common.fixture.UserFixture.getFakerUser;
+import static com.minecraft.job.common.team.domain.TeamSearchType.*;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -148,7 +149,7 @@ class DomainTeamServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.NAME, name, pageable);
+        Page<Team> findTeamList = teamService.getTeams(NAME, name, pageable);
 
         for (Team team : findTeamList) {
             assertThat(team.getName()).contains(name);
@@ -162,7 +163,7 @@ class DomainTeamServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.DESCRIPTION, description, pageable);
+        Page<Team> findTeamList = teamService.getTeams(DESCRIPTION, description, pageable);
 
         for (Team team : findTeamList) {
             assertThat(team.getDescription()).contains(description);
@@ -175,7 +176,7 @@ class DomainTeamServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Team> findTeamList = teamService.getTeams(TeamSearchType.USER, user.getNickname(), pageable);
+        Page<Team> findTeamList = teamService.getTeams(USER, user.getNickname(), pageable);
 
         for (Team team : findTeamList) {
             assertThat(team.getUser()).isEqualTo(user);
@@ -188,7 +189,7 @@ class DomainTeamServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Team> findTeamtList = teamService.getTeams(TeamSearchType.NAME, "name", pageable);
+        Page<Team> findTeamtList = teamService.getTeams(NAME, "name", pageable);
 
         assertThat(findTeamtList.getTotalPages()).isEqualTo(2);
     }
