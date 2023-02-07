@@ -4,7 +4,6 @@ import com.minecraft.job.common.fixture.ResumeFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
-import com.minecraft.job.common.resume.domain.ResumeSearchType;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.resume.domain.ResumeSearchType.*;
 import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -135,7 +136,9 @@ class DomainResumeServiceTest {
         String title = "title";
         이력서_목록_생성(20, title, "content", "trainingHistory", user);
 
-        Page<Resume> findResumeList = resumeService.getResumes(ResumeSearchType.TITLE, title, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Resume> findResumeList = resumeService.getResumes(TITLE, title, pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getTitle()).contains(title);
@@ -147,7 +150,9 @@ class DomainResumeServiceTest {
         String content = "content";
         이력서_목록_생성(20, "title", content, "trainingHistory", user);
 
-        Page<Resume> findResumeList = resumeService.getResumes(ResumeSearchType.CONTENT, content, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Resume> findResumeList = resumeService.getResumes(CONTENT, content, pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getContent()).contains(content);
@@ -159,7 +164,9 @@ class DomainResumeServiceTest {
         String trainingHistory = "trainingHistory";
         이력서_목록_생성(20, "title", "content", trainingHistory, user);
 
-        Page<Resume> findResumeList = resumeService.getResumes(ResumeSearchType.TRAININGHISTORY, trainingHistory, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Resume> findResumeList = resumeService.getResumes(TRAININGHISTORY, trainingHistory, pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getTrainingHistory()).contains(trainingHistory);
@@ -170,7 +177,9 @@ class DomainResumeServiceTest {
     void 이력서_리스트_조회_성공__유저가_일치하는_경우() {
         이력서_목록_생성(20, "title", "content", "trainingHistory", user);
 
-        Page<Resume> findResumeList = resumeService.getResumes(ResumeSearchType.USER, user.getNickname(), 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Resume> findResumeList = resumeService.getResumes(USER, user.getNickname(), pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getUser()).isEqualTo(user);
@@ -181,7 +190,9 @@ class DomainResumeServiceTest {
     void 이력서_리스트_조회_성공__페이징_처리() {
         이력서_목록_생성(20, "title", "content", "trainingHistory", user);
 
-        Page<Resume> findResumeList = resumeService.getResumes(ResumeSearchType.TITLE, "title", 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Resume> findResumeList = resumeService.getResumes(TITLE, "title", pageable);
 
         assertThat(findResumeList.getTotalPages()).isEqualTo(2);
     }
