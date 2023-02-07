@@ -3,6 +3,7 @@ package com.minecraft.job.common.resume.service;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeSearchType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ResumeService {
 
@@ -16,5 +17,5 @@ public interface ResumeService {
 
     void delete(Long resumeId, Long userId);
 
-    Page<Resume> getResumes(ResumeSearchType searchType, String searchName, int page);
+    Page<Resume> getResumes(ResumeSearchType searchType, String searchName, Pageable pageable);
 }
