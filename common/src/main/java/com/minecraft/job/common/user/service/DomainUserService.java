@@ -9,6 +9,7 @@ import com.minecraft.job.common.user.domain.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,13 +75,11 @@ public class DomainUserService implements UserService {
     }
 
     @Override
-    public Page<User> getUsers(UserSearchType searchType, String searchName, int page) {
+    public Page<User> getUsers(UserSearchType searchType, String searchName, Pageable pageable) {
 
         Specification<User> spec = getUserSpecification(searchType, searchName);
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
-
-        return userRepository.findAll(spec, pageRequest);
+        return userRepository.findAll(spec, pageable);
     }
 
     private Specification<User> getUserSpecification(UserSearchType searchType, String searchName) {
