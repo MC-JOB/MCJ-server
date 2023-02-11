@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.user.domain.UserSearchType.*;
@@ -151,6 +150,15 @@ class DomainUserServiceTest {
         Page<User> findUserList = userService.getUsers(INTEREST, "interest", pageable);
 
         assertThat(findUserList.getTotalPages()).isEqualTo(2);
+    }
+
+    @Test
+    void 유저_조회_성공() {
+        유저_생성();
+
+        User findUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertThat(findUser.getId()).isEqualTo(user.getId());
     }
 
     private void 유저_생성() {

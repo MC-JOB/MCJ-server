@@ -21,4 +21,7 @@ public interface UserService {
     void inactivate(Long userId);
 
     Page<User> getUsers(UserSearchType searchType, String searchName, Pageable pageable);
+
+    User getUser(Long userId);
+
 }
