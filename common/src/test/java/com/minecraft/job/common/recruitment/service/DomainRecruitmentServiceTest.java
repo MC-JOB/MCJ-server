@@ -14,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static com.minecraft.job.common.recruitment.domain.RecruitmentSearchType.*;
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -254,7 +256,9 @@ class DomainRecruitmentServiceTest {
 
         채용공고_목록_생성(title, "content", team);
 
-        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TITLE, title, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(TITLE, title, pageable);
 
         for (Recruitment recruitment : findRecruitmentList) {
             assertThat(recruitment.getTitle()).contains(title);
@@ -267,7 +271,9 @@ class DomainRecruitmentServiceTest {
 
         채용공고_목록_생성("title", content, team);
 
-        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.CONTENT, content, 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(CONTENT, content, pageable);
 
         for (Recruitment recruitment : findRecruitmentList) {
             assertThat(recruitment.getContent()).contains(content);
@@ -278,7 +284,9 @@ class DomainRecruitmentServiceTest {
     void 채용공고_리스트_조회_성공__팀이_일치하는_경우() {
         채용공고_목록_생성("title", "content", team);
 
-        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TEAM, team.getName(), 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(TEAM, team.getName(), pageable);
 
         for (Recruitment recruitment : findRecruitmentList) {
             assertThat(recruitment.getTeam()).isEqualTo(team);
@@ -289,7 +297,9 @@ class DomainRecruitmentServiceTest {
     void 채용공고_리스트_조회_성공__페이징_처리() {
         채용공고_목록_생성("title", "content", team);
 
-        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(RecruitmentSearchType.TITLE, "title", 0);
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(TITLE, "title", pageable);
 
         assertThat(findRecruitmentList.getTotalPages()).isEqualTo(2);
     }
