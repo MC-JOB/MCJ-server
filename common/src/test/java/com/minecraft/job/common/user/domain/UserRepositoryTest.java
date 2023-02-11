@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Optional;
+
 import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -19,11 +21,11 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    private User user;
+
     @Test
     void 유저_생성_성공() {
-        User user = User.create("email", "password", "nickname", "interest", 10L);
-
-        user = userRepository.save(user);
+        유저_생성("email", "password", "nickname", "interest", 10L);
 
         User findUser = userRepository.findById(user.getId()).orElseThrow();
 
@@ -101,9 +103,34 @@ class UserRepositoryTest {
         assertThat(findUserList.getTotalPages()).isEqualTo(2);
     }
 
+    @Test
+    void 유저_정보_조회_성공__아이디가_일치하는_경우() {
+        유저_생성("email", "password", "nickname", "interest", 10L);
+
+        Optional<User> findUser = userRepository.findById(user.getId());
+
+        assertThat(findUser).isNotNull();
+        assertThat(findUser.get().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 유저_정보_조회_성공__아이디가_일치하지_않는_경우() {
+        유저_생성("email", "password", "nickname", "interest", 10L);
+
+        Optional<User> findUser = userRepository.findById(2L);
+
+        assertThat(findUser).isEmpty();
+    }
+
+    private void 유저_생성(String email, String password, String nickName, String interest, Long age) {
+        user = User.create(email, password, nickName, interest, age);
+        userRepository.save(user);
+    }
+
+
     private void 유저_목록_생성(String email, String password, String nickname, String interest, Long age) {
         for (int i = 1; i <= 20; i++) {
-            User user = User.create(email + i, password + i, nickname, interest, age);
+            user = User.create(email + i, password + i, nickname, interest, age);
             userRepository.save(user);
         }
     }
