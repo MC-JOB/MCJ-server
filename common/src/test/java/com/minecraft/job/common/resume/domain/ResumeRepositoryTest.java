@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Optional;
+
 import static com.minecraft.job.common.resume.domain.ResumeStatue.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -28,6 +30,8 @@ class ResumeRepositoryTest {
 
     private User user;
 
+    private Resume resume;
+
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
@@ -35,9 +39,7 @@ class ResumeRepositoryTest {
 
     @Test
     void 이력서_생성_성공() {
-        Resume resume = Resume.create("title", "content", "trainingHistory", user);
-
-        resume = resumeRepository.save(resume);
+        이력서_생성("title", "content", "trainingHistory", user);
 
         Resume findResume = resumeRepository.findById(resume.getId()).orElseThrow();
 
@@ -128,6 +130,29 @@ class ResumeRepositoryTest {
         Page<Resume> findResumeList = resumeRepository.findAll(spec, pageRequest);
 
         assertThat(findResumeList.getTotalPages()).isEqualTo(2);
+    }
+
+    @Test
+    void 이력서_조회_성공_유저가_일치하는_경우() {
+        이력서_생성("title", "content", "trainingHistory", user);
+
+        Optional<Resume> findResume = resumeRepository.findByUser_id(user.getId());
+
+        assertThat(findResume.get().getUser().getId()).isNotNull();
+        assertThat(findResume.get().getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 이력서_조회_성공_유저가_일치하지_않는_경우() {
+        이력서_생성("title", "content", "trainingHistory", user);
+
+        Optional<Resume> findResume = resumeRepository.findByUser_id(3L);
+
+        assertThat(findResume).isEmpty();
+    }
+
+    private void 이력서_생성(String title, String content, String trainingHistory, User user) {
+        resume = resumeRepository.save(Resume.create("title", "content", "trainingHistory", user));
     }
 
     private void 이력서_목록_생성(int count, String title, String content, String trainingHistory, User user) {
