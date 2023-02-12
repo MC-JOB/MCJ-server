@@ -4,7 +4,6 @@ import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.fixture.EmailAuthFixture;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
-import com.minecraft.job.common.team.domain.TeamSearchType;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -181,6 +180,15 @@ class DomainTeamServiceTest {
         for (Team team : findTeamList) {
             assertThat(team.getUser()).isEqualTo(user);
         }
+    }
+
+    @Test
+    void 팀_조회_성공() {
+        teamService.create(user.getId(), "name", "description", 5L);
+
+        Team findTeam = teamService.getTeam(user.getId());
+
+        assertThat(findTeam.getUser().getId()).isEqualTo(user.getId());
     }
 
     @Test
