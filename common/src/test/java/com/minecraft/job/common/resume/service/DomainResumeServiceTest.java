@@ -14,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static com.minecraft.job.common.resume.domain.ResumeSearchType.*;
 import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -203,9 +201,9 @@ class DomainResumeServiceTest {
     void 이력서_조회_성공() {
         이력서_생성();
 
-        Optional<Resume> findResume = resumeRepository.findByUser_id(user.getId());
+        Resume findResume = resumeService.getResume(user.getId());
 
-        assertThat(findResume.get().getUser().getId()).isEqualTo(user.getId());
+        assertThat(findResume.getUser().getId()).isEqualTo(user.getId());
     }
 
     private void 이력서_생성() {
