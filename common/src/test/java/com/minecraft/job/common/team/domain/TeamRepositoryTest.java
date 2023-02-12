@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Optional;
+
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -28,6 +30,8 @@ class TeamRepositoryTest {
 
     private User user;
 
+    private Team team;
+
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
@@ -35,9 +39,7 @@ class TeamRepositoryTest {
 
     @Test
     void 팀_생성_성공() {
-        Team team = Team.create("name", "description", 5L, user);
-
-        team = teamRepository.save(team);
+        팀_생성("name", "description", 5L, user);
 
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
@@ -112,6 +114,29 @@ class TeamRepositoryTest {
         Page<Team> findTeamList = teamRepository.findAll(spec, pageRequest);
 
         assertThat(findTeamList.getTotalPages()).isEqualTo(2);
+    }
+
+    @Test
+    void 팀_조회_성공__유저_아이디가_일치하는_경우() {
+        팀_생성("name", "description", 5L, user);
+
+        Optional<Team> findTeam = teamRepository.findByUser_Id(user.getId());
+
+        assertThat(findTeam).isNotNull();
+        assertThat(findTeam.get().getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 팀_조회_실패__유저_아이디가_일치하지_않는_경우() {
+        팀_생성("name", "description", 5L, user);
+
+        Optional<Team> findTeam = teamRepository.findByUser_Id(2L);
+
+        assertThat(findTeam).isEmpty();
+    }
+
+    private void 팀_생성(String name, String description, Long memberNum, User user) {
+        team = teamRepository.save(Team.create(name, description, memberNum, user));
     }
 
     private void 팀_목록_생성(String name, String description, Long memberNum, User user) {
