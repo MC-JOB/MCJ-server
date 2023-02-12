@@ -82,7 +82,12 @@ public class DomainResumeService implements ResumeService {
 
     @Override
     public Resume getResume(Long userId) {
-        return resumeRepository.findByUser_id(userId).orElseThrow();
+        Resume resume = resumeRepository.findByUser_id(userId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        require(resume.ofUser(user));
+
+        return resume;
     }
 
     private Specification<Resume> getResumeSpecification(ResumeSearchType searchType, String searchName) {
