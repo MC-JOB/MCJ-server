@@ -18,4 +18,6 @@ public interface TeamService {
     void activate(Long teamId, Long userId);
 
     Page<Team> getTeams(TeamSearchType searchType, String searchName, Pageable pageable);
+
+    Team getTeam(Long userId);
 }
