@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -50,7 +52,6 @@ class RecruitmentProcessRepositoryTest {
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
-
         teamUser = userRepository.save(UserFixture.getAntherUser("teamUser"));
         team = teamRepository.save(TeamFixture.create(teamUser));
         recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
@@ -60,7 +61,6 @@ class RecruitmentProcessRepositoryTest {
     @Test
     void 채용과정_생성_성공() {
         RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user, resume);
-
         recruitmentProcess = recruitmentProcessRepository.save(recruitmentProcess);
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
@@ -70,5 +70,26 @@ class RecruitmentProcessRepositoryTest {
         assertThat(findRecruitmentProcess.getRecruitment()).isEqualTo(recruitment);
         assertThat(findRecruitmentProcess.getStatus()).isEqualTo(WAITING);
         assertThat(findRecruitmentProcess.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void 채용과정_조회_성공__유저_아이디가_일치하는_경우() {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user, resume);
+        recruitmentProcessRepository.save(recruitmentProcess);
+
+        Optional<RecruitmentProcess> findRecruitmentProcess = recruitmentProcessRepository.findByUser_Id(user.getId());
+
+        assertThat(findRecruitmentProcess).isNotNull();
+        assertThat(findRecruitmentProcess.get().getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 채용과정_조회_실패__유저_아이디가_일치하지_않는_경우() {
+        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user, resume);
+        recruitmentProcessRepository.save(recruitmentProcess);
+
+        Optional<RecruitmentProcess> findRecruitmentProcess = recruitmentProcessRepository.findByUser_Id(2L);
+
+        assertThat(findRecruitmentProcess).isEmpty();
     }
 }
