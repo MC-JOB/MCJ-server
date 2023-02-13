@@ -230,4 +230,13 @@ public class DomainRecruitmentProcessServiceTest {
                 () -> recruitmentProcessService.fail(recruitmentProcess.getId(), team.getId(), fakeLeader.getId())
         );
     }
+
+    @Test
+    void 채용과정_조회_성공() {
+        recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
+
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.getRecruitmentProcess(user.getId());
+
+        assertThat(recruitmentProcess.getUser().getId()).isEqualTo(user.getId());
+    }
 }

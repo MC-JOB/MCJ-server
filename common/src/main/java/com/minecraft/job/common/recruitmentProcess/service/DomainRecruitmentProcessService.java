@@ -100,4 +100,14 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
 
         eventPublisher.publishEvent(new RecruitmentProcessFailEvent(recruitmentProcess.getId()));
     }
+
+    @Override
+    public RecruitmentProcess getRecruitmentProcess(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.findByUser_Id(userId).orElseThrow();
+
+        require(recruitmentProcess.ofUser(user));
+
+        return recruitmentProcess;
+    }
 }
