@@ -4,7 +4,6 @@ import com.minecraft.job.common.fixture.TeamFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
-import com.minecraft.job.common.recruitment.domain.RecruitmentSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -302,6 +301,15 @@ class DomainRecruitmentServiceTest {
         Page<Recruitment> findRecruitmentList = recruitmentService.getRecruitments(TITLE, "title", pageable);
 
         assertThat(findRecruitmentList.getTotalPages()).isEqualTo(2);
+    }
+
+    @Test
+    void 채용공고_조회_성공() {
+        recruitmentService.create(user.getId(), team.getId(), "title", "content");
+
+        Recruitment findRecruitment = recruitmentRepository.findByTeam_Id(team.getId()).orElseThrow();
+
+        assertThat(findRecruitment.getTeam().getId()).isEqualTo(team.getId());
     }
 
     private void 채용공고_목록_생성(String title, String content, Team team) {

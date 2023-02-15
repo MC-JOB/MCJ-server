@@ -10,7 +10,6 @@ import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -109,6 +108,16 @@ public class DomainRecruitmentService implements RecruitmentService {
         Specification<Recruitment> spec = getRecruitmentSpecification(searchType, searchName);
 
         return recruitmentRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Recruitment getRecruitment(Long teamId) {
+        Recruitment recruitment = recruitmentRepository.findByTeam_Id(teamId).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+
+        require(recruitment.ofTeam(team));
+
+        return recruitment;
     }
 
     private Specification<Recruitment> getRecruitmentSpecification(RecruitmentSearchType searchType, String searchName) {
