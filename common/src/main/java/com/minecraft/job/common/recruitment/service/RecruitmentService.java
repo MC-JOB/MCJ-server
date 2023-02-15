@@ -22,4 +22,6 @@ public interface RecruitmentService {
     void closedAtExtend(Long recruitmentId, Long userId, long teamId, LocalDateTime closedAt);
 
     Page<Recruitment> getRecruitments(RecruitmentSearchType searchType, String searchName, Pageable pageable);
+
+    Recruitment getRecruitment(Long teamId);
 }
