@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Optional;
+
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -119,6 +121,29 @@ class RecruitmentRepositoryTest {
         Page<Recruitment> findRecruitmentList = recruitmentRepository.findAll(spec, pageRequest);
 
         assertThat(findRecruitmentList.getTotalPages()).isEqualTo(2);
+    }
+
+    @Test
+    void 채용공고_조회_성공__팀_아이디가_일치하는_경우() {
+        Recruitment recruitment = Recruitment.create("title", "content", team);
+
+        recruitmentRepository.save(recruitment);
+
+        Optional<Recruitment> findRecruitment = recruitmentRepository.findByTeam_Id(team.getId());
+
+        assertThat(findRecruitment).isNotNull();
+        assertThat(findRecruitment.get().getTeam().getId()).isEqualTo(team.getId());
+    }
+
+    @Test
+    void 채용공고_조회_실패__팀_아이디가_일치하지_않는_경우() {
+        Recruitment recruitment = Recruitment.create("title", "content", team);
+
+        recruitmentRepository.save(recruitment);
+
+        Optional<Recruitment> findRecruitment = recruitmentRepository.findByTeam_Id(2L);
+
+        assertThat(findRecruitment).isEmpty();
     }
 
     private void 채용공고_목록_생성(String title, String content, Team team) {
