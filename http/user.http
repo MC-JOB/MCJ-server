@@ -3,11 +3,11 @@ POST http://localhost:8080/user
 Content-Type: application/json
 
 {
-  "email": "",
-  "password": "",
-  "nickname": "",
-  "interest": "",
-  "age": ""
+  "email": "test@test.com",
+  "password": "test",
+  "nickname": "test",
+  "interest": "test",
+  "age": "18"
 }
 
 ###ChagneInformation
@@ -46,3 +46,12 @@ Content-Type: application/json
 {
   "userId": ""
 }
+
+###GetInformation
+GET http://localhost:8080/user/get-information
+Content-Type: application/json
+
+{
+  "userId": "1"
+}
+

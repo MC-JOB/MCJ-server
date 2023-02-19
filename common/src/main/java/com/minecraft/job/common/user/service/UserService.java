@@ -22,6 +22,6 @@ public interface UserService {
 
     Page<User> getUsers(UserSearchType searchType, String searchName, Pageable pageable);
 
-    User getUser(Long userId);
+    User getInformation(Long userId);
 
 }

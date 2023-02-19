@@ -153,10 +153,10 @@ class DomainUserServiceTest {
     }
 
     @Test
-    void 유저_조회_성공() {
+    void 유저_정보_조회_성공() {
         유저_생성();
 
-        User findUser = userRepository.findById(user.getId()).orElseThrow();
+        User findUser = userService.getInformation(user.getId());
 
         assertThat(findUser.getId()).isEqualTo(user.getId());
     }

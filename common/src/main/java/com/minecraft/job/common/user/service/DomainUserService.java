@@ -82,7 +82,7 @@ public class DomainUserService implements UserService {
     }
 
     @Override
-    public User getUser(Long userId) {
+    public User getInformation(Long userId) {
         return userRepository.findById(userId).orElseThrow();
     }
 
