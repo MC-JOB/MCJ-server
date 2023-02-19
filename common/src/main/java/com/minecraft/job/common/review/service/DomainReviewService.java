@@ -1,14 +1,15 @@
 package com.minecraft.job.common.review.service;
 
-import com.minecraft.job.common.review.domain.Review;
-import com.minecraft.job.common.review.domain.ReviewCreateEvent;
-import com.minecraft.job.common.review.domain.ReviewRepository;
+import com.minecraft.job.common.review.domain.*;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -63,5 +64,27 @@ public class DomainReviewService implements ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow();
 
         review.inactivate();
+    }
+
+    @Override
+    public Page<Review> getMyReviews(ReviewSearchType searchType, String searchName, Pageable pageable, User user) {
+
+        Specification<Review> spec = getReviewSpecification(searchType, searchName)
+                .and(ReviewSpecification.equalUser(user));
+
+        return reviewRepository.findAll(spec, pageable);
+    }
+
+    private Specification<Review> getReviewSpecification(ReviewSearchType searchType, String searchName) {
+        Specification<Review> spec = null;
+
+        if (searchType == ReviewSearchType.CONTENT) {
+            spec = Specification.where(ReviewSpecification.likeContent(searchName));
+        }
+        if (searchType == ReviewSearchType.TEAM) {
+            Team team = teamRepository.findByName(searchName);
+            spec = Specification.where(ReviewSpecification.equalTeam(team));
+        }
+        return spec;
     }
 }

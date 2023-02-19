@@ -5,6 +5,7 @@ import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.review.domain.Review;
 import com.minecraft.job.common.review.domain.ReviewCreateEvent;
 import com.minecraft.job.common.review.domain.ReviewRepository;
+import com.minecraft.job.common.review.domain.ReviewSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -13,11 +14,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import javax.transaction.Transactional;
 
+import static com.minecraft.job.common.review.domain.ReviewSearchType.*;
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,5 +122,20 @@ class DomainReviewServiceTest {
         Review findReview = reviewRepository.findById(review.getId()).orElseThrow();
 
         assertThat(findReview.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @Test
+    void 리뷰_리스트_조회_성공() {
+        Review review = reviewService.create(user.getId(), team.getId(), "content", 3L);
+
+        reviewRepository.findById(review.getId()).orElseThrow();
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Review> myReviewList = reviewService.getMyReviews(CONTENT, "content", pageable, user);
+
+        for (Review findReview : myReviewList) {
+            assertThat(findReview.getUser()).isEqualTo(user);
+        }
     }
 }
