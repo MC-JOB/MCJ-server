@@ -1,6 +1,10 @@
 package com.minecraft.job.common.review.service;
 
 import com.minecraft.job.common.review.domain.Review;
+import com.minecraft.job.common.review.domain.ReviewSearchType;
+import com.minecraft.job.common.user.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReviewService {
 
@@ -11,4 +15,6 @@ public interface ReviewService {
     void active(Long reviewId);
 
     void inactive(Long reviewId);
+
+    Page<Review> getMyReviews(ReviewSearchType searchType, String searchName, Pageable pageable, User user);
 }
