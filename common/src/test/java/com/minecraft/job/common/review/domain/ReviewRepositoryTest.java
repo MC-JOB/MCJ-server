@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,25 +79,62 @@ class ReviewRepositoryTest {
     }
 
     @Test
-    void 리뷰_조회_성공_유저__아이디가_일치하는_경우() {
+    void 리뷰_리스트_조회_성공__유저_아이디가_일치하는_경우() {
         Review review = Review.create("content", 3L, user, team);
 
         reviewRepository.save(review);
 
-        Optional<Review> findReview = reviewRepository.findByUser_Id(user.getId());
+        Specification<Review> spec = Specification.where(ReviewSpecification.equalUser(user));
 
-        assertThat(findReview).isNotNull();
-        assertThat(findReview.get().getUser().getId()).isEqualTo(user.getId());
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Review> findReviewList = reviewRepository.findAll(spec, pageRequest);
+
+        assertThat(findReviewList.getNumberOfElements()).isEqualTo(1);
+        for (Review findReview : findReviewList) {
+            assertThat(findReview.getUser()).isEqualTo(user);
+        }
     }
 
     @Test
-    void 리뷰_조회_실패__유저_아이디가_일치하지_않는_경우() {
+    void 리뷰_리스트_조회_성공__아이디가_일치하고_내용이_포함되는_경우() {
+        String content = "content";
+
+        Review review = Review.create(content, 3L, user, team);
+
+        reviewRepository.save(review);
+
+        Specification<Review> spec = Specification.where(ReviewSpecification.equalUser(user))
+                .and(ReviewSpecification.likeContent(content));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Review> findReviewList = reviewRepository.findAll(spec, pageRequest);
+
+        assertThat(findReviewList.getNumberOfElements()).isEqualTo(1);
+        for (Review findReview : findReviewList) {
+            assertThat(findReview.getUser()).isEqualTo(user);
+            assertThat(findReview.getContent()).isEqualTo(content);
+        }
+    }
+
+    @Test
+    void 리뷰_리스트_조회_성공__아이디와_팀이_일치하는_경우() {
         Review review = Review.create("content", 3L, user, team);
 
         reviewRepository.save(review);
 
-        Optional<Review> findReview = reviewRepository.findByUser_Id(2L);
+        Specification<Review> spec = Specification.where(ReviewSpecification.equalUser(user))
+                .and(ReviewSpecification.equalTeam(team));
 
-        assertThat(findReview).isEmpty();
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        Page<Review> findReviewList = reviewRepository.findAll(spec, pageRequest);
+
+        assertThat(findReviewList.getNumberOfElements()).isEqualTo(1);
+        for (Review findReview : findReviewList) {
+            assertThat(findReview.getUser()).isEqualTo(user);
+            assertThat(findReview.getTeam()).isEqualTo(team);
+        }
     }
 }
