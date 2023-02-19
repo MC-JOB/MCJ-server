@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,5 +74,28 @@ class ReviewRepositoryTest {
 
         assertThat(findReviews).containsExactly(review1, review2);
         assertThat(findReviews).doesNotContain(review3);
+    }
+
+    @Test
+    void 리뷰_조회_성공_유저__아이디가_일치하는_경우() {
+        Review review = Review.create("content", 3L, user, team);
+
+        reviewRepository.save(review);
+
+        Optional<Review> findReview = reviewRepository.findByUser_Id(user.getId());
+
+        assertThat(findReview).isNotNull();
+        assertThat(findReview.get().getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 리뷰_조회_실패__유저_아이디가_일치하지_않는_경우() {
+        Review review = Review.create("content", 3L, user, team);
+
+        reviewRepository.save(review);
+
+        Optional<Review> findReview = reviewRepository.findByUser_Id(2L);
+
+        assertThat(findReview).isEmpty();
     }
 }
