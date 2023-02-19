@@ -2,6 +2,7 @@ package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.UserActivateDto.UserActivateRequest;
 import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
+import com.minecraft.job.api.controller.dto.UserGetInformationDto.UserGetInformationRequest;
 import com.minecraft.job.api.controller.dto.UserInactivateDto.UserInactivateRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.fixture.UserFixture;
@@ -21,6 +22,7 @@ import static com.minecraft.job.common.user.domain.UserStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -134,5 +136,22 @@ class UserApiTest extends ApiTest {
         User findUser = userRepository.findById(user.getId()).orElseThrow();
 
         assertThat(findUser.getStatus()).isEqualTo(INACTIVATED);
+    }
+
+    @Test
+    void 유저_정보_조회_성공() throws Exception {
+        UserGetInformationRequest req = new UserGetInformationRequest(user.getId());
+
+        mockMvc.perform(get("/user/get-information")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andDo(document("user/get-information",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+        User findUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertThat(findUser).isEqualTo(user);
     }
 }

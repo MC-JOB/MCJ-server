@@ -6,14 +6,12 @@ import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePass
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateData;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateResponse;
+import com.minecraft.job.api.controller.dto.UserGetInformationDto;
 import com.minecraft.job.api.controller.dto.UserInactivateDto.UserInactivateRequest;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -57,5 +55,14 @@ public class UserApi {
             @RequestBody UserInactivateRequest req
     ) {
         userService.inactivate(req.userId());
+    }
+
+    @GetMapping("/get-information")
+    public User getInformation(
+            @RequestBody UserGetInformationDto.UserGetInformationRequest req
+    ) {
+        User user = userService.getInformation(req.userId());
+
+        return user;
     }
 }
