@@ -20,6 +20,4 @@ public interface ResumeService {
     void delete(Long resumeId, Long userId);
 
     Page<Resume> getResumes(ResumeSearchType searchType, String searchName, Pageable pageable);
-
-    Resume getResume(Long userId);
 }

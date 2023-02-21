@@ -80,16 +80,6 @@ public class DomainResumeService implements ResumeService {
         return resumeRepository.findAll(spec, pageable);
     }
 
-    @Override
-    public Resume getResume(Long userId) {
-        Resume resume = resumeRepository.findByUser_id(userId).orElseThrow();
-        User user = userRepository.findById(userId).orElseThrow();
-
-        require(resume.ofUser(user));
-
-        return resume;
-    }
-
     private Specification<Resume> getResumeSpecification(ResumeSearchType searchType, String searchName) {
         Specification<Resume> spec = null;
 
