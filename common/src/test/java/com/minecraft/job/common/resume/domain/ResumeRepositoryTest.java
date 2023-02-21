@@ -132,6 +132,25 @@ class ResumeRepositoryTest {
         assertThat(findResumeList.getTotalPages()).isEqualTo(2);
     }
 
+    @Test
+    void 이력서_조회_성공_유저가_일치하는_경우() {
+        이력서_생성("title", "content", "trainingHistory", user);
+
+        Optional<Resume> findResume = resumeRepository.findByUser_id(user.getId());
+
+        assertThat(findResume.get().getUser().getId()).isNotNull();
+        assertThat(findResume.get().getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 이력서_조회_성공_유저가_일치하지_않는_경우() {
+        이력서_생성("title", "content", "trainingHistory", user);
+
+        Optional<Resume> findResume = resumeRepository.findByUser_id(3L);
+
+        assertThat(findResume).isEmpty();
+    }
+
     private void 이력서_생성(String title, String content, String trainingHistory, User user) {
         resume = resumeRepository.save(Resume.create("title", "content", "trainingHistory", user));
     }
