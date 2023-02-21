@@ -197,6 +197,15 @@ class DomainResumeServiceTest {
         assertThat(findResumeList.getTotalPages()).isEqualTo(2);
     }
 
+    @Test
+    void 이력서_조회_성공() {
+        이력서_생성();
+
+        Resume findResume = resumeService.getResume(user.getId());
+
+        assertThat(findResume.getUser().getId()).isEqualTo(user.getId());
+    }
+
     private void 이력서_생성() {
         resume = resumeRepository.save(ResumeFixture.create(user));
     }
