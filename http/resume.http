@@ -47,3 +47,15 @@ Content-Type: application/json
   "resumeId": "",
   "userId": ""
 }
+
+###GetMyResumes
+GET http://localhost:8080/resume/getMyResumes
+Content-Type: application/json
+
+{
+  "searchType" : "",
+  "searchName" : "",
+  "page" : 0,
+  "size" : 10,
+  "userNickName": ""
+}
