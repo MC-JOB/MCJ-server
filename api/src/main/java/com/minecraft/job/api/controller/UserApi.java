@@ -13,6 +13,8 @@ import com.minecraft.job.common.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import static com.minecraft.job.api.controller.dto.UserGetInformationDto.*;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -58,11 +60,11 @@ public class UserApi {
     }
 
     @GetMapping("/get-information")
-    public User getInformation(
-            @RequestBody UserGetInformationDto.UserGetInformationRequest req
+    public UserGetInformationResponse getInformation(
+            @RequestBody UserGetInformationRequest req
     ) {
         User user = userService.getInformation(req.userId());
 
-        return user;
+        return UserGetInformationResponse.getInformation(UserGetInformationData.getInformationData(user));
     }
 }
