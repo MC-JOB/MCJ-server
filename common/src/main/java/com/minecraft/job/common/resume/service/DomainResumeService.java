@@ -90,9 +90,20 @@ public class DomainResumeService implements ResumeService {
         return resume;
     }
 
+    @Override
+    public Page<Resume> getMyResumes(ResumeSearchType searchType, String searchName, Pageable pageable, String userNickName) {
+        User user = userRepository.findByNickname(userNickName);
+        Specification<Resume> spec = getResumeSpecification(searchType, searchName).and(ResumeSpecification.equalUser(user));
+
+        return resumeRepository.findAll(spec, pageable);
+    }
+
     private Specification<Resume> getResumeSpecification(ResumeSearchType searchType, String searchName) {
         Specification<Resume> spec = null;
 
+        if(searchType == ResumeSearchType.ALL) {
+            spec = Specification.where(null);
+        }
         if (searchType == ResumeSearchType.TITLE) {
             spec = Specification.where(ResumeSpecification.likeTitle(searchName));
         }

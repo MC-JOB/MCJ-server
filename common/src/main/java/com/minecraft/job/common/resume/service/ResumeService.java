@@ -21,5 +21,7 @@ public interface ResumeService {
 
     Page<Resume> getResumes(ResumeSearchType searchType, String searchName, Pageable pageable);
 
+    Page<Resume> getMyResumes(ResumeSearchType searchType, String searchName, Pageable pageable, String userNickName);
+
     Resume getResume(Long userId);
 }

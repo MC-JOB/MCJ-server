@@ -5,15 +5,17 @@ import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateData;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateResponse;
 import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
+import com.minecraft.job.api.controller.dto.ResumeGetResumesDto.ResumeGetResumesResponse;
 import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.service.ResumeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
+
+import static com.minecraft.job.api.controller.dto.ResumeGetResumesDto.*;
 
 @RestController
 @RequestMapping("/resume")
@@ -51,5 +53,13 @@ public class ResumeApi {
     public void delete(@RequestBody ResumeDeleteRequest req) {
 
         resumeService.delete(req.resumeId(), req.userId());
+    }
+
+    @GetMapping("/getMyResumes")
+    public ResumeGetResumesResponse getMyResumes(@RequestBody ResumeGetResumesRequest req) {
+        PageRequest pageable = PageRequest.of(req.page(), req.size());
+        Page<Resume> resumes = resumeService.getMyResumes(req.searchType(), req.searchName(), pageable, req.userNickName());
+
+        return ResumeGetResumesResponse.getResumes(ResumeGetResumesData.getResumes(resumes));
     }
 }
