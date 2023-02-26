@@ -184,7 +184,7 @@ class ResumeApiTest extends ApiTest {
                         preprocessResponse(prettyPrint())
                 ));
 
-        Resume findResume = resumeRepository.findById(user.getId()).orElseThrow();
+        Resume findResume = resumeRepository.findByUser_id(user.getId()).orElseThrow();
 
         assertThat(findResume).isNotNull();
     }
