@@ -107,7 +107,7 @@ public class DomainTeamService implements TeamService {
             spec = Specification.where(TeamSpecification.likeDescription(searchName));
         }
         if (searchType == TeamSearchType.USER) {
-            User user = userRepository.findByNickname(searchName);
+            User user = userRepository.findById(searchName);
             spec = Specification.where(TeamSpecification.equalUser(user));
         }
         return spec;

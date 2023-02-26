@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Optional;
 
-import static com.minecraft.job.common.resume.domain.ResumeStatue.CREATED;
+import static com.minecraft.job.common.resume.domain.ResumeStatus.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 

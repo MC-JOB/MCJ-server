@@ -2,7 +2,6 @@ package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.ResumeActivateDto.ResumeActivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
-import com.minecraft.job.api.controller.dto.ResumeGetResumesDto;
 import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.api.fixture.ResumeFixture;
@@ -10,8 +9,6 @@ import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
-import com.minecraft.job.common.resume.domain.ResumeSearchType;
-import com.minecraft.job.common.resume.domain.ResumeSpecification;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import static com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
-import static com.minecraft.job.api.controller.dto.ResumeGetResumesDto.*;
+import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.ResumeGetListDto.*;
 import static com.minecraft.job.common.resume.domain.ResumeSearchType.*;
-import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
+import static com.minecraft.job.common.resume.domain.ResumeStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -155,7 +153,7 @@ class ResumeApiTest extends ApiTest {
 
     @Test
     void 이력서_목록_조회_성공() throws Exception {
-        ResumeGetResumesRequest req = new ResumeGetResumesRequest(ALL, "", 0, 10, user.getNickname());
+        ResumeGetListRequest req = new ResumeGetListRequest(ALL, "", 0, 10, user.getId());
 
         mockMvc.perform(get("/resume/getMyResumes")
                         .contentType(APPLICATION_JSON)
@@ -171,5 +169,23 @@ class ResumeApiTest extends ApiTest {
         Page<Resume> findResumes = resumeRepository.findAll(spec, pageable);
 
         assertThat(findResumes).isNotNull();
+    }
+
+    @Test
+    void 이력서_상세_조회_성공() throws Exception {
+        ResumeGetDetailRequest req = new ResumeGetDetailRequest(user.getId());
+
+        mockMvc.perform(get("/resume/getMyResume")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("resume/getMyResume",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        Resume findResume = resumeRepository.findById(1L).orElseThrow();
+
+        assertThat(findResume).isNotNull();
     }
 }

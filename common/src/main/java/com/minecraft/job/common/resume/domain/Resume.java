@@ -10,7 +10,7 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
+import static com.minecraft.job.common.resume.domain.ResumeStatus.*;
 import static com.minecraft.job.common.support.Preconditions.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -36,7 +36,7 @@ public class Resume {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private ResumeStatue status = CREATED;
+    private ResumeStatus status = CREATED;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
