@@ -3,10 +3,10 @@ POST http://localhost:8080/resume
 Content-Type: application/json
 
 {
-  "userId": "",
-  "title": "",
-  "content": "",
-  "trainingHistory": ""
+  "userId": "1",
+  "title": "test",
+  "content": "test",
+  "trainingHistory": "test"
 }
 
 ###Update
@@ -53,9 +53,17 @@ GET http://localhost:8080/resume/getMyResumes
 Content-Type: application/json
 
 {
-  "searchType" : "",
+  "searchType" : "ALL",
   "searchName" : "",
   "page" : 0,
   "size" : 10,
-  "userNickName": ""
+  "userId": "1"
+}
+
+###GetMyResume
+GET http://localhost:8080/resume/getMyResume
+Content-Type: application/json
+
+{
+  "userId": "1"
 }

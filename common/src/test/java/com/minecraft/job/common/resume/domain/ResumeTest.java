@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
+import static com.minecraft.job.common.resume.domain.ResumeStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
@@ -111,8 +111,8 @@ class ResumeTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ResumeStatue.class, names = {"INACTIVATED", "DELETED"}, mode = INCLUDE)
-    void 이력서_비활성화_실패__비활성화_가능한_상태가_아님(ResumeStatue statue) {
+    @EnumSource(value = ResumeStatus.class, names = {"INACTIVATED", "DELETED"}, mode = INCLUDE)
+    void 이력서_비활성화_실패__비활성화_가능한_상태가_아님(ResumeStatus statue) {
         Resume resume = ResumeFixture.create(user);
 
         resume.setStatus(statue);
@@ -130,8 +130,8 @@ class ResumeTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ResumeStatue.class, names = {"ACTIVATED", "DELETED"}, mode = INCLUDE)
-    void 이력서_활성화_실패__활성화_가능한_상태가_아님(ResumeStatue statue) {
+    @EnumSource(value = ResumeStatus.class, names = {"ACTIVATED", "DELETED"}, mode = INCLUDE)
+    void 이력서_활성화_실패__활성화_가능한_상태가_아님(ResumeStatus statue) {
         Resume resume = ResumeFixture.create(user);
 
         resume.setStatus(statue);

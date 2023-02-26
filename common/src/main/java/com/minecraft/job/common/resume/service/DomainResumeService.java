@@ -91,8 +91,8 @@ public class DomainResumeService implements ResumeService {
     }
 
     @Override
-    public Page<Resume> getMyResumes(ResumeSearchType searchType, String searchName, Pageable pageable, String userNickName) {
-        User user = userRepository.findByNickname(userNickName);
+    public Page<Resume> getMyResumes(ResumeSearchType searchType, String searchName, Pageable pageable, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
         Specification<Resume> spec = getResumeSpecification(searchType, searchName).and(ResumeSpecification.equalUser(user));
 
         return resumeRepository.findAll(spec, pageable);

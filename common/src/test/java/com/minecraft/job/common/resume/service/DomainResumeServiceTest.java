@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.minecraft.job.common.resume.domain.ResumeSearchType.*;
-import static com.minecraft.job.common.resume.domain.ResumeStatue.*;
+import static com.minecraft.job.common.resume.domain.ResumeStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 

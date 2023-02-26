@@ -5,7 +5,7 @@ import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateData;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
 import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateResponse;
 import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
-import com.minecraft.job.api.controller.dto.ResumeGetResumesDto.ResumeGetResumesResponse;
+import com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListResponse;
 import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.common.resume.domain.Resume;
@@ -15,7 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.ResumeGetResumesDto.*;
+import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.ResumeGetListDto.*;
 
 @RestController
 @RequestMapping("/resume")
@@ -56,10 +57,17 @@ public class ResumeApi {
     }
 
     @GetMapping("/getMyResumes")
-    public ResumeGetResumesResponse getMyResumes(@RequestBody ResumeGetResumesRequest req) {
+    public ResumeGetListResponse getMyResumes(@RequestBody ResumeGetListRequest req) {
         PageRequest pageable = PageRequest.of(req.page(), req.size());
-        Page<Resume> resumes = resumeService.getMyResumes(req.searchType(), req.searchName(), pageable, req.userNickName());
+        Page<Resume> resumes = resumeService.getMyResumes(req.searchType(), req.searchName(), pageable, req.userId());
 
-        return ResumeGetResumesResponse.getResumes(ResumeGetResumesData.getResumes(resumes));
+        return ResumeGetListResponse.getResumes(ResumeGetListData.getResumes(resumes));
+    }
+
+    @GetMapping("/getMyResume")
+    public ResumeGetDetailResponse getMyResumeDetail(@RequestBody ResumeGetDetailRequest req) {
+        Resume resume = resumeService.getResume(req.userId());
+        
+        return ResumeGetDetailResponse.getResume(ResumeGetDetailData.getResume(resume));
     }
 }
