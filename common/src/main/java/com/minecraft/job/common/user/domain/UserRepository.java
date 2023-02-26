@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Page<User> findAll(Specification spec, Pageable pageable);
 
-    User findById(String nickname);
+    User findByNickname(String nickname);
 
     Optional<User> findById(Long id);
 }

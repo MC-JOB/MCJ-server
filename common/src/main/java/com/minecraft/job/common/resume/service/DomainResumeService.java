@@ -114,7 +114,7 @@ public class DomainResumeService implements ResumeService {
             spec = Specification.where(ResumeSpecification.likeTrainingHistory(searchName));
         }
         if (searchType == ResumeSearchType.USER) {
-            User user = userRepository.findById(searchName);
+            User user = userRepository.findByNickname(searchName);
             spec = Specification.where(ResumeSpecification.equalUser(user));
         }
         return spec;
