@@ -13,4 +13,6 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Long>,
     Page<Recruitment> findAll(Specification spec, Pageable pageable);
 
     Optional<Recruitment> findByTeam_Id(Long teamId);
+
+    Recruitment findByTitle(String title);
 }

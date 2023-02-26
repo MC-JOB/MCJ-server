@@ -74,7 +74,7 @@ public class DomainResumeService implements ResumeService {
     }
 
     @Override
-    public Page<Resume> getResumes(ResumeSearchType searchType, String searchName, Pageable pageable) {
+    public Page<Resume> getResumeList(ResumeSearchType searchType, String searchName, Pageable pageable) {
         Specification<Resume> spec = getResumeSpecification(searchType, searchName);
 
         return resumeRepository.findAll(spec, pageable);
@@ -91,7 +91,7 @@ public class DomainResumeService implements ResumeService {
     }
 
     @Override
-    public Page<Resume> getMyResumes(ResumeSearchType searchType, String searchName, Pageable pageable, Long userId) {
+    public Page<Resume> getMyResumeList(ResumeSearchType searchType, String searchName, Pageable pageable, Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         Specification<Resume> spec = getResumeSpecification(searchType, searchName).and(ResumeSpecification.equalUser(user));
 

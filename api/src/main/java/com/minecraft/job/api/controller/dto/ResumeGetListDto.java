@@ -15,18 +15,18 @@ public class ResumeGetListDto {
     ) {
     }
 
-    public record ResumeGetListResponse(ResumeGetListData resumes) {
+    public record ResumeGetListResponse(ResumeGetListData resumeList) {
 
-        public static ResumeGetListResponse getResumes(ResumeGetListData resumeGetListData) {
+        public static ResumeGetListResponse getResumeList(ResumeGetListData resumeGetListData) {
             return new ResumeGetListResponse(resumeGetListData);
         }
     }
 
-    public record ResumeGetListData(Page<Resume> resumes) {
+    public record ResumeGetListData(Page<Resume> resumeList) {
 
-        public static ResumeGetListData getResumes(Page<Resume> resumes) {
+        public static ResumeGetListData getResumeList(Page<Resume> resumeList) {
 
-            return new ResumeGetListData(resumes);
+            return new ResumeGetListData(resumeList);
         }
     }
 }

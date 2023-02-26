@@ -56,12 +56,12 @@ public class ResumeApi {
         resumeService.delete(req.resumeId(), req.userId());
     }
 
-    @GetMapping("/getMyResumes")
-    public ResumeGetListResponse getMyResumes(@RequestBody ResumeGetListRequest req) {
+    @GetMapping("/getMyResumeList")
+    public ResumeGetListResponse getMyResumeList(@RequestBody ResumeGetListRequest req) {
         PageRequest pageable = PageRequest.of(req.page(), req.size());
-        Page<Resume> resumes = resumeService.getMyResumes(req.searchType(), req.searchName(), pageable, req.userId());
+        Page<Resume> resumeList = resumeService.getMyResumeList(req.searchType(), req.searchName(), pageable, req.userId());
 
-        return ResumeGetListResponse.getResumes(ResumeGetListData.getResumes(resumes));
+        return ResumeGetListResponse.getResumeList(ResumeGetListData.getResumeList(resumeList));
     }
 
     @GetMapping("/getMyResume")

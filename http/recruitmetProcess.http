@@ -3,9 +3,9 @@ POST http://localhost:8080/recruitment-process
 Content-Type: application/json
 
 {
-  "recruitmentId": "",
-  "userId": "",
-  "resumeId": ""
+  "recruitmentId": "1",
+  "userId": "2",
+  "resumeId": "1"
 }
 
 ###InProgress
@@ -46,4 +46,16 @@ Content-Type: application/json
   "recruitmentProcessId": "",
   "teamId": "",
   "leaderId": ""
+}
+
+###getMyRecruitmentProcessList
+GET http://localhost:8080/recruitment-process/getMyRecruitmentProcessList
+Content-Type: application/json
+
+{
+  "searchType" : "ALL",
+  "searchName" : "",
+  "page" : 0,
+  "size" : 10,
+  "userId": "2"
 }

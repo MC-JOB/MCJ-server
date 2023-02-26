@@ -5,8 +5,6 @@ import com.minecraft.job.common.resume.domain.ResumeSearchType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 public interface ResumeService {
 
     Resume create(Long userId, String title, String content, String trainingHistory);
@@ -19,9 +17,9 @@ public interface ResumeService {
 
     void delete(Long resumeId, Long userId);
 
-    Page<Resume> getResumes(ResumeSearchType searchType, String searchName, Pageable pageable);
+    Page<Resume> getResumeList(ResumeSearchType searchType, String searchName, Pageable pageable);
 
-    Page<Resume> getMyResumes(ResumeSearchType searchType, String searchName, Pageable pageable, Long userId);
+    Page<Resume> getMyResumeList(ResumeSearchType searchType, String searchName, Pageable pageable, Long userId);
 
     Resume getResume(Long userId);
 }

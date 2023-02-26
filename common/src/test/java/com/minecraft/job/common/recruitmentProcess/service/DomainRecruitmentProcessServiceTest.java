@@ -6,9 +6,7 @@ import com.minecraft.job.common.fixture.TeamFixture;
 import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessCreateEvent;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
+import com.minecraft.job.common.recruitmentProcess.domain.*;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
 import com.minecraft.job.common.team.domain.Team;
@@ -19,10 +17,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType.*;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -238,5 +240,20 @@ public class DomainRecruitmentProcessServiceTest {
         RecruitmentProcess recruitmentProcess = recruitmentProcessService.getRecruitmentProcess(user.getId());
 
         assertThat(recruitmentProcess.getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void 채용과정_리스트_조회_성공() {
+        String title = "title";
+        recruitmentProcessService.create(recruitment.getId(), user.getId(), resume.getId());
+
+        Specification<RecruitmentProcess> spec = Specification.where(RecruitmentProcessSpecification.equalUser(user));
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<RecruitmentProcess> findRecruitmentList = recruitmentProcessService.getMyRecruitmentProcessList(RESUME, title, pageable, user.getId());
+        for (RecruitmentProcess recruitmentProcess : findRecruitmentList) {
+            assertThat(recruitmentProcess.getResume().getTitle()).contains(title);
+        }
     }
 }
