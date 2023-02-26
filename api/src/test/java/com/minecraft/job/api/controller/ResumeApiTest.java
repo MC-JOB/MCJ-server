@@ -155,20 +155,20 @@ class ResumeApiTest extends ApiTest {
     void 이력서_목록_조회_성공() throws Exception {
         ResumeGetListRequest req = new ResumeGetListRequest(ALL, "", 0, 10, user.getId());
 
-        mockMvc.perform(get("/resume/getMyResumes")
+        mockMvc.perform(get("/resume/getMyResumeList")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpectAll(status().isOk())
-                .andDo(document("resume/getMyResumes",
+                .andDo(document("resume/getMyResumeList",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ));
 
         Specification<Resume> spec = Specification.where(null);
         PageRequest pageable = PageRequest.of(0, 10);
-        Page<Resume> findResumes = resumeRepository.findAll(spec, pageable);
+        Page<Resume> findResumeList = resumeRepository.findAll(spec, pageable);
 
-        assertThat(findResumes).isNotNull();
+        assertThat(findResumeList).isNotNull();
     }
 
     @Test

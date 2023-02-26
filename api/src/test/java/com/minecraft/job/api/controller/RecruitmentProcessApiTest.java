@@ -1,5 +1,6 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
@@ -9,6 +10,7 @@ import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
+import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
 import com.minecraft.job.common.team.domain.Team;
@@ -18,17 +20,24 @@ import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType.*;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -160,5 +169,25 @@ public class RecruitmentProcessApiTest extends ApiTest {
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
         assertThat(findRecruitmentProcess.getStatus()).isEqualTo(FAILED);
+    }
+
+    @Test
+    void 채용과정_목록_조회_성공() throws Exception {
+        RecruitmentProcessGetListRequest req = new RecruitmentProcessGetListRequest(ALL, "", 0, 10, user.getId());
+
+        mockMvc.perform(get("/recruitment-process/getMyRecruitmentProcessList")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("recruitment-process/getMyRecruitmentProcessList",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        Specification<RecruitmentProcess> spec = Specification.where(null);
+        PageRequest pageable = PageRequest.of(0, 10);
+        Page<RecruitmentProcess> findRecruitmentProcessList = recruitmentProcessRepository.findAll(spec, pageable);
+
+        assertThat(findRecruitmentProcessList).isNotNull();
     }
 }

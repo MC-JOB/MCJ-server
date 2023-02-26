@@ -11,4 +11,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     Page<Resume> findAll(Specification spec, Pageable pageable);
 
     Optional<Resume> findByUser_id(long userId);
+
+    Resume findByTitle(String searchName);
 }

@@ -138,7 +138,7 @@ class DomainResumeServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Resume> findResumeList = resumeService.getResumes(TITLE, title, pageable);
+        Page<Resume> findResumeList = resumeService.getResumeList(TITLE, title, pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getTitle()).contains(title);
@@ -152,7 +152,7 @@ class DomainResumeServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Resume> findResumeList = resumeService.getResumes(CONTENT, content, pageable);
+        Page<Resume> findResumeList = resumeService.getResumeList(CONTENT, content, pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getContent()).contains(content);
@@ -166,7 +166,7 @@ class DomainResumeServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Resume> findResumeList = resumeService.getResumes(TRAININGHISTORY, trainingHistory, pageable);
+        Page<Resume> findResumeList = resumeService.getResumeList(TRAININGHISTORY, trainingHistory, pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getTrainingHistory()).contains(trainingHistory);
@@ -179,7 +179,7 @@ class DomainResumeServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Resume> findResumeList = resumeService.getResumes(USER, user.getNickname(), pageable);
+        Page<Resume> findResumeList = resumeService.getResumeList(USER, user.getNickname(), pageable);
 
         for (Resume resume : findResumeList) {
             assertThat(resume.getUser()).isEqualTo(user);
@@ -192,7 +192,7 @@ class DomainResumeServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Resume> findResumeList = resumeService.getResumes(TITLE, "title", pageable);
+        Page<Resume> findResumeList = resumeService.getResumeList(TITLE, "title", pageable);
 
         assertThat(findResumeList.getTotalPages()).isEqualTo(2);
     }

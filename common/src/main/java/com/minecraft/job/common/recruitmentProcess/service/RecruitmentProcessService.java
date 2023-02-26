@@ -1,6 +1,10 @@
 package com.minecraft.job.common.recruitmentProcess.service;
 
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
+import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType;
+import com.minecraft.job.common.resume.domain.ResumeSearchType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface RecruitmentProcessService {
 
@@ -15,6 +19,8 @@ public interface RecruitmentProcessService {
     void fail(Long recruitmentProcessId, Long teamId, Long leaderId);
 
     RecruitmentProcess getRecruitmentProcess(Long userId);
+
+    Page<RecruitmentProcess> getMyRecruitmentProcessList(RecruitmentProcessSearchType searchType, String searchName, Pageable pageable, Long userId);
 
 
 }

@@ -8,6 +8,7 @@ import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
+import com.minecraft.job.common.resume.domain.ResumeSpecification;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -17,6 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Optional;
 
@@ -49,6 +53,8 @@ class RecruitmentProcessRepositoryTest {
     private Team team;
     private Resume resume;
 
+    private RecruitmentProcess recruitmentProcess;
+
     @BeforeEach
     void setUp() {
         user = userRepository.save(UserFixture.create());
@@ -60,8 +66,7 @@ class RecruitmentProcessRepositoryTest {
 
     @Test
     void 채용과정_생성_성공() {
-        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user, resume);
-        recruitmentProcess = recruitmentProcessRepository.save(recruitmentProcess);
+        채용과정_생성();
 
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findById(recruitmentProcess.getId()).orElseThrow();
 
@@ -74,8 +79,7 @@ class RecruitmentProcessRepositoryTest {
 
     @Test
     void 채용과정_조회_성공__유저_아이디가_일치하는_경우() {
-        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user, resume);
-        recruitmentProcessRepository.save(recruitmentProcess);
+        채용과정_생성();
 
         Optional<RecruitmentProcess> findRecruitmentProcess = recruitmentProcessRepository.findByUser_Id(user.getId());
 
@@ -85,11 +89,30 @@ class RecruitmentProcessRepositoryTest {
 
     @Test
     void 채용과정_조회_실패__유저_아이디가_일치하지_않는_경우() {
-        RecruitmentProcess recruitmentProcess = RecruitmentProcess.create(recruitment, user, resume);
-        recruitmentProcessRepository.save(recruitmentProcess);
+        채용과정_생성();
 
         Optional<RecruitmentProcess> findRecruitmentProcess = recruitmentProcessRepository.findByUser_Id(2L);
 
         assertThat(findRecruitmentProcess).isEmpty();
+    }
+
+    @Test
+    void 채용과정_리스트_조회_성공__유저가_일치하는_경우() {
+        채용과정_생성();
+
+        Specification<RecruitmentProcess> spec = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("user"), user));
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<RecruitmentProcess> findRecruitmentProcessList = recruitmentProcessRepository.findAll(spec, pageable);
+
+        assertThat(findRecruitmentProcessList.getNumberOfElements()).isEqualTo(1);
+        for (RecruitmentProcess recruitmentProcess : findRecruitmentProcessList) {
+            assertThat(recruitmentProcess.getUser()).isEqualTo(user);
+        }
+    }
+
+    private void 채용과정_생성() {
+        recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
     }
 }

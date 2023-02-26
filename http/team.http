@@ -3,11 +3,11 @@ POST http://localhost:8080/team
 Content-Type: application/json
 
 {
-  "userId": "",
-  "name": "",
-  "description": "",
-  "logo": "",
-  "memberNum": ""
+  "userId": "1",
+  "name": "test",
+  "description": "test",
+  "logo": "test",
+  "memberNum": "18"
 }
 
 ###Update

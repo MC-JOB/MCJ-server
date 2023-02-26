@@ -3,10 +3,10 @@ POST http://localhost:8080/recruitment
 Content-Type: application/json
 
 {
-  "userId": "",
-  "teamId": "",
-  "title": "",
-  "content": ""
+  "userId": "1",
+  "teamId": "1",
+  "title": "test",
+  "content": "test"
 }
 
 ###Update
@@ -36,10 +36,10 @@ POST http://localhost:8080/recruitment/activate
 Content-Type: application/json
 
 {
-  "recruitmentId": "",
-  "userId": "",
-  "teamId": "",
-  "closedAt": "2022-10-07T23:00:00.0000"
+  "recruitmentId": "1",
+  "userId": "1",
+  "teamId": "1",
+  "closedAt": "2023-02-26T23:00:00.0000"
 }
 
 ###Delete

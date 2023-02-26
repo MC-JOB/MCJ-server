@@ -5,15 +5,21 @@ import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
 import com.minecraft.job.common.recruitmentProcess.domain.*;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
+import com.minecraft.job.common.resume.domain.ResumeSearchType;
+import com.minecraft.job.common.resume.domain.ResumeSpecification;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType.*;
 import static com.minecraft.job.common.support.Preconditions.require;
 
 @Service
@@ -109,5 +115,36 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
         require(recruitmentProcess.ofUser(user));
 
         return recruitmentProcess;
+    }
+
+    @Override
+    public Page<RecruitmentProcess> getMyRecruitmentProcessList(RecruitmentProcessSearchType searchType, String searchName, Pageable pageable, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Specification<Resume> spec = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("user"), user));
+
+        return recruitmentProcessRepository.findAll(spec, pageable);
+    }
+
+    private Specification<RecruitmentProcess> getRecruitmentProcessSpecification(RecruitmentProcessSearchType searchType, String searchName) {
+        Specification<RecruitmentProcess> spec = null;
+
+        if(searchType == ALL) {
+            spec = Specification.where(null);
+        }
+        if (searchType == USER) {
+            User user = userRepository.findByNickname(searchName);
+            spec = Specification.where(RecruitmentProcessSpecification.equalUser(user));
+        }
+
+        if (searchType == RECRUITMENT) {
+            Recruitment recruitment = recruitmentRepository.findByTitle(searchName);
+            spec = Specification.where(RecruitmentProcessSpecification.equalRecruitment(recruitment));
+        }
+
+        if (searchType == RESUME) {
+            Resume resume = resumeRepository.findByTitle(searchName);
+            spec = Specification.where(RecruitmentProcessSpecification.equalResume(resume));
+        }
+        return spec;
     }
 }

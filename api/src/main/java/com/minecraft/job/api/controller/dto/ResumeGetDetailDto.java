@@ -5,7 +5,7 @@ import com.minecraft.job.common.resume.domain.ResumeStatus;
 
 import java.time.LocalDateTime;
 
-public record ResumeGetDetailDto() {
+public class ResumeGetDetailDto {
 
     public record ResumeGetDetailRequest(
             Long userId

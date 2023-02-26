@@ -3,7 +3,7 @@ POST http://localhost:8080/resume
 Content-Type: application/json
 
 {
-  "userId": "1",
+  "userId": "2",
   "title": "test",
   "content": "test",
   "trainingHistory": "test"
@@ -48,8 +48,8 @@ Content-Type: application/json
   "userId": ""
 }
 
-###GetMyResumes
-GET http://localhost:8080/resume/getMyResumes
+###GetMyResumeList
+GET http://localhost:8080/resume/getMyResumeList
 Content-Type: application/json
 
 {
