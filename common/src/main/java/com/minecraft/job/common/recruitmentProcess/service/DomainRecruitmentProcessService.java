@@ -5,8 +5,6 @@ import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
 import com.minecraft.job.common.recruitmentProcess.domain.*;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
-import com.minecraft.job.common.resume.domain.ResumeSearchType;
-import com.minecraft.job.common.resume.domain.ResumeSpecification;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -128,7 +126,7 @@ public class DomainRecruitmentProcessService implements RecruitmentProcessServic
     private Specification<RecruitmentProcess> getRecruitmentProcessSpecification(RecruitmentProcessSearchType searchType, String searchName) {
         Specification<RecruitmentProcess> spec = null;
 
-        if(searchType == ALL) {
+        if (searchType == ALL) {
             spec = Specification.where(null);
         }
         if (searchType == USER) {

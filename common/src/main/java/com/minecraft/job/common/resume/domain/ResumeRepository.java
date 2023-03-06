@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
     Page<Resume> findAll(Specification spec, Pageable pageable);
 
-    Optional<Resume> findByUser_id(long userId);
+    Optional<Resume> findByUser_id(Long userId);
 
     Resume findByTitle(String searchName);
 }
