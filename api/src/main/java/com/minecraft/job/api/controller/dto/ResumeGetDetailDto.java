@@ -20,11 +20,16 @@ public class ResumeGetDetailDto {
         }
     }
 
-    public record ResumeGetDetailData(Long id, String title, String content, String trainingHistory,
-                                      ResumeStatus status, LocalDateTime createdAt) {
+    public record ResumeGetDetailData(
+            Long id, String title, String content, String trainingHistory,
+            ResumeStatus status, LocalDateTime createdAt
+    ) {
 
         public static ResumeGetDetailData getResume(Resume resume) {
-            return new ResumeGetDetailData(resume.getId(), resume.getTitle(), resume.getContent(), resume.getTrainingHistory(), resume.getStatus(), resume.getCreatedAt());
+            return new ResumeGetDetailData(
+                    resume.getId(), resume.getTitle(), resume.getContent(), resume.getTrainingHistory(),
+                    resume.getStatus(), resume.getCreatedAt()
+            );
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.service.RecruitmentProcessService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetDetailDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.*;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
@@ -55,5 +55,12 @@ public class RecruitmentProcessApi {
         Page<RecruitmentProcess> recruitmentProcessList = recruitmentProcessService.getMyRecruitmentProcessList(req.searchType(), req.searchName(), pageable, req.userId());
 
         return RecruitmentProcessGetListResponse.getRecruitmentProcessList(RecruitmentProcessGetListData.getRecruitmentProcessList(recruitmentProcessList));
+    }
+
+    @GetMapping("/getMyRecruitmentProcess")
+    public RecruitmentProcessGetDetailResponse getMyRecruitmentProcessDetail(@RequestBody RecruitmentProcessGetDetailRequest req) {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessService.getRecruitmentProcess(req.userId());
+
+        return RecruitmentProcessGetDetailResponse.getRecruitmentProcess(RecruitmentProcessGetDetailData.getRecruitmentProcess(recruitmentProcess));
     }
 }

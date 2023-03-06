@@ -13,9 +13,9 @@ POST http://localhost:8080/recruitment-process/in-progress
 Content-Type: application/json
 
 {
-  "recruitmentProcessId": "",
-  "teamId": "",
-  "leaderId": ""
+  "recruitmentProcessId": "1",
+  "teamId": "1",
+  "leaderId": "1"
 }
 
 ###Pass
@@ -57,5 +57,13 @@ Content-Type: application/json
   "searchName" : "",
   "page" : 0,
   "size" : 10,
+  "userId": "2"
+}
+
+###getMyRecruitmentProces
+GET http://localhost:8080/recruitment-process/getMyRecruitmentProcess
+Content-Type: application/json
+
+{
   "userId": "2"
 }

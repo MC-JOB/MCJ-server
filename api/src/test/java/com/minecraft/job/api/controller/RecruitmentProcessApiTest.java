@@ -1,6 +1,5 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto;
 import com.minecraft.job.api.fixture.RecruitmentFixture;
 import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
@@ -10,7 +9,6 @@ import com.minecraft.job.common.recruitment.domain.Recruitment;
 import com.minecraft.job.common.recruitment.domain.RecruitmentRepository;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessRepository;
-import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.domain.ResumeRepository;
 import com.minecraft.job.common.team.domain.Team;
@@ -28,10 +26,11 @@ import org.springframework.http.MediaType;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.*;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetDetailDto.RecruitmentProcessGetDetailRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.RecruitmentProcessGetListRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
-import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType.*;
+import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType.ALL;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -189,5 +188,24 @@ public class RecruitmentProcessApiTest extends ApiTest {
         Page<RecruitmentProcess> findRecruitmentProcessList = recruitmentProcessRepository.findAll(spec, pageable);
 
         assertThat(findRecruitmentProcessList).isNotNull();
+    }
+
+    @Test
+    void 채용과정_상세_조회_성공() throws Exception {
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
+        RecruitmentProcessGetDetailRequest req = new RecruitmentProcessGetDetailRequest(user.getId());
+
+        mockMvc.perform(get("/recruitment-process/getMyRecruitmentProcess")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("recruitment-process/getMyRecruitmentProcess",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findByUser_Id(recruitmentProcess.getUser().getId()).orElseThrow();
+
+        assertThat(findRecruitmentProcess).isNotNull();
     }
 }
