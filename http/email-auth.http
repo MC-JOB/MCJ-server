@@ -3,7 +3,7 @@ POST http://localhost:8080/email-auth/issue
 Content-Type: application/json
 
 {
-  "email": "test2@test.com"
+  "email": "test1@test.com"
 }
 
 ###Validate
@@ -11,6 +11,6 @@ POST http://localhost:8080/email-auth/validate
 Content-Type: application/json
 
 {
-  "email": "test2@test.com",
-  "code": "uauEK"
+  "email": "test1@test.com",
+  "code": "WG0d0"
 }

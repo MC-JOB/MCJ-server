@@ -4,15 +4,14 @@ import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
+import com.minecraft.job.api.controller.dto.TeamGetDetailDto;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
 import static com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
 
 @RestController
@@ -45,5 +44,12 @@ public class TeamApi {
     public void activate(@RequestBody TeamActivateRequest req) {
 
         teamService.activate(req.teamId(), req.userId());
+    }
+
+    @GetMapping("/getMyTeam")
+    public TeamGetDetailResponse getMyTeamDetail(@RequestBody TeamGetDetailRequest req) {
+        Team team = teamService.getTeam(req.userId());
+
+        return TeamGetDetailResponse.getTeam(TeamGetDetailData.getTeam(team));
     }
 }
