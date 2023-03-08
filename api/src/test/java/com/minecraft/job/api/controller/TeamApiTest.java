@@ -2,6 +2,7 @@ package com.minecraft.job.api.controller;
 
 import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
+import com.minecraft.job.api.controller.dto.TeamGetDetailDto;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
@@ -9,6 +10,7 @@ import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
+import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.service.TeamService;
@@ -19,11 +21,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -128,5 +133,23 @@ class TeamApiTest extends ApiTest {
         Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findTeam.getStatus()).isEqualTo(ACTIVATED);
+    }
+
+    @Test
+    void 팀_상세_조회_성공() throws Exception{
+        TeamGetDetailRequest req = new TeamGetDetailRequest(user.getId());
+
+        mockMvc.perform(get("/team/getMyTeam")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("team/getMyTeam",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        Team findTeam = teamRepository.findByUser_Id(user.getId()).orElseThrow();
+
+        assertThat(findTeam).isNotNull();
     }
 }
