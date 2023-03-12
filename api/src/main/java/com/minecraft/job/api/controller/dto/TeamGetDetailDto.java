@@ -2,11 +2,10 @@ package com.minecraft.job.api.controller.dto;
 
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamStatus;
-import com.minecraft.job.common.user.domain.User;
 
 import java.time.LocalDateTime;
 
-public record TeamGetDetailDto() {
+public class TeamGetDetailDto {
 
     public record TeamGetDetailRequest(
             Long userId

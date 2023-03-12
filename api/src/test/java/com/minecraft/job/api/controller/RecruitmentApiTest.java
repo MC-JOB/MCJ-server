@@ -21,12 +21,15 @@ import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.Recrui
 import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.RecruitmentDeleteRequest;
+import static com.minecraft.job.api.controller.dto.RecruitmentGetDetailDto.RecruitmentGetDetailRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -168,5 +171,23 @@ public class RecruitmentApiTest extends ApiTest {
         Recruitment findRecruitment = recruitmentRepository.findById(recruitment.getId()).orElseThrow();
 
         assertThat(findRecruitment.getClosedAt()).isEqualTo(localDateTime.plusMinutes(1));
+    }
+
+    @Test
+    void 채용공고_상세_조회_성공() throws Exception {
+        RecruitmentGetDetailRequest req = new RecruitmentGetDetailRequest(team.getId());
+
+        mockMvc.perform(get("/recruitment/getMyRecruitment")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("resume/getMyResume",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        Recruitment findTeam = recruitmentRepository.findByTeam_Id(team.getId()).orElseThrow();
+
+        assertThat(findTeam).isNotNull();
     }
 }
