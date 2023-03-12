@@ -24,7 +24,6 @@ public class ResumeGetDetailDto {
             Long id, String title, String content, String trainingHistory,
             ResumeStatus status, LocalDateTime createdAt
     ) {
-
         public static ResumeGetDetailData getResume(Resume resume) {
             return new ResumeGetDetailData(
                     resume.getId(), resume.getTitle(), resume.getContent(), resume.getTrainingHistory(),
