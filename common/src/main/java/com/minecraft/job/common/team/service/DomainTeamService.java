@@ -2,6 +2,7 @@ package com.minecraft.job.common.team.service;
 
 import com.minecraft.job.common.emailauth.domain.EmailAuth;
 import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
+import com.minecraft.job.common.resume.domain.ResumeSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.domain.TeamSearchType;
@@ -97,9 +98,20 @@ public class DomainTeamService implements TeamService {
         return team;
     }
 
+    @Override
+    public Page<Team> getMyTeamList(TeamSearchType searchType, String searchName, Pageable pageable, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Specification<Team> spec = getTeamSpecification(searchType, searchName).and(TeamSpecification.equalUser(user));
+
+        return teamRepository.findAll(spec, pageable);
+    }
+
     private Specification<Team> getTeamSpecification(TeamSearchType searchType, String searchName) {
         Specification<Team> spec = null;
 
+        if(searchType == TeamSearchType.ALL) {
+            spec = Specification.where(null);
+        }
         if (searchType == TeamSearchType.NAME) {
             spec = Specification.where(TeamSpecification.likeName(searchName));
         }

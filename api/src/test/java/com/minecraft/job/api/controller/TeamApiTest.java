@@ -1,8 +1,10 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.ResumeGetListDto;
 import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamGetDetailDto;
+import com.minecraft.job.api.controller.dto.TeamGetListDto;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
@@ -13,15 +15,22 @@ import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
+import com.minecraft.job.common.team.domain.TeamSearchType;
 import com.minecraft.job.common.team.service.TeamService;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 
 import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.TeamGetListDto.*;
+import static com.minecraft.job.common.resume.domain.ResumeSearchType.ALL;
+import static com.minecraft.job.common.team.domain.TeamSearchType.*;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -151,5 +160,25 @@ class TeamApiTest extends ApiTest {
         Team findTeam = teamRepository.findByUser_Id(user.getId()).orElseThrow();
 
         assertThat(findTeam).isNotNull();
+    }
+
+    @Test
+    void 팀_목록_조회_성공() throws Exception {
+        TeamGetListRequest req = new TeamGetListRequest(TeamSearchType.ALL, "", 0, 10, user.getId());
+
+        mockMvc.perform(get("/team/getMyTeamList")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("team/getMyTeamList",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        Specification<Team> spec = Specification.where(null);
+        PageRequest pageable = PageRequest.of(0, 10);
+        Page<Team> findTeamList = teamRepository.findAll(spec, pageable);
+
+        assertThat(findTeamList).isNotNull();
     }
 }
