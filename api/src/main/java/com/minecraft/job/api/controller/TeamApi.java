@@ -4,14 +4,16 @@ import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
-import com.minecraft.job.api.controller.dto.TeamGetDetailDto;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.TeamGetListDto.*;
 import static com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
 
 @RestController
@@ -51,5 +53,13 @@ public class TeamApi {
         Team team = teamService.getTeam(req.userId());
 
         return TeamGetDetailResponse.getTeam(TeamGetDetailData.getTeam(team));
+    }
+
+    @GetMapping("/getMyTeamList")
+    public TeamGetListResponse getMyTeamList(@RequestBody TeamGetListRequest req) {
+        PageRequest pageable = PageRequest.of(req.page(), req.size());
+        Page<Team> teamList = teamService.getMyTeamList(req.searchType(), req.searchName(), pageable, req.userId());
+
+        return TeamGetListResponse.getTeamList(TeamGetListData.getTeamList(teamList));
     }
 }
