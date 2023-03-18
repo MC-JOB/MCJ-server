@@ -8,6 +8,10 @@ public class UserFixture {
         return User.create("email", "password", "nickname", "interest", 10L);
     }
 
+    public static User create(String email, String password) {
+        return User.create(email, password, "nickname", "interest", 10L);
+    }
+
     public static User getFakerUser() {
         return User.create("fakerEmail", "fakerPassword", "fakerNickname", "fakerInterest", 10L);
     }

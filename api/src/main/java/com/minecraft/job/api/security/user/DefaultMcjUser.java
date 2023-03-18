@@ -2,6 +2,7 @@ package com.minecraft.job.api.security.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Slf4j
 @Getter
+@Setter
 @NoArgsConstructor(access = PROTECTED)
 public class DefaultMcjUser implements McjUser, UserDetails {
 
