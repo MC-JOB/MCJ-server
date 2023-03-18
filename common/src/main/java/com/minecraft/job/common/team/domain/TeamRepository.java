@@ -11,6 +11,4 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     Team findByName(String name);
 
     Page<Team> findAll(Specification spec, Pageable pageable);
-
-    Optional<Team> findByUser_Id(Long userId);
 }

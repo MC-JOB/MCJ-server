@@ -3,10 +3,8 @@ POST http://localhost:8080/team
 Content-Type: application/json
 
 {
-  "userId": "1",
-  "name": "test3",
+  "name": "test1",
   "description": "test",
-  "logo": "test",
   "memberNum": "18"
 }
 
@@ -46,7 +44,7 @@ GET http://localhost:8080/team/getMyTeam
 Content-Type: application/json
 
 {
-  "userId": "1"
+  "teamId": "1"
 }
 
 ###GetMyTeamList

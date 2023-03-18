@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class TeamGetDetailDto {
 
     public record TeamGetDetailRequest(
-            Long userId
+            Long teamId
     ) {
     }
 
