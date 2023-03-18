@@ -20,7 +20,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
-        String token = (String) authentication.getCredentials();
+        String token = (String) authentication.getPrincipal();
 
         jwtComponent.validate(token, ACCESS);
 

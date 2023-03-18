@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 @Getter
 @Component
 public class JwtProperties {
@@ -19,8 +21,8 @@ public class JwtProperties {
     @Value("${jwt.refreshTokenExpireTime}")
     private Long refreshTokenExpireTime;
 
-    public byte[] getEncodedSecretKey() {
-        return Base64.getDecoder().decode(secretKey);
+    public String getEncodedSecretKey() {
+        return Base64.getEncoder().encodeToString(secretKey.getBytes(UTF_8));
     }
 
     public Long getTokenExpireTime(JwtType jwtType) {
@@ -28,7 +30,6 @@ public class JwtProperties {
 
         switch (jwtType) {
             case ACCESS -> expireTime = accessTokenExpireTime;
-
             case REFRESH -> expireTime = refreshTokenExpireTime;
         }
 
