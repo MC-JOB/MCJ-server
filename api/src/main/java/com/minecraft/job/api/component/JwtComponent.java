@@ -1,6 +1,6 @@
-package com.minecraft.job.api.security.component;
+package com.minecraft.job.api.component;
 
-import com.minecraft.job.api.security.properties.JwtProperties;
+import com.minecraft.job.api.properties.JwtProperties;
 import com.minecraft.job.api.security.user.McjUserException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -22,15 +22,12 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class JwtComponent {
     private final JwtProperties jwtProperties;
 
-    /**
-     * jwt token 발급
-     */
     public String issue(Long id, String audience, Date now) {
         val expiration = new Date(now.getTime() + jwtProperties.getAccessTokenExpireTime());
 
         return Jwts.builder()
-                .setSubject("Irg Owner Api Token")
-                .setIssuer("Irg")
+                .setSubject("MCJ User Api Token")
+                .setIssuer("MCJ")
                 .setIssuedAt(now)
                 .setId(id.toString())
                 .setAudience(audience)

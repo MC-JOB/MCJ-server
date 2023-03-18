@@ -1,4 +1,4 @@
-package com.minecraft.job.api.security.properties;
+package com.minecraft.job.api.properties;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

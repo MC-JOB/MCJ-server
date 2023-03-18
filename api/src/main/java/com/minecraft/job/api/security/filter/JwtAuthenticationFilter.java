@@ -1,6 +1,6 @@
 package com.minecraft.job.api.security.filter;
 
-import com.minecraft.job.api.security.component.JwtComponent;
+import com.minecraft.job.api.component.JwtComponent;
 import com.minecraft.job.api.security.user.McjUserException;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

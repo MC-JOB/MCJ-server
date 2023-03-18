@@ -1,6 +1,6 @@
 package com.minecraft.job.api.security.provider;
 
-import com.minecraft.job.api.security.component.JwtComponent;
+import com.minecraft.job.api.component.JwtComponent;
 import com.minecraft.job.api.security.user.DefaultMcjUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
