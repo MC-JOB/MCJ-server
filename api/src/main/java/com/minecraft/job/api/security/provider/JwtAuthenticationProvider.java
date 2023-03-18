@@ -1,6 +1,6 @@
 package com.minecraft.job.api.security.provider;
 
-import com.minecraft.job.api.security.component.JwtComponent;
+import com.minecraft.job.api.component.JwtComponent;
 import com.minecraft.job.api.security.user.DefaultMcjUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+
+import static com.minecraft.job.api.component.JwtType.ACCESS;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) {
         String token = (String) authentication.getCredentials();
 
-        jwtComponent.validate(token);
+        jwtComponent.validate(token, ACCESS);
 
         Long id = jwtComponent.getId(token);
 
