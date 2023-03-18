@@ -22,11 +22,12 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class JwtComponent {
     private final JwtProperties jwtProperties;
 
-    public String issue(Long id, String audience, Date now) {
-        val expiration = new Date(now.getTime() + jwtProperties.getAccessTokenExpireTime());
+    public String issue(Long id, String audience, JwtType type) {
+        val now = new Date();
+        val expiration = new Date(now.getTime() + jwtProperties.getTokenExpireTime(type));
 
         return Jwts.builder()
-                .setSubject("MCJ User Api Token")
+                .setSubject("MCJ User" + type.name() + "Api Token")
                 .setIssuer("MCJ")
                 .setIssuedAt(now)
                 .setId(id.toString())
