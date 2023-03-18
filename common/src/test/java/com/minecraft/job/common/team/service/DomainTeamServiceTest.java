@@ -184,11 +184,11 @@ class DomainTeamServiceTest {
 
     @Test
     void 팀_조회_성공() {
-        teamService.create(user.getId(), "name", "description", 5L);
+        Team team = teamService.create(user.getId(), "name", "description", 5L);
 
-        Team findTeam = teamService.getTeam(user.getId());
+        Team findTeam = teamService.getTeam(team.getId());
 
-        assertThat(findTeam.getUser().getId()).isEqualTo(user.getId());
+        assertThat(findTeam.getId()).isEqualTo(team.getId());
     }
 
     @Test
