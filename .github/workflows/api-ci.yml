@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  COMMON-Test:
+  API-Test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
