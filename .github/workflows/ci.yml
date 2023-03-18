@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  API-Test:
+  Test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,6 +47,10 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Common Test
+        run: ./gradlew common:test --parallel --max-workers=4 --fail-fast
         shell: bash
 
       - name: API Test
