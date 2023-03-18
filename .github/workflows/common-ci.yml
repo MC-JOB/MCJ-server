@@ -1,5 +1,6 @@
 env:
-  RESOURCE_PATH: ./common/src/test/resources/application.yml
+  API_RESOURCE_PATH: ./api/src/test/resources/application.yml
+  COMMON_RESOURCE_PATH: ./common/src/test/resources/application.yml
   S3_BUCKET_NAME: mcjserver
   CODE_DEPLOY_APPLICATION_NAME: title-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: title-server
@@ -26,10 +27,19 @@ jobs:
         with:
           java-version: 17
 
+      - name: "API Test application.yml Set"
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.API_RESOURCE_PATH }}
+        env:
+          spring.datasource.url: ${{ secrets.RDB_TEST_URL }}
+          spring.datasource.username: ${{ secrets.RDB_USER_NAME }}
+          spring.datasource.password: ${{ secrets.RDB_PASSWORD }}
+
       - name: "COMMON Test application.yml Set"
         uses: microsoft/variable-substitution@v1
         with:
-          files: ${{ env.RESOURCE_PATH }}
+          files: ${{ env.COMMON_RESOURCE_PATH }}
         env:
           spring.datasource.url: ${{ secrets.RDB_TEST_URL }}
           spring.datasource.username: ${{ secrets.RDB_USER_NAME }}
@@ -39,6 +49,6 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Api Test
+      - name: Common Test
         run: ./gradlew common:test --parallel --max-workers=4 --fail-fast
         shell: bash
