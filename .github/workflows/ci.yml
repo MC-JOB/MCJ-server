@@ -55,6 +55,10 @@ jobs:
         shell: bash
 
 
-      - name: Test with Gradle
-        run: ./gradlew clean test
+      - name: Common Test
+        run: ./gradlew common:test --parallel --max-workers=4 --fail-fast
+        shell: bash
+
+      - name: Api Test
+        run: ./gradlew api:test --parallel --max-workers=4 --fail-fast
         shell: bash

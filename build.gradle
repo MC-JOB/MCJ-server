@@ -26,6 +26,15 @@ subprojects {
         google()
     }
 
+    tasks.withType(Test) {
+        reports.html.enabled = false
+        reports.junitXml.enabled = false
+    }
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
