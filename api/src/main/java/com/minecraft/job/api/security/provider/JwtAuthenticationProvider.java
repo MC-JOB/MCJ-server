@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+import static com.minecraft.job.api.component.JwtType.ACCESS;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
@@ -20,7 +22,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) {
         String token = (String) authentication.getCredentials();
 
-        jwtComponent.validate(token);
+        jwtComponent.validate(token, ACCESS);
 
         Long id = jwtComponent.getId(token);
 

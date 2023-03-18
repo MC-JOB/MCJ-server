@@ -37,41 +37,52 @@ public class JwtComponent {
                 .compact();
     }
 
-    public Long getId(String accessToken) {
+    public Long getId(String token) {
         try {
-            return Long.valueOf(Jwts.parserBuilder().setSigningKeyResolver(getSigningKeyResolver()).build().parseClaimsJws(accessToken).getBody().getId());
+            return Long.valueOf(Jwts.parserBuilder().setSigningKeyResolver(getSigningKeyResolver()).build().parseClaimsJws(token).getBody().getId());
         } catch (ExpiredJwtException ex) {
             return Long.valueOf(ex.getClaims().getId());
         }
     }
 
-    public String resolveToken(HttpServletRequest req) {
-        val token = req.getHeader("Authorization");
-
-        if (token != null && token.startsWith("Bearer")) {
-            return token.substring(7);
-        } else {
-            return null;
-        }
-    }
-
-    public Boolean isExpired(String accessToken) {
+    public String getAudience(String token) {
         try {
-            notNull(Jwts.parserBuilder().setSigningKeyResolver(getSigningKeyResolver()).build().parseClaimsJws(accessToken));
-
-            return false;
+            return Jwts.parserBuilder().setSigningKeyResolver(getSigningKeyResolver()).build().parseClaimsJws(token).getBody().getAudience();
         } catch (ExpiredJwtException ex) {
-            return true;
+            return ex.getClaims().getAudience();
         }
     }
 
-    public void validate(String token) {
+    public String resolveToken(HttpServletRequest req, JwtType type) {
+        String header = null;
+        if (type == JwtType.ACCESS) {
+            header = req.getHeader("Authorization");
+        } else if (type == JwtType.REFRESH) {
+            header = req.getHeader("X-Refresh-Token");
+        }
+
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
+    }
+
+    public void isExpired(String token) {
+        try {
+            notNull(Jwts.parserBuilder().setSigningKeyResolver(getSigningKeyResolver()).build().parseClaimsJws(token));
+
+            throw new McjUserException("Not expired access token", UNAUTHORIZED);
+        } catch (ExpiredJwtException ignored) {
+        }
+    }
+
+    public void validate(String token, JwtType type) {
         try {
             notNull(Jwts.parserBuilder().setSigningKeyResolver(getSigningKeyResolver()).build().parseClaimsJws(token));
         } catch (ExpiredJwtException ex) {
-            throw new McjUserException("Expired access token", UNAUTHORIZED);
+            throw new McjUserException("Expired " + type.name() + " token", UNAUTHORIZED);
         } catch (IllegalArgumentException ex) {
-            throw new McjUserException("Invalid access token", UNAUTHORIZED);
+            throw new McjUserException("Invalid " + type.name() + " token", UNAUTHORIZED);
         }
     }
 

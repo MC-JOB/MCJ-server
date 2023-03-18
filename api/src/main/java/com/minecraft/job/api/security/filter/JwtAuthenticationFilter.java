@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.minecraft.job.api.component.JwtType.ACCESS;
+import static com.minecraft.job.api.component.JwtType.REFRESH;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -28,10 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        val accessToken = jwtComponent.resolveToken(request);
+        var accessToken = jwtComponent.resolveToken(request, ACCESS);
 
         try {
             if (nonNull(accessToken)) {
+                accessToken = checkRefreshFlow(request, response, accessToken);
+
                 val authenticationToken = new UsernamePasswordAuthenticationToken(accessToken, "", new ArrayList<>());
 
                 val authentication = authenticationManager.authenticate(authenticationToken);
@@ -49,5 +53,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String checkRefreshFlow(HttpServletRequest request, HttpServletResponse response, String accessToken) {
+        var refreshToken = jwtComponent.resolveToken(request, REFRESH);
+
+        if (nonNull(refreshToken)) {
+            jwtComponent.isExpired(accessToken);
+
+            jwtComponent.validate(refreshToken, REFRESH);
+
+            val id = jwtComponent.getId(accessToken);
+            val audience = jwtComponent.getAudience(accessToken);
+
+            accessToken = jwtComponent.issue(id, audience, ACCESS);
+            refreshToken = jwtComponent.issue(id, audience, REFRESH);
+
+            response.addHeader("Authorization", "Bearer " + accessToken);
+            response.addHeader("X-Refresh-Token", "Bearer " + refreshToken);
+        }
+
+        return accessToken;
     }
 }
