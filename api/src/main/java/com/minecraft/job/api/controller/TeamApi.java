@@ -5,11 +5,13 @@ import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
+import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
@@ -24,8 +26,11 @@ public class TeamApi {
     private final TeamService teamService;
 
     @PostMapping
-    public TeamCreateResponse create(@RequestBody TeamCreateRequest req) {
-        Team team = teamService.create(req.userId(), req.name(), req.description(), req.memberNum());
+    public TeamCreateResponse create(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamCreateRequest req
+    ) {
+        Team team = teamService.create(user.getId(), req.name(), req.description(), req.memberNum());
 
         return TeamCreateResponse.create(TeamCreateData.create(team));
     }

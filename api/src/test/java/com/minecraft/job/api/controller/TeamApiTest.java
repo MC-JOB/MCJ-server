@@ -1,24 +1,18 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.ResumeGetListDto;
 import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
 import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
-import com.minecraft.job.api.controller.dto.TeamGetDetailDto;
-import com.minecraft.job.api.controller.dto.TeamGetListDto;
 import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
-import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
-import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.team.domain.TeamSearchType;
 import com.minecraft.job.common.team.service.TeamService;
 import com.minecraft.job.common.user.domain.User;
-import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +20,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 
-import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
-import static com.minecraft.job.api.controller.dto.TeamGetListDto.*;
-import static com.minecraft.job.common.resume.domain.ResumeSearchType.ALL;
-import static com.minecraft.job.common.team.domain.TeamSearchType.*;
+import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.TeamGetDetailRequest;
+import static com.minecraft.job.api.controller.dto.TeamGetListDto.TeamGetListRequest;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,9 +41,6 @@ class TeamApiTest extends ApiTest {
     private TeamRepository teamRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private EmailAuthRepository emailAuthRepository;
 
     @Autowired
@@ -61,14 +51,15 @@ class TeamApiTest extends ApiTest {
 
     @BeforeEach
     void setUp() {
-        user = userRepository.save(UserFixture.create());
+        user = prepareLoggedInUser("setUp");
         team = teamRepository.save(TeamFixture.create(user));
         emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
     }
 
     @Test
+    @WithUserDetails
     void 팀_생성_성공() throws Exception {
-        TeamCreateRequest teamCreateRequest = new TeamCreateRequest(user.getId(), "teamName", "description", 10L);
+        TeamCreateRequest teamCreateRequest = new TeamCreateRequest("teamName", "description", 10L);
 
         mockMvc.perform(post("/team")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,6 +75,7 @@ class TeamApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 팀_수정_성공() throws Exception {
         TeamUpdateRequest teamUpdateRequest = new TeamUpdateRequest(team.getId(), user.getId(), "updateName", "updateDescription", 1L);
 
@@ -105,6 +97,7 @@ class TeamApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 팀_비활성화_성공() throws Exception {
         TeamInactivateRequest teamInactivateRequest = new TeamInactivateRequest(team.getId(), user.getId());
 
@@ -124,6 +117,7 @@ class TeamApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 팀_활성화_성공() throws Exception {
         TeamActivateRequest teamActivateRequest = new TeamActivateRequest(team.getId(), user.getId());
 
@@ -145,7 +139,8 @@ class TeamApiTest extends ApiTest {
     }
 
     @Test
-    void 팀_상세_조회_성공() throws Exception{
+    @WithUserDetails
+    void 팀_상세_조회_성공() throws Exception {
         TeamGetDetailRequest req = new TeamGetDetailRequest(user.getId());
 
         mockMvc.perform(get("/team/getMyTeam")
@@ -163,6 +158,7 @@ class TeamApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 팀_목록_조회_성공() throws Exception {
         TeamGetListRequest req = new TeamGetListRequest(TeamSearchType.ALL, "", 0, 10, user.getId());
 

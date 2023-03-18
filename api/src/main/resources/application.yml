@@ -20,3 +20,6 @@ spring:
           validation:
             mode: none
     show-sql: true
+jwt:
+  secretKey: ${JWT_SECRET_KEY:1234}
+  accessTokenExpireTime: 600000
