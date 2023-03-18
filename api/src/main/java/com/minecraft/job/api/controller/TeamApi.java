@@ -55,7 +55,7 @@ public class TeamApi {
 
     @GetMapping("/getMyTeam")
     public TeamGetDetailResponse getMyTeamDetail(@RequestBody TeamGetDetailRequest req) {
-        Team team = teamService.getTeam(req.userId());
+        Team team = teamService.getTeam(req.teamId());
 
         return TeamGetDetailResponse.getTeam(TeamGetDetailData.getTeam(team));
     }

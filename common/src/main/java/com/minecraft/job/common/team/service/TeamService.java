@@ -21,5 +21,5 @@ public interface TeamService {
 
     Page<Team> getMyTeamList(TeamSearchType searchType, String searchName, Pageable pageable, Long userId);
 
-    Team getTeam(Long userId);
+    Team getTeam(Long teamId);
 }

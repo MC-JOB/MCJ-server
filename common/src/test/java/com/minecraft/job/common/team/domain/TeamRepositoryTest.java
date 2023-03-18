@@ -117,22 +117,13 @@ class TeamRepositoryTest {
     }
 
     @Test
-    void 팀_조회_성공__유저_아이디가_일치하는_경우() {
+    void 팀_조회_성공() {
         팀_생성("name", "description", 5L, user);
 
-        Optional<Team> findTeam = teamRepository.findByUser_Id(user.getId());
+        Optional<Team> findTeam = teamRepository.findById(team.getId());
 
         assertThat(findTeam).isNotNull();
-        assertThat(findTeam.get().getUser().getId()).isEqualTo(user.getId());
-    }
-
-    @Test
-    void 팀_조회_실패__유저_아이디가_일치하지_않는_경우() {
-        팀_생성("name", "description", 5L, user);
-
-        Optional<Team> findTeam = teamRepository.findByUser_Id(2L);
-
-        assertThat(findTeam).isEmpty();
+        assertThat(findTeam.get().getId()).isEqualTo(team.getId());
     }
 
     private void 팀_생성(String name, String description, Long memberNum, User user) {

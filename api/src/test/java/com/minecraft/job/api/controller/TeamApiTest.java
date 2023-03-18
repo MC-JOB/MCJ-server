@@ -141,7 +141,7 @@ class TeamApiTest extends ApiTest {
     @Test
     @WithUserDetails
     void 팀_상세_조회_성공() throws Exception {
-        TeamGetDetailRequest req = new TeamGetDetailRequest(user.getId());
+        TeamGetDetailRequest req = new TeamGetDetailRequest(team.getId());
 
         mockMvc.perform(get("/team/getMyTeam")
                         .contentType(APPLICATION_JSON)
@@ -152,7 +152,7 @@ class TeamApiTest extends ApiTest {
                         preprocessResponse(prettyPrint())
                 ));
 
-        Team findTeam = teamRepository.findByUser_Id(user.getId()).orElseThrow();
+        Team findTeam = teamRepository.findById(team.getId()).orElseThrow();
 
         assertThat(findTeam).isNotNull();
     }

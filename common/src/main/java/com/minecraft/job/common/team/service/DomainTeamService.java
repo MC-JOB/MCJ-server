@@ -89,11 +89,8 @@ public class DomainTeamService implements TeamService {
     }
 
     @Override
-    public Team getTeam(Long userId) {
-        Team team = teamRepository.findByUser_Id(userId).orElseThrow();
-        User user = userRepository.findById(userId).orElseThrow();
-
-        require(team.ofUser(user));
+    public Team getTeam(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
 
         return team;
     }
