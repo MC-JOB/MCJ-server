@@ -5,7 +5,6 @@ import com.minecraft.job.common.fixture.UserFixture;
 import com.minecraft.job.common.review.domain.Review;
 import com.minecraft.job.common.review.domain.ReviewCreateEvent;
 import com.minecraft.job.common.review.domain.ReviewRepository;
-import com.minecraft.job.common.review.domain.ReviewSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -132,7 +131,7 @@ class DomainReviewServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        Page<Review> myReviewList = reviewService.getMyReviews(CONTENT, "content", pageable, user);
+        Page<Review> myReviewList = reviewService.getMyReviewList(CONTENT, "content", pageable, user.getId());
 
         for (Review findReview : myReviewList) {
             assertThat(findReview.getUser()).isEqualTo(user);

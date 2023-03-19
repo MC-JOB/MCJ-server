@@ -16,5 +16,5 @@ public interface ReviewService {
 
     void inactive(Long reviewId);
 
-    Page<Review> getMyReviews(ReviewSearchType searchType, String searchName, Pageable pageable, User user);
+    Page<Review> getMyReviewList(ReviewSearchType searchType, String searchName, Pageable pageable, Long userId);
 }

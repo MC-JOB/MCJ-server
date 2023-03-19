@@ -67,10 +67,9 @@ public class DomainReviewService implements ReviewService {
     }
 
     @Override
-    public Page<Review> getMyReviews(ReviewSearchType searchType, String searchName, Pageable pageable, User user) {
-
-        Specification<Review> spec = getReviewSpecification(searchType, searchName)
-                .and(ReviewSpecification.equalUser(user));
+    public Page<Review> getMyReviewList(ReviewSearchType searchType, String searchName, Pageable pageable, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Specification<Review> spec = getReviewSpecification(searchType, searchName).and(ReviewSpecification.equalUser(user));
 
         return reviewRepository.findAll(spec, pageable);
     }
@@ -78,6 +77,9 @@ public class DomainReviewService implements ReviewService {
     private Specification<Review> getReviewSpecification(ReviewSearchType searchType, String searchName) {
         Specification<Review> spec = null;
 
+        if (searchType == ReviewSearchType.ALL) {
+            spec = Specification.where(null);
+        }
         if (searchType == ReviewSearchType.CONTENT) {
             spec = Specification.where(ReviewSpecification.likeContent(searchName));
         }
