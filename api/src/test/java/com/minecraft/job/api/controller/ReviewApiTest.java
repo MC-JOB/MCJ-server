@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
@@ -44,15 +45,16 @@ class ReviewApiTest extends ApiTest {
 
     @BeforeEach
     void setUp() {
-        user = userRepository.save(UserFixture.create());
+        user = prepareLoggedInUser("setUp");
 
         User leader = userRepository.save(UserFixture.getAnotherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_생성_성공() throws Exception {
-        ReviewCreateRequest req = new ReviewCreateRequest(user.getId(), team.getId(), "content", 3L);
+        ReviewCreateRequest req = new ReviewCreateRequest(team.getId(), "content", 3L);
 
         mockMvc.perform(post("/review")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,10 +75,11 @@ class ReviewApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_수정_성공() throws Exception {
         Review review = reviewRepository.save(ReviewFixture.create(user, team));
 
-        ReviewUpdateRequest req = new ReviewUpdateRequest(review.getId(), user.getId(), team.getId(), "updateContent", 1L);
+        ReviewUpdateRequest req = new ReviewUpdateRequest(review.getId(), team.getId(), "updateContent", 1L);
 
         mockMvc.perform(post("/review/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,12 +99,13 @@ class ReviewApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_활성화_성공() throws Exception {
         Review review = ReviewFixture.create(user, team);
         review.inactivate();
         review = reviewRepository.save(review);
 
-        ReviewActivateRequest req = new ReviewActivateRequest(review.getId(), user.getId(), team.getId(), "content", 1L);
+        ReviewActivateRequest req = new ReviewActivateRequest(review.getId(), team.getId(), "content", 1L);
 
         mockMvc.perform(post("/review/activate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -122,10 +126,11 @@ class ReviewApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_비활성화_성공() throws Exception {
         Review review = reviewRepository.save(ReviewFixture.create(user, team));
 
-        ReviewInactivateRequest req = new ReviewInactivateRequest(review.getId(), user.getId(), team.getId());
+        ReviewInactivateRequest req = new ReviewInactivateRequest(review.getId(), team.getId());
         mockMvc.perform(post("/review/inactivate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))

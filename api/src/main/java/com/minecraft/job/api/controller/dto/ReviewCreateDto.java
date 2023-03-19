@@ -6,10 +6,10 @@ import org.springframework.data.util.Pair;
 public class ReviewCreateDto {
 
     public record ReviewCreateRequest(
-            Long userId, Long teamId, String content, Long score
+            Long teamId, String content, Long score
     ) {
 
-        public com.minecraft.job.api.service.dto.ReviewCreateDto toDto() {
+        public com.minecraft.job.api.service.dto.ReviewCreateDto toDto(Long userId) {
             return new com.minecraft.job.api.service.dto.ReviewCreateDto(userId, teamId, content, score);
         }
     }
