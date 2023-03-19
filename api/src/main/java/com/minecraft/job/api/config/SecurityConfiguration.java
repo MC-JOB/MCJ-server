@@ -25,9 +25,9 @@ public class SecurityConfiguration {
             JwtAuthenticationProvider jwtAuthenticationProvider,
             SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> jwtFilterConfigurer
     ) throws Exception {
-        //TODO 로그인 페이지 설정 이후 구체적인 PATH 추가
         http.authorizeRequests()
-                .anyRequest().permitAll();
+                .antMatchers("/auth/**", "/user/create", "/email-auth/**").permitAll()
+                .anyRequest().authenticated();
 
         http.formLogin().disable();
         http.httpBasic().disable();
