@@ -1,15 +1,19 @@
 package com.minecraft.job.api.controller;
 
+import com.minecraft.job.api.controller.dto.ResumeGetListDto;
 import com.minecraft.job.api.controller.dto.ReviewActivateDto.ReviewActivateRequest;
 import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
+import com.minecraft.job.api.controller.dto.ReviewGetListDto;
 import com.minecraft.job.api.controller.dto.ReviewInactivateDto.ReviewInactivateRequest;
 import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
 import com.minecraft.job.api.fixture.ReviewFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
+import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.review.domain.Review;
 import com.minecraft.job.common.review.domain.ReviewRepository;
+import com.minecraft.job.common.review.domain.ReviewSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -17,13 +21,22 @@ import com.minecraft.job.common.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 
+import static com.minecraft.job.api.controller.dto.ReviewGetListDto.*;
+import static com.minecraft.job.common.resume.domain.ResumeSearchType.ALL;
+import static com.minecraft.job.common.review.domain.ReviewSearchType.*;
 import static com.minecraft.job.common.review.domain.ReviewStatus.ACTIVATED;
 import static com.minecraft.job.common.review.domain.ReviewStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,13 +57,13 @@ class ReviewApiTest extends ApiTest {
 
     @BeforeEach
     void setUp() {
-        user = userRepository.save(UserFixture.create());
-
+        user = prepareLoggedInUser("setUp");
         User leader = userRepository.save(UserFixture.getAnotherUser("leader"));
         team = teamRepository.save(TeamFixture.create(leader));
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_생성_성공() throws Exception {
         ReviewCreateRequest req = new ReviewCreateRequest(user.getId(), team.getId(), "content", 3L);
 
@@ -73,6 +86,7 @@ class ReviewApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_수정_성공() throws Exception {
         Review review = reviewRepository.save(ReviewFixture.create(user, team));
 
@@ -96,6 +110,7 @@ class ReviewApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_활성화_성공() throws Exception {
         Review review = ReviewFixture.create(user, team);
         review.inactivate();
@@ -122,6 +137,7 @@ class ReviewApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 리뷰_비활성화_성공() throws Exception {
         Review review = reviewRepository.save(ReviewFixture.create(user, team));
 
@@ -140,5 +156,26 @@ class ReviewApiTest extends ApiTest {
 
         assertThat(findReview.getStatus()).isEqualTo(INACTIVATED);
         assertThat(findTeam.getAveragePoint()).isEqualTo(0);
+    }
+
+    @Test
+    @WithUserDetails
+    void 리뷰_목록_조회_성공() throws Exception {
+        ReviewGetListRequest req = new ReviewGetListRequest(ReviewSearchType.ALL, "", 0, 10);
+
+        mockMvc.perform(get("/review/getMyReviewList")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpectAll(status().isOk())
+                .andDo(document("review/getMyReviewList",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+
+        Specification<Resume> spec = Specification.where(null);
+        PageRequest pageable = PageRequest.of(0, 10);
+        Page<Review> findReviewList = reviewRepository.findAll(spec, pageable);
+
+        assertThat(findReviewList).isNotNull();
     }
 }

@@ -3,8 +3,21 @@ POST http://localhost:8080/review
 Content-Type: application/json
 
 {
-  "userId": "",
-  "teamId": "",
-  "content": "",
-  "score": ""
+  "userId": "2",
+  "teamId": "1",
+  "content": "test",
+  "score": "1"
+}
+
+
+###GetMyReviewList
+GET http://localhost:8080/review/getMyReviewList
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNQ0ogVXNlciBBQ0NFU1MgQXBpIFRva2VuIiwiaXNzIjoiTUNKIiwiaWF0IjoxNjc5MjIwNDI5LCJqdGkiOiIyIiwiYXVkIjoidGVzdDJAdGVzdC5jb20iLCJleHAiOjE2NzkyMjA2MDl9.heQqzNjT2O_moAxhIuCq-uxzhs1iBqncIBSObxxbQQA
+
+{
+  "searchType" : "ALL",
+  "searchName" : "",
+  "page" : 0,
+  "size" : 10
 }
