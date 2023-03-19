@@ -21,6 +21,6 @@ spring:
             mode: none
     show-sql: true
 jwt:
-  secretKey: ${JWT_SECRET_KEY:1234}
+  secretKey: ${JWT_SECRET_KEY:keykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykey}
   accessTokenExpireTime: 180000
   refreshTokenExpireTime: 600000
