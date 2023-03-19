@@ -15,18 +15,17 @@ import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamRepository;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.domain.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetDetailDto.RecruitmentProcessGetDetailRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.RecruitmentProcessGetListRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
 import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
@@ -57,21 +56,15 @@ public class RecruitmentProcessApiTest extends ApiTest {
     private User user;
     private User leader;
     private Team team;
-    private Recruitment recruitment;
     private Resume resume;
-
-    @BeforeEach
-    void setUp() {
-        user = userRepository.save(UserFixture.create());
-        leader = userRepository.save(UserFixture.getAnotherUser("leader"));
-        team = teamRepository.save(TeamFixture.create(leader));
-        recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
-        resume = resumeRepository.save(ResumeFixture.create(user));
-    }
+    private Recruitment recruitment;
 
     @Test
+    @WithUserDetails
     void 채용과정_생성_성공() throws Exception {
-        RecruitmentProcessCreateRequest recruitmentProcessCreateRequest = new RecruitmentProcessCreateRequest(recruitment.getId(), user.getId(), resume.getId());
+        prepareLoggedIn();
+
+        RecruitmentProcessCreateRequest recruitmentProcessCreateRequest = new RecruitmentProcessCreateRequest(recruitment.getId(), resume.getId());
 
         mockMvc.perform(post("/recruitment-process")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,10 +79,13 @@ public class RecruitmentProcessApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 채용과정_서류합격_성공() throws Exception {
+        prepareLoggedInLeader();
+
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
 
-        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitmentProcess.getId(), team.getId(), leader.getId());
+        RecruitmentProcessInProgressRequest recruitmentProcessInProgressRequest = new RecruitmentProcessInProgressRequest(recruitmentProcess.getId(), team.getId());
 
         mockMvc.perform(post("/recruitment-process/in-progress")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,12 +103,15 @@ public class RecruitmentProcessApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 채용과정_최종합격_성공() throws Exception {
+        prepareLoggedInLeader();
+
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
 
         recruitmentProcess.inProgress();
 
-        RecruitmentProcessPassRequest recruitmentProcessPassRequest = new RecruitmentProcessPassRequest(recruitmentProcess.getId(), team.getId(), leader.getId());
+        RecruitmentProcessPassRequest recruitmentProcessPassRequest = new RecruitmentProcessPassRequest(recruitmentProcess.getId(), team.getId());
 
         mockMvc.perform(post("/recruitment-process/pass")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -130,9 +129,13 @@ public class RecruitmentProcessApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 채용과정_중도취소_성공() throws Exception {
+        prepareLoggedIn();
+
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
-        RecruitmentProcessCancelRequest recruitmentProcessCancelRequest = new RecruitmentProcessCancelRequest(recruitmentProcess.getId(), team.getId(), user.getId());
+
+        RecruitmentProcessCancelRequest recruitmentProcessCancelRequest = new RecruitmentProcessCancelRequest(recruitmentProcess.getId(), team.getId());
 
         mockMvc.perform(post("/recruitment-process/cancel")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -150,10 +153,13 @@ public class RecruitmentProcessApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 채용과정_불합격_성공() throws Exception {
+        prepareLoggedInLeader();
+
         RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
 
-        RecruitmentProcessFailRequest recruitmentProcessFailRequest = new RecruitmentProcessFailRequest(recruitmentProcess.getId(), team.getId(), leader.getId());
+        RecruitmentProcessFailRequest recruitmentProcessFailRequest = new RecruitmentProcessFailRequest(recruitmentProcess.getId(), team.getId());
 
         mockMvc.perform(post("/recruitment-process/fail")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -171,8 +177,11 @@ public class RecruitmentProcessApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 채용과정_목록_조회_성공() throws Exception {
-        RecruitmentProcessGetListRequest req = new RecruitmentProcessGetListRequest(ALL, "", 0, 10, user.getId());
+        prepareLoggedIn();
+
+        RecruitmentProcessGetListRequest req = new RecruitmentProcessGetListRequest(ALL, "", 0, 10);
 
         mockMvc.perform(get("/recruitment-process/getMyRecruitmentProcessList")
                         .contentType(APPLICATION_JSON)
@@ -191,13 +200,13 @@ public class RecruitmentProcessApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 채용과정_상세_조회_성공() throws Exception {
-        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
-        RecruitmentProcessGetDetailRequest req = new RecruitmentProcessGetDetailRequest(user.getId());
+        prepareLoggedIn();
 
-        mockMvc.perform(get("/recruitment-process/getMyRecruitmentProcess")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        RecruitmentProcess recruitmentProcess = recruitmentProcessRepository.save(RecruitmentProcess.create(recruitment, user, resume));
+
+        mockMvc.perform(get("/recruitment-process/getMyRecruitmentProcess"))
                 .andExpectAll(status().isOk())
                 .andDo(document("recruitment-process/getMyRecruitmentProcess",
                         preprocessRequest(prettyPrint()),
@@ -207,5 +216,21 @@ public class RecruitmentProcessApiTest extends ApiTest {
         RecruitmentProcess findRecruitmentProcess = recruitmentProcessRepository.findByUser_Id(recruitmentProcess.getUser().getId()).orElseThrow();
 
         assertThat(findRecruitmentProcess).isNotNull();
+    }
+
+    private void prepareLoggedInLeader() {
+        user = userRepository.save(UserFixture.create());
+        leader = prepareLoggedInUser("Leader");
+        team = teamRepository.save(TeamFixture.create(leader));
+        recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
+        resume = resumeRepository.save(ResumeFixture.create(user));
+    }
+
+    private void prepareLoggedIn() {
+        user = prepareLoggedInUser("user");
+        leader = userRepository.save(UserFixture.create());
+        team = teamRepository.save(TeamFixture.create(leader));
+        recruitment = recruitmentRepository.save(RecruitmentFixture.create(team));
+        resume = resumeRepository.save(ResumeFixture.create(user));
     }
 }

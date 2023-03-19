@@ -9,8 +9,7 @@ public class RecruitmentProcessGetListDto {
             RecruitmentProcessSearchType searchType,
             String searchName,
             int page,
-            int size,
-            Long userId
+            int size
     ) {
     }
 

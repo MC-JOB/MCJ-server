@@ -6,10 +6,6 @@ import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStat
 import java.time.LocalDateTime;
 
 public class RecruitmentProcessGetDetailDto {
-    public record RecruitmentProcessGetDetailRequest(
-            Long userId
-    ) {
-    }
 
     public record RecruitmentProcessGetDetailResponse(
             RecruitmentProcessGetDetailData recruitmentProcess

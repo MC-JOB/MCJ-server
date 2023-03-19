@@ -4,7 +4,7 @@ import com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcess;
 
 public class RecruitmentProcessCreateDto {
 
-    public record RecruitmentProcessCreateRequest(Long recruitmentId, Long userId, Long resumeId) {
+    public record RecruitmentProcessCreateRequest(Long recruitmentId, Long resumeId) {
     }
 
     public record RecruitmentProcessResponse(RecruitmentProcessCreateData recruitmentProcess) {
