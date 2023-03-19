@@ -11,6 +11,21 @@ ifndef::snippets[]
 endif::[]
 
 
+[[Auth]]
+== 로그인 API
+
+=== Request
+include::{snippets}/auth/login/curl-request.adoc[]
+
+=== RequestBody
+include::{snippets}/auth/login/request-body.adoc[]
+
+=== Response
+include::{snippets}/auth/login/http-response.adoc[]
+
+=== ResponseBody
+include::{snippets}/auth/login/response-body.adoc[]
+
 
 [[User]]
 == 유저 생성 API
