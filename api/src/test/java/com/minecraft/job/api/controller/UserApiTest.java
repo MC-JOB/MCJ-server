@@ -1,11 +1,7 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.UserActivateDto.UserActivateRequest;
 import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
-import com.minecraft.job.api.controller.dto.UserGetInformationDto.UserGetInformationRequest;
-import com.minecraft.job.api.controller.dto.UserInactivateDto.UserInactivateRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
-import com.minecraft.job.api.fixture.UserFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import com.minecraft.job.common.user.domain.User;
@@ -14,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 import static com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
 import static com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
@@ -39,11 +36,12 @@ class UserApiTest extends ApiTest {
 
     @BeforeEach
     void setUp() {
-        user = userRepository.save(UserFixture.getAnotherUser("anotherEmail"));
+        user = prepareLoggedInUser("setUp");
         emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth(user.getEmail()));
     }
 
     @Test
+    @WithUserDetails
     void 유저_생성() throws Exception {
         emailAuthRepository.save(EmailAuthFixture.getValidatedEmailAuth("email"));
 
@@ -63,8 +61,9 @@ class UserApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 유저_정보_수정() throws Exception {
-        UserChangeInformationRequest req = new UserChangeInformationRequest(user.getId(), "updateNickname", "updateInterest", 30L);
+        UserChangeInformationRequest req = new UserChangeInformationRequest("updateNickname", "updateInterest", 30L);
 
         mockMvc.perform(post("/user/change-information")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,8 +82,9 @@ class UserApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 유저_비밀번호_변경() throws Exception {
-        UserChangePasswordRequest req = new UserChangePasswordRequest(user.getId(), user.getPassword(), "newPassword");
+        UserChangePasswordRequest req = new UserChangePasswordRequest(user.getPassword(), "newPassword");
 
         mockMvc.perform(post("/user/change-password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -101,14 +101,11 @@ class UserApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 유저_활성화() throws Exception {
         user.inactivate();
 
-        UserActivateRequest req = new UserActivateRequest(user.getId());
-
-        mockMvc.perform(post("/user/activate")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(post("/user/activate"))
                 .andExpect(status().isOk())
                 .andDo(document("user/activate",
                         preprocessRequest(prettyPrint()),
@@ -121,12 +118,9 @@ class UserApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 유저_비활성화() throws Exception {
-        UserInactivateRequest req = new UserInactivateRequest(user.getId());
-
-        mockMvc.perform(post("/user/inactivate")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(post("/user/inactivate"))
                 .andExpect(status().isOk())
                 .andDo(document("user/inactivate",
                         preprocessRequest(prettyPrint()),
@@ -139,12 +133,9 @@ class UserApiTest extends ApiTest {
     }
 
     @Test
+    @WithUserDetails
     void 유저_정보_조회_성공() throws Exception {
-        UserGetInformationRequest req = new UserGetInformationRequest(user.getId());
-
-        mockMvc.perform(get("/user/get-information")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
+        mockMvc.perform(get("/user/get-information"))
                 .andExpect(status().isOk())
                 .andDo(document("user/get-information",
                         preprocessRequest(prettyPrint()),

@@ -1,19 +1,20 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.UserActivateDto.UserActivateRequest;
 import com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
 import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateData;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateResponse;
-import com.minecraft.job.api.controller.dto.UserInactivateDto.UserInactivateRequest;
+import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.api.service.UserAppService;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.UserGetInformationDto.*;
+import static com.minecraft.job.api.controller.dto.UserGetInformationDto.UserGetInformationData;
+import static com.minecraft.job.api.controller.dto.UserGetInformationDto.UserGetInformationResponse;
 
 @RestController
 @RequestMapping("/user")
@@ -34,38 +35,40 @@ public class UserApi {
 
     @PostMapping("/change-information")
     public void changeInformation(
+            @AuthenticationPrincipal DefaultMcjUser user,
             @RequestBody UserChangeInformationRequest req
     ) {
-        userService.changeInformation(req.userId(), req.nickname(), req.interest(), req.age());
+        userService.changeInformation(user.getId(), req.nickname(), req.interest(), req.age());
     }
 
     @PostMapping("/change-password")
     public void changePassword(
+            @AuthenticationPrincipal DefaultMcjUser user,
             @RequestBody UserChangePasswordRequest req
     ) {
-        userService.changePassword(req.userId(), req.password(), req.newPassword());
+        userService.changePassword(user.getId(), req.password(), req.newPassword());
     }
 
     @PostMapping("/activate")
     public void activate(
-            @RequestBody UserActivateRequest req
+            @AuthenticationPrincipal DefaultMcjUser user
     ) {
-        userService.activate(req.userId());
+        userService.activate(user.getId());
     }
 
     @PostMapping("/inactivate")
-    public void activate(
-            @RequestBody UserInactivateRequest req
+    public void inactivate(
+            @AuthenticationPrincipal DefaultMcjUser user
     ) {
-        userService.inactivate(req.userId());
+        userService.inactivate(user.getId());
     }
 
     @GetMapping("/get-information")
     public UserGetInformationResponse getInformation(
-            @RequestBody UserGetInformationRequest req
+            @AuthenticationPrincipal DefaultMcjUser user
     ) {
-        User user = userService.getInformation(req.userId());
+        User userInfo = userService.getInformation(user.getId());
 
-        return UserGetInformationResponse.getInformation(UserGetInformationData.getInformationData(user));
+        return UserGetInformationResponse.getInformation(UserGetInformationData.getInformationData(userInfo));
     }
 }

@@ -4,11 +4,6 @@ import com.minecraft.job.common.user.domain.User;
 
 public class UserGetInformationDto {
 
-    public record UserGetInformationRequest(
-            Long userId
-    ) {
-    }
-
     public record UserGetInformationResponse(UserGetInformationData informationData) {
 
         public static UserGetInformationResponse getInformation(UserGetInformationData userGetInformationData) {
