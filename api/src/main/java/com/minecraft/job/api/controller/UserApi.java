@@ -6,8 +6,8 @@ import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePass
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateData;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
 import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateResponse;
-import com.minecraft.job.api.controller.dto.UserGetInformationDto;
 import com.minecraft.job.api.controller.dto.UserInactivateDto.UserInactivateRequest;
+import com.minecraft.job.api.service.UserAppService;
 import com.minecraft.job.common.user.domain.User;
 import com.minecraft.job.common.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +21,13 @@ import static com.minecraft.job.api.controller.dto.UserGetInformationDto.*;
 public class UserApi {
 
     private final UserService userService;
+    private final UserAppService userAppService;
 
     @PostMapping
     public UserCreateResponse create(
             @RequestBody UserCreateRequest req
     ) {
-        User user = userService.create(req.email(), req.password(), req.nickname(), req.interest(), req.age());
+        User user = userAppService.create(req.email(), req.password(), req.nickname(), req.interest(), req.age());
 
         return UserCreateResponse.create(UserCreateData.create(user));
     }
