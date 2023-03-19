@@ -1,7 +1,7 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.AuthLoginDto.AuthLoginRequest;
-import com.minecraft.job.api.controller.dto.AuthLoginDto.AuthLoginResponse;
+import com.minecraft.job.api.controller.dto.auth.AuthLoginDto.AuthLoginRequest;
+import com.minecraft.job.api.controller.dto.auth.AuthLoginDto.AuthLoginResponse;
 import com.minecraft.job.api.service.AuthAppService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;

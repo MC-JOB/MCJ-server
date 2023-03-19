@@ -23,12 +23,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.RecruitmentProcessGetListRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessCreateDto.RecruitmentProcessCreateRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessGetListDto.RecruitmentProcessGetListRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessSearchType.ALL;
 import static com.minecraft.job.common.recruitmentProcess.domain.RecruitmentProcessStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;

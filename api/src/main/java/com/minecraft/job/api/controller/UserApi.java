@@ -1,10 +1,10 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
-import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
-import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateData;
-import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
-import com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateResponse;
+import com.minecraft.job.api.controller.dto.user.UserChangeInformationDto.UserChangeInformationRequest;
+import com.minecraft.job.api.controller.dto.user.UserChangePasswordDto.UserChangePasswordRequest;
+import com.minecraft.job.api.controller.dto.user.UserCreateDto.UserCreateData;
+import com.minecraft.job.api.controller.dto.user.UserCreateDto.UserCreateRequest;
+import com.minecraft.job.api.controller.dto.user.UserCreateDto.UserCreateResponse;
 import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.api.service.UserAppService;
 import com.minecraft.job.common.user.domain.User;
@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.UserGetInformationDto.UserGetInformationData;
-import static com.minecraft.job.api.controller.dto.UserGetInformationDto.UserGetInformationResponse;
+import static com.minecraft.job.api.controller.dto.user.UserGetInformationDto.UserGetInformationData;
+import static com.minecraft.job.api.controller.dto.user.UserGetInformationDto.UserGetInformationResponse;
 
 @RestController
 @RequestMapping("/user")

@@ -16,13 +16,13 @@ import org.springframework.security.test.context.support.WithUserDetails;
 
 import java.time.LocalDateTime;
 
-import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.RecruitmentCreateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.RecruitmentDeleteRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentGetDetailDto.RecruitmentGetDetailRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentActivateDto.RecruitmentActivateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentCreateDto.RecruitmentCreateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentDeleteDto.RecruitmentDeleteRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentGetDetailDto.RecruitmentGetDetailRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentInactivateDto.RecruitmentInactivateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 import static com.minecraft.job.common.recruitment.domain.RecruitmentStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

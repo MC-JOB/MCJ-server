@@ -1,10 +1,10 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
-import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamActivateDto.TeamActivateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateData;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateResponse;
+import com.minecraft.job.api.controller.dto.team.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.service.TeamService;
@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
-import static com.minecraft.job.api.controller.dto.TeamGetListDto.*;
-import static com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
+import static com.minecraft.job.api.controller.dto.team.TeamGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.team.TeamGetListDto.*;
+import static com.minecraft.job.api.controller.dto.team.TeamUpdateDto.TeamUpdateRequest;
 
 @RestController
 @RequestMapping("/team")

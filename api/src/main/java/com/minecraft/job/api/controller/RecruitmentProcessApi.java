@@ -9,14 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessCreateDto.*;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetDetailDto.RecruitmentProcessGetDetailData;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetDetailDto.RecruitmentProcessGetDetailResponse;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessGetListDto.*;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessCancelDto.RecruitmentProcessCancelRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessCreateDto.*;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessFailDto.RecruitmentProcessFailRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessGetDetailDto.RecruitmentProcessGetDetailData;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessGetDetailDto.RecruitmentProcessGetDetailResponse;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessGetListDto.*;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessInProgressDto.RecruitmentProcessInProgressRequest;
+import static com.minecraft.job.api.controller.dto.recuritmentprocess.RecruitmentProcessPassDto.RecruitmentProcessPassRequest;
 
 @RestController
 @RequestMapping("/recruitment-process")

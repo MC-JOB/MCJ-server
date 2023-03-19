@@ -1,13 +1,13 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.ResumeActivateDto.ResumeActivateRequest;
-import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateData;
-import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
-import com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateResponse;
-import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
-import com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListResponse;
-import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
-import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeActivateDto.ResumeActivateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeCreateDto.ResumeCreateData;
+import com.minecraft.job.api.controller.dto.resume.ResumeCreateDto.ResumeCreateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeCreateDto.ResumeCreateResponse;
+import com.minecraft.job.api.controller.dto.resume.ResumeDeleteDto.ResumeDeleteRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeGetListDto.ResumeGetListResponse;
+import com.minecraft.job.api.controller.dto.resume.ResumeInactivateDto.ResumeInactivateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.service.ResumeService;
@@ -17,10 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.ResumeGetDetailData;
-import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.ResumeGetDetailResponse;
-import static com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListData;
-import static com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListRequest;
+import static com.minecraft.job.api.controller.dto.resume.ResumeGetDetailDto.ResumeGetDetailData;
+import static com.minecraft.job.api.controller.dto.resume.ResumeGetDetailDto.ResumeGetDetailResponse;
+import static com.minecraft.job.api.controller.dto.resume.ResumeGetListDto.ResumeGetListData;
+import static com.minecraft.job.api.controller.dto.resume.ResumeGetListDto.ResumeGetListRequest;
 
 @RestController
 @RequestMapping("/resume")

@@ -1,6 +1,6 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.EmailAuthIssueDto.EmailAuthIssueRequest;
+import com.minecraft.job.api.controller.dto.emailauth.EmailAuthIssueDto.EmailAuthIssueRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.emailauth.domain.EmailAuth;
@@ -8,7 +8,7 @@ import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.minecraft.job.api.controller.dto.EmailAuthValidateDto.EmailAuthValidateRequest;
+import static com.minecraft.job.api.controller.dto.emailauth.EmailAuthValidateDto.EmailAuthValidateRequest;
 import static com.minecraft.job.common.emailauth.domain.EmailAuthStatus.ISSUED;
 import static com.minecraft.job.common.emailauth.domain.EmailAuthStatus.VALIDATED;
 import static org.assertj.core.api.Assertions.assertThat;

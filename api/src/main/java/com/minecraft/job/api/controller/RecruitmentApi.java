@@ -7,13 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.RecruitmentActivateDto.RecruitmentActivateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentCreateDto.*;
-import static com.minecraft.job.api.controller.dto.RecruitmentDeleteDto.RecruitmentDeleteRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentGetDetailDto.*;
-import static com.minecraft.job.api.controller.dto.RecruitmentInactivateDto.RecruitmentInactivateRequest;
-import static com.minecraft.job.api.controller.dto.RecruitmentUpdateDto.RecruitmentUpdateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentActivateDto.RecruitmentActivateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentClosedAtExtendDto.RecruitmentClosedAtExtendRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentCreateDto.*;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentDeleteDto.RecruitmentDeleteRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentInactivateDto.RecruitmentInactivateRequest;
+import static com.minecraft.job.api.controller.dto.recuritment.RecruitmentUpdateDto.RecruitmentUpdateRequest;
 
 @RestController
 @RequestMapping("/recruitment")

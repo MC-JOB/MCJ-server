@@ -1,9 +1,9 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.ResumeActivateDto.ResumeActivateRequest;
-import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
-import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
-import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeActivateDto.ResumeActivateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeDeleteDto.ResumeDeleteRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeInactivateDto.ResumeInactivateRequest;
+import com.minecraft.job.api.controller.dto.resume.ResumeUpdateDto.ResumeUpdateRequest;
 import com.minecraft.job.api.fixture.ResumeFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.resume.domain.Resume;
@@ -17,8 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.test.context.support.WithUserDetails;
 
-import static com.minecraft.job.api.controller.dto.ResumeCreateDto.ResumeCreateRequest;
-import static com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListRequest;
+import static com.minecraft.job.api.controller.dto.resume.ResumeCreateDto.ResumeCreateRequest;
+import static com.minecraft.job.api.controller.dto.resume.ResumeGetListDto.ResumeGetListRequest;
 import static com.minecraft.job.common.resume.domain.ResumeSearchType.ALL;
 import static com.minecraft.job.common.resume.domain.ResumeStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;

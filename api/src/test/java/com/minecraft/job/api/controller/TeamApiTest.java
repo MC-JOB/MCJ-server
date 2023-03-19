@@ -1,9 +1,9 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
-import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
-import com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamActivateDto.TeamActivateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamInactivateDto.TeamInactivateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamUpdateDto.TeamUpdateRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.support.ApiTest;
@@ -22,8 +22,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 
-import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.TeamGetDetailRequest;
-import static com.minecraft.job.api.controller.dto.TeamGetListDto.TeamGetListRequest;
+import static com.minecraft.job.api.controller.dto.team.TeamGetDetailDto.TeamGetDetailRequest;
+import static com.minecraft.job.api.controller.dto.team.TeamGetListDto.TeamGetListRequest;
 import static com.minecraft.job.common.team.domain.TeamStatus.ACTIVATED;
 import static com.minecraft.job.common.team.domain.TeamStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,6 +1,6 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.UserChangePasswordDto.UserChangePasswordRequest;
+import com.minecraft.job.api.controller.dto.user.UserChangePasswordDto.UserChangePasswordRequest;
 import com.minecraft.job.api.fixture.EmailAuthFixture;
 import com.minecraft.job.api.support.ApiTest;
 import com.minecraft.job.common.emailauth.domain.EmailAuthRepository;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 
-import static com.minecraft.job.api.controller.dto.UserChangeInformationDto.UserChangeInformationRequest;
-import static com.minecraft.job.api.controller.dto.UserCreateDto.UserCreateRequest;
+import static com.minecraft.job.api.controller.dto.user.UserChangeInformationDto.UserChangeInformationRequest;
+import static com.minecraft.job.api.controller.dto.user.UserCreateDto.UserCreateRequest;
 import static com.minecraft.job.common.user.domain.UserStatus.ACTIVATED;
 import static com.minecraft.job.common.user.domain.UserStatus.INACTIVATED;
 import static org.assertj.core.api.Assertions.assertThat;

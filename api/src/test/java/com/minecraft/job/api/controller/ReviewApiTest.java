@@ -1,9 +1,9 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.ReviewActivateDto.ReviewActivateRequest;
-import com.minecraft.job.api.controller.dto.ReviewCreateDto.ReviewCreateRequest;
-import com.minecraft.job.api.controller.dto.ReviewInactivateDto.ReviewInactivateRequest;
-import com.minecraft.job.api.controller.dto.ReviewUpdateDto.ReviewUpdateRequest;
+import com.minecraft.job.api.controller.dto.review.ReviewActivateDto.ReviewActivateRequest;
+import com.minecraft.job.api.controller.dto.review.ReviewCreateDto.ReviewCreateRequest;
+import com.minecraft.job.api.controller.dto.review.ReviewInactivateDto.ReviewInactivateRequest;
+import com.minecraft.job.api.controller.dto.review.ReviewUpdateDto.ReviewUpdateRequest;
 import com.minecraft.job.api.fixture.ReviewFixture;
 import com.minecraft.job.api.fixture.TeamFixture;
 import com.minecraft.job.api.fixture.UserFixture;
