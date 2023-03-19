@@ -73,7 +73,7 @@ public class RecruitmentApiTest extends ApiTest {
     @Test
     @WithUserDetails
     void 채용공고_수정_성공() throws Exception {
-        RecruitmentUpdateRequest recruitmentUpdateRequest = new RecruitmentUpdateRequest(recruitment.getId(), user.getId(), "updateTitle", "updateContent");
+        RecruitmentUpdateRequest recruitmentUpdateRequest = new RecruitmentUpdateRequest(recruitment.getId(), team.getId(), "updateTitle", "updateContent");
 
         mockMvc.perform(post("/recruitment/update")
                         .contentType(MediaType.APPLICATION_JSON)
