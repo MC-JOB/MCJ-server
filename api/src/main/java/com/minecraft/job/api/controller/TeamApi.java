@@ -36,21 +36,27 @@ public class TeamApi {
     }
 
     @PostMapping("/update")
-    public void update(@RequestBody TeamUpdateRequest req) {
-
-        teamService.update(req.teamId(), req.userId(), req.name(), req.description(), req.memberNum());
+    public void update(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamUpdateRequest req
+    ) {
+        teamService.update(req.teamId(), user.getId(), req.name(), req.description(), req.memberNum());
     }
 
     @PostMapping("/inactivate")
-    public void inactivate(@RequestBody TeamInactivateRequest req) {
-
-        teamService.inactivate(req.teamId(), req.userId());
+    public void inactivate(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamInactivateRequest req
+    ) {
+        teamService.inactivate(req.teamId(), user.getId());
     }
 
     @PostMapping("/activate")
-    public void activate(@RequestBody TeamActivateRequest req) {
-
-        teamService.activate(req.teamId(), req.userId());
+    public void activate(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamActivateRequest req
+    ) {
+        teamService.activate(req.teamId(), user.getId());
     }
 
     @GetMapping("/getMyTeam")
@@ -61,9 +67,13 @@ public class TeamApi {
     }
 
     @GetMapping("/getMyTeamList")
-    public TeamGetListResponse getMyTeamList(@RequestBody TeamGetListRequest req) {
+    public TeamGetListResponse getMyTeamList(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamGetListRequest req
+    ) {
         PageRequest pageable = PageRequest.of(req.page(), req.size());
-        Page<Team> teamList = teamService.getMyTeamList(req.searchType(), req.searchName(), pageable, req.userId());
+
+        Page<Team> teamList = teamService.getMyTeamList(req.searchType(), req.searchName(), pageable, user.getId());
 
         return TeamGetListResponse.getTeamList(TeamGetListData.getTeamList(teamList));
     }

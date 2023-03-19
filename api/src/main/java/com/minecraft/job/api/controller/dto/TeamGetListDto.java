@@ -1,6 +1,5 @@
 package com.minecraft.job.api.controller.dto;
 
-import com.minecraft.job.common.resume.domain.ResumeSearchType;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.domain.TeamSearchType;
 import org.springframework.data.domain.Page;
@@ -11,8 +10,7 @@ public class TeamGetListDto {
             TeamSearchType searchType,
             String searchName,
             int page,
-            int size,
-            Long userId
+            int size
     ) {
     }
 

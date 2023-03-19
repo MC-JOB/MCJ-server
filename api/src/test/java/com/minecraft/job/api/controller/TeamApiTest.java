@@ -77,7 +77,7 @@ class TeamApiTest extends ApiTest {
     @Test
     @WithUserDetails
     void 팀_수정_성공() throws Exception {
-        TeamUpdateRequest teamUpdateRequest = new TeamUpdateRequest(team.getId(), user.getId(), "updateName", "updateDescription", 1L);
+        TeamUpdateRequest teamUpdateRequest = new TeamUpdateRequest(team.getId(), "updateName", "updateDescription", 1L);
 
         mockMvc.perform(post("/team/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ class TeamApiTest extends ApiTest {
     @Test
     @WithUserDetails
     void 팀_비활성화_성공() throws Exception {
-        TeamInactivateRequest teamInactivateRequest = new TeamInactivateRequest(team.getId(), user.getId());
+        TeamInactivateRequest teamInactivateRequest = new TeamInactivateRequest(team.getId());
 
         mockMvc.perform(post("/team/inactivate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +119,7 @@ class TeamApiTest extends ApiTest {
     @Test
     @WithUserDetails
     void 팀_활성화_성공() throws Exception {
-        TeamActivateRequest teamActivateRequest = new TeamActivateRequest(team.getId(), user.getId());
+        TeamActivateRequest teamActivateRequest = new TeamActivateRequest(team.getId());
 
         teamService.inactivate(team.getId(), user.getId());
 
@@ -160,7 +160,7 @@ class TeamApiTest extends ApiTest {
     @Test
     @WithUserDetails
     void 팀_목록_조회_성공() throws Exception {
-        TeamGetListRequest req = new TeamGetListRequest(TeamSearchType.ALL, "", 0, 10, user.getId());
+        TeamGetListRequest req = new TeamGetListRequest(TeamSearchType.ALL, "", 0, 10);
 
         mockMvc.perform(get("/team/getMyTeamList")
                         .contentType(APPLICATION_JSON)
