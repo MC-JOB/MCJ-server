@@ -10,8 +10,7 @@ public class ResumeGetListDto {
             ResumeSearchType searchType,
             String searchName,
             int page,
-            int size,
-            Long userId
+            int size
     ) {
     }
 

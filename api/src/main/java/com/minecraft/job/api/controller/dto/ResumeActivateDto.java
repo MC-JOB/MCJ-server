@@ -2,6 +2,6 @@ package com.minecraft.job.api.controller.dto;
 
 public class ResumeActivateDto {
 
-    public record ResumeActivateRequest(Long resumeId, Long userId) {
+    public record ResumeActivateRequest(Long resumeId) {
     }
 }

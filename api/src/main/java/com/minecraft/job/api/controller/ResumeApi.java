@@ -8,15 +8,19 @@ import com.minecraft.job.api.controller.dto.ResumeDeleteDto.ResumeDeleteRequest;
 import com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListResponse;
 import com.minecraft.job.api.controller.dto.ResumeInactivateDto.ResumeInactivateRequest;
 import com.minecraft.job.api.controller.dto.ResumeUpdateDto.ResumeUpdateRequest;
+import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.common.resume.domain.Resume;
 import com.minecraft.job.common.resume.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.*;
-import static com.minecraft.job.api.controller.dto.ResumeGetListDto.*;
+import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.ResumeGetDetailData;
+import static com.minecraft.job.api.controller.dto.ResumeGetDetailDto.ResumeGetDetailResponse;
+import static com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListData;
+import static com.minecraft.job.api.controller.dto.ResumeGetListDto.ResumeGetListRequest;
 
 @RestController
 @RequestMapping("/resume")
@@ -26,48 +30,65 @@ public class ResumeApi {
     private final ResumeService resumeService;
 
     @PostMapping
-    public ResumeCreateResponse create(@RequestBody ResumeCreateRequest req) {
-        Resume resume = resumeService.create(req.userId(), req.title(), req.content(), req.trainingHistory());
+    public ResumeCreateResponse create(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody ResumeCreateRequest req
+    ) {
+        Resume resume = resumeService.create(user.getId(), req.title(), req.content(), req.trainingHistory());
 
         return ResumeCreateResponse.create(ResumeCreateData.create(resume));
     }
 
     @PostMapping("/update")
-    public void update(@RequestBody ResumeUpdateRequest req) {
-
-        resumeService.update(req.resumeId(), req.userId(), req.title(), req.content(), req.trainingHistory());
+    public void update(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody ResumeUpdateRequest req
+    ) {
+        resumeService.update(req.resumeId(), user.getId(), req.title(), req.content(), req.trainingHistory());
     }
 
     @PostMapping("/activate")
-    public void activate(@RequestBody ResumeActivateRequest req) {
-
-        resumeService.activate(req.resumeId(), req.userId());
+    public void activate(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody ResumeActivateRequest req
+    ) {
+        resumeService.activate(req.resumeId(), user.getId());
     }
 
     @PostMapping("/inactivate")
-    public void inactivate(@RequestBody ResumeInactivateRequest req) {
-
-        resumeService.inactivate(req.resumeId(), req.userId());
+    public void inactivate(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody ResumeInactivateRequest req
+    ) {
+        resumeService.inactivate(req.resumeId(), user.getId());
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestBody ResumeDeleteRequest req) {
-
-        resumeService.delete(req.resumeId(), req.userId());
+    public void delete(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody ResumeDeleteRequest req
+    ) {
+        resumeService.delete(req.resumeId(), user.getId());
     }
 
     @GetMapping("/getMyResumeList")
-    public ResumeGetListResponse getMyResumeList(@RequestBody ResumeGetListRequest req) {
+    public ResumeGetListResponse getMyResumeList(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody ResumeGetListRequest req
+    ) {
         PageRequest pageable = PageRequest.of(req.page(), req.size());
-        Page<Resume> resumeList = resumeService.getMyResumeList(req.searchType(), req.searchName(), pageable, req.userId());
+
+        Page<Resume> resumeList = resumeService.getMyResumeList(req.searchType(), req.searchName(), pageable, user.getId());
 
         return ResumeGetListResponse.getResumeList(ResumeGetListData.getResumeList(resumeList));
     }
 
     @GetMapping("/getMyResume")
-    public ResumeGetDetailResponse getMyResumeDetail(@RequestBody ResumeGetDetailRequest req) {
-        Resume resume = resumeService.getResume(req.userId());
-        
+    public ResumeGetDetailResponse getMyResumeDetail(
+            @AuthenticationPrincipal DefaultMcjUser user
+    ) {
+        Resume resume = resumeService.getResume(user.getId());
+
         return ResumeGetDetailResponse.getResume(ResumeGetDetailData.getResume(resume));
     }
 }

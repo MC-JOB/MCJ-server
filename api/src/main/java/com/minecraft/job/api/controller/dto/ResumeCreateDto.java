@@ -5,7 +5,7 @@ import com.minecraft.job.common.resume.domain.Resume;
 public class ResumeCreateDto {
 
     public record ResumeCreateRequest(
-            Long userId, String title, String content, String trainingHistory
+            String title, String content, String trainingHistory
     ) {
     }
 

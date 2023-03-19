@@ -7,11 +7,6 @@ import java.time.LocalDateTime;
 
 public class ResumeGetDetailDto {
 
-    public record ResumeGetDetailRequest(
-            Long userId
-    ) {
-    }
-
     public record ResumeGetDetailResponse(
             ResumeGetDetailData resume
     ) {
