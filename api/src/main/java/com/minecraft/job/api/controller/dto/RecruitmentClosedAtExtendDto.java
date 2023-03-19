@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class RecruitmentClosedAtExtendDto {
 
     public record RecruitmentClosedAtExtendRequest(
-            Long recruitmentId, Long userId, long teamId,
+            Long recruitmentId, long teamId,
             LocalDateTime closedAt
     ) {
     }

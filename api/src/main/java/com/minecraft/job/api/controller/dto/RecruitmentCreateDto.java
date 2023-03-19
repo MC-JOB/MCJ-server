@@ -4,7 +4,7 @@ import com.minecraft.job.common.recruitment.domain.Recruitment;
 
 public class RecruitmentCreateDto {
 
-    public record RecruitmentCreateRequest(Long userId, Long teamId, String title, String content) {
+    public record RecruitmentCreateRequest(Long teamId, String title, String content) {
     }
 
     public record RecruitmentCreateResponse(RecruitmentCreateData recruitment) {

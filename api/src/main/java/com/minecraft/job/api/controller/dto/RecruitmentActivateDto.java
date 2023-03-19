@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class RecruitmentActivateDto {
 
     public record RecruitmentActivateRequest(
-            Long recruitmentId, Long userId, Long teamId,
+            Long recruitmentId, Long teamId,
             LocalDateTime closedAt
     ) {
     }
