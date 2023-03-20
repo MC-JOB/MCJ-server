@@ -1,10 +1,10 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.TeamActivateDto.TeamActivateRequest;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateData;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateRequest;
-import com.minecraft.job.api.controller.dto.TeamCreateDto.TeamCreateResponse;
-import com.minecraft.job.api.controller.dto.TeamInactivateDto.TeamInactivateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamActivateDto.TeamActivateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateData;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateRequest;
+import com.minecraft.job.api.controller.dto.team.TeamCreateDto.TeamCreateResponse;
+import com.minecraft.job.api.controller.dto.team.TeamInactivateDto.TeamInactivateRequest;
 import com.minecraft.job.api.security.user.DefaultMcjUser;
 import com.minecraft.job.common.team.domain.Team;
 import com.minecraft.job.common.team.service.TeamService;
@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.minecraft.job.api.controller.dto.TeamGetDetailDto.*;
-import static com.minecraft.job.api.controller.dto.TeamGetListDto.*;
-import static com.minecraft.job.api.controller.dto.TeamUpdateDto.TeamUpdateRequest;
+import static com.minecraft.job.api.controller.dto.team.TeamGetDetailDto.*;
+import static com.minecraft.job.api.controller.dto.team.TeamGetListDto.*;
+import static com.minecraft.job.api.controller.dto.team.TeamUpdateDto.TeamUpdateRequest;
 
 @RestController
 @RequestMapping("/team")
@@ -36,21 +36,27 @@ public class TeamApi {
     }
 
     @PostMapping("/update")
-    public void update(@RequestBody TeamUpdateRequest req) {
-
-        teamService.update(req.teamId(), req.userId(), req.name(), req.description(), req.memberNum());
+    public void update(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamUpdateRequest req
+    ) {
+        teamService.update(req.teamId(), user.getId(), req.name(), req.description(), req.memberNum());
     }
 
     @PostMapping("/inactivate")
-    public void inactivate(@RequestBody TeamInactivateRequest req) {
-
-        teamService.inactivate(req.teamId(), req.userId());
+    public void inactivate(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamInactivateRequest req
+    ) {
+        teamService.inactivate(req.teamId(), user.getId());
     }
 
     @PostMapping("/activate")
-    public void activate(@RequestBody TeamActivateRequest req) {
-
-        teamService.activate(req.teamId(), req.userId());
+    public void activate(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamActivateRequest req
+    ) {
+        teamService.activate(req.teamId(), user.getId());
     }
 
     @GetMapping("/getMyTeam")
@@ -61,9 +67,13 @@ public class TeamApi {
     }
 
     @GetMapping("/getMyTeamList")
-    public TeamGetListResponse getMyTeamList(@RequestBody TeamGetListRequest req) {
+    public TeamGetListResponse getMyTeamList(
+            @AuthenticationPrincipal DefaultMcjUser user,
+            @RequestBody TeamGetListRequest req
+    ) {
         PageRequest pageable = PageRequest.of(req.page(), req.size());
-        Page<Team> teamList = teamService.getMyTeamList(req.searchType(), req.searchName(), pageable, req.userId());
+
+        Page<Team> teamList = teamService.getMyTeamList(req.searchType(), req.searchName(), pageable, user.getId());
 
         return TeamGetListResponse.getTeamList(TeamGetListData.getTeamList(teamList));
     }

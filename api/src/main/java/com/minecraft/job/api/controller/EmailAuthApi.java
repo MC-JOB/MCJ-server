@@ -1,7 +1,7 @@
 package com.minecraft.job.api.controller;
 
-import com.minecraft.job.api.controller.dto.EmailAuthValidateDto.EmailAuthValidateRequest;
-import com.minecraft.job.api.controller.dto.EmailAuthValidateDto.EmailAuthValidateResponse;
+import com.minecraft.job.api.controller.dto.emailauth.EmailAuthValidateDto.EmailAuthValidateRequest;
+import com.minecraft.job.api.controller.dto.emailauth.EmailAuthValidateDto.EmailAuthValidateResponse;
 import com.minecraft.job.common.emailauth.domain.CodeNotValidException;
 import com.minecraft.job.common.emailauth.domain.TimeExceededException;
 import com.minecraft.job.common.emailauth.domain.TryCountExceededException;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.minecraft.job.api.controller.dto.EmailAuthIssueDto.EmailAuthIssueRequest;
+import static com.minecraft.job.api.controller.dto.emailauth.EmailAuthIssueDto.EmailAuthIssueRequest;
 import static com.minecraft.job.common.support.ErrorCode.*;
 
 @RestController
